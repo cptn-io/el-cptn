@@ -14,6 +14,8 @@ public interface WorkflowMapper {
     @Mapping(ignore = true, target = "createdBy")
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
+    @Mapping(source = "secured", target = "secured", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mapping(source = "active", target = "active", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     Workflow convertToEntity(WorkflowDto workflowDto);
 
     @Mapping(ignore = true, target = "createdAt")

@@ -14,5 +14,6 @@ CREATE TABLE public.workflow
     name                 character varying(128),
     primary_key          character varying(16),
     secondary_key        character varying(16),
-    secured              boolean
+    secured              boolean,
+    active               boolean
 );

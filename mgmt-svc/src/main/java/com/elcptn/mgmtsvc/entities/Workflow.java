@@ -24,7 +24,11 @@ public class Workflow extends BaseEntity {
 
     @Getter
     @Setter
-    private Boolean secured;
+    private Boolean secured = true;
+
+    @Getter
+    @Setter
+    private Boolean active = true;
 
     @Getter
     @Column(length = 16)
