@@ -1,15 +1,19 @@
 package com.elcptn.mgmtsvc.entities;
 
 import com.elcptn.mgmtsvc.helpers.StringHelper;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.time.ZonedDateTime;
 
 @Entity
-public class Workflow extends BaseEntity{
+@EqualsAndHashCode
+@ToString
+public class Workflow extends BaseEntity {
 
     @Getter
     @Setter
@@ -43,5 +47,9 @@ public class Workflow extends BaseEntity{
         this.primaryKey = StringHelper.getSecureRandomString(16);
         this.secondaryKey = StringHelper.getSecureRandomString(16);
         this.lastKeyRotationAt = ZonedDateTime.now();
+    }
+
+    public boolean hasAnyKeysSetup() {
+        return primaryKey != null || secondaryKey != null;
     }
 }
