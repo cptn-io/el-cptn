@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.time.ZonedDateTime;
 
+/* @author: kc, created on 2/7/23 */
+
 @Entity
 @EqualsAndHashCode
 @ToString

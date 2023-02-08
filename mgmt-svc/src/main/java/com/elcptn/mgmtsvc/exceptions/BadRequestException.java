@@ -5,6 +5,8 @@ import org.springframework.validation.FieldError;
 
 import java.util.List;
 
+/* @author: kc, created on 2/7/23 */
+
 public class BadRequestException extends WebApplicationException {
     @Getter
     private List<FieldError> fieldErrors;

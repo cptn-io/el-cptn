@@ -7,15 +7,13 @@ import lombok.NonNull;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+/* @author: kc, created on 2/7/23 */
+
 @Data
 public class ListEntitiesParam {
-
     private int page;
-
     private int size;
-
     private String[] sortBy;
-
     private boolean sortAsc;
 
     public ListEntitiesParam(@NonNull HttpServletRequest request) {

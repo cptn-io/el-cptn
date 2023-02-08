@@ -4,6 +4,8 @@ import com.elcptn.mgmtsvc.dto.WorkflowDto;
 import com.elcptn.mgmtsvc.entities.Workflow;
 import org.mapstruct.*;
 
+/* @author: kc, created on 2/7/23 */
+
 @Mapper
 public interface WorkflowMapper {
 

@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+/* @author: kc, created on 2/7/23 */
+
 @MappedSuperclass
 @EntityListeners(EntityListener.class)
 public class BaseEntity {
@@ -15,7 +17,7 @@ public class BaseEntity {
     @Getter
     @Setter
     @GeneratedValue
-    @Column( columnDefinition = "uuid", updatable = false )
+    @Column(columnDefinition = "uuid", updatable = false)
     private UUID id;
 
     @Getter
