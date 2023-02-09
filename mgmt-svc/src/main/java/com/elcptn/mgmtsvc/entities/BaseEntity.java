@@ -1,7 +1,12 @@
 package com.elcptn.mgmtsvc.entities;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -11,6 +16,11 @@ import java.util.UUID;
 
 @MappedSuperclass
 @EntityListeners(EntityListener.class)
+@ToString(onlyExplicitlyIncluded = true)
+@TypeDefs({
+        @TypeDef(name = "json", typeClass = JsonStringType.class),
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
 public class BaseEntity {
 
     @Id
@@ -18,6 +28,7 @@ public class BaseEntity {
     @Setter
     @GeneratedValue
     @Column(columnDefinition = "uuid", updatable = false)
+    @ToString.Include
     private UUID id;
 
     @Getter
@@ -32,6 +43,7 @@ public class BaseEntity {
     @Getter
     @Setter
     @Column(columnDefinition = "timestamp with time zone")
+    @ToString.Include
     private ZonedDateTime updatedAt;
 
     @Getter

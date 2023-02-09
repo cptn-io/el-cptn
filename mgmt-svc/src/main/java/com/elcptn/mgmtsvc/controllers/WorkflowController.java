@@ -71,7 +71,7 @@ public class WorkflowController {
         }
 
         Workflow workflow = getById(id);
-        mapper.updateEntity(workflowDto, workflow);
+        mapper.updateWorkflowFromWorkflowDto(workflowDto, workflow);
         workflowService.update(workflow);
 
         return ResponseEntity.ok(convert((workflow)));
@@ -101,10 +101,10 @@ public class WorkflowController {
     }
 
     private Workflow convert(WorkflowDto workflowDto) {
-        return mapper.convertToEntity(workflowDto);
+        return mapper.workflowDtoToWorkflow(workflowDto);
     }
 
     private WorkflowDto convert(Workflow workflow) {
-        return mapper.convertToDto(workflow);
+        return mapper.workflowToWorkflowDto(workflow);
     }
 }

@@ -2,18 +2,35 @@
 
 --changeset kcthota:1
 
-CREATE TABLE public.workflow
+CREATE TABLE workflow
 (
-    id                   uuid    NOT NULL PRIMARY KEY,
-    created_at           timestamp with time zone,
-    created_by           character varying(36),
-    updated_at           timestamp with time zone,
-    updated_by           character varying(36),
-    version              integer NOT NULL,
-    last_key_rotation_at timestamp with time zone,
-    name                 character varying(128),
-    primary_key          character varying(16),
-    secondary_key        character varying(16),
-    secured              boolean,
-    active               boolean
+    id                   UUID    NOT NULL,
+    version              INTEGER NOT NULL,
+    created_at           TIMESTAMP with time zone,
+    updated_at           TIMESTAMP with time zone,
+    created_by           VARCHAR(36),
+    updated_by           VARCHAR(36),
+    name                 VARCHAR(128),
+    secured              BOOLEAN,
+    active               BOOLEAN,
+    primary_key          VARCHAR(16),
+    secondary_key        VARCHAR(16),
+    last_key_rotation_at TIMESTAMP with time zone,
+    CONSTRAINT pk_workflow PRIMARY KEY (id)
 );
+
+CREATE TABLE event
+(
+    id          UUID    NOT NULL,
+    version     INTEGER NOT NULL,
+    created_at  TIMESTAMP with time zone,
+    updated_at  TIMESTAMP with time zone,
+    created_by  VARCHAR(36),
+    updated_by  VARCHAR(36),
+    payload     JSON,
+    workflow_id UUID,
+    CONSTRAINT pk_event PRIMARY KEY (id)
+);
+
+ALTER TABLE event
+    ADD CONSTRAINT FK_EVENT_ON_WORKFLOW FOREIGN KEY (workflow_id) REFERENCES workflow (id);

@@ -6,7 +6,7 @@ import org.mapstruct.*;
 
 /* @author: kc, created on 2/7/23 */
 
-@Mapper
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface WorkflowMapper {
 
     @Mapping(ignore = true, target = "createdAt")
@@ -16,7 +16,7 @@ public interface WorkflowMapper {
     @Mapping(ignore = true, target = "id")
     @Mapping(source = "secured", target = "secured", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(source = "active", target = "active", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    Workflow convertToEntity(WorkflowDto workflowDto);
+    Workflow workflowDtoToWorkflow(WorkflowDto workflowDto);
 
     @Mapping(ignore = true, target = "createdAt")
     @Mapping(ignore = true, target = "updatedAt")
@@ -24,7 +24,7 @@ public interface WorkflowMapper {
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(WorkflowDto workflowDto, @MappingTarget Workflow workflow);
+    void updateWorkflowFromWorkflowDto(WorkflowDto workflowDto, @MappingTarget Workflow workflow);
 
-    WorkflowDto convertToDto(Workflow workflow);
+    WorkflowDto workflowToWorkflowDto(Workflow workflow);
 }
