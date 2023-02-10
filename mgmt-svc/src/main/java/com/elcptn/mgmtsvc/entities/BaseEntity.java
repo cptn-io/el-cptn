@@ -26,10 +26,9 @@ public class BaseEntity {
     @Id
     @Getter
     @Setter
-    @GeneratedValue
     @Column(columnDefinition = "uuid", updatable = false)
     @ToString.Include
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @Getter
     @Version

@@ -9,6 +9,7 @@ import com.elcptn.mgmtsvc.mappers.WorkflowMapper;
 import com.elcptn.mgmtsvc.services.WorkflowService;
 import com.elcptn.mgmtsvc.validation.OnCreate;
 import com.elcptn.mgmtsvc.validation.OnUpdate;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,16 +27,12 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @Validated
+@RequiredArgsConstructor
 public class WorkflowController {
+
     private final WorkflowService workflowService;
-
     private final WorkflowMapper mapper;
-
-    public WorkflowController(WorkflowService workflowService, WorkflowMapper workflowMapper) {
-        this.workflowService = workflowService;
-        this.mapper = workflowMapper;
-    }
-
+    
     @Validated(OnCreate.class)
     @PostMapping("/api/workflow")
     public ResponseEntity<WorkflowDto> create(@Valid @RequestBody WorkflowDto workflowDto, BindingResult bindingResult) {

@@ -3,6 +3,7 @@ package com.elcptn.mgmtsvc.services;
 import com.elcptn.mgmtsvc.entities.Workflow;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.WorkflowRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,10 @@ import java.util.stream.Collectors;
 /* @author: kc, created on 2/7/23 */
 
 @Service
+@RequiredArgsConstructor
 public class WorkflowService extends CommonService {
 
     private final WorkflowRepository workflowRepository;
-
-    public WorkflowService(WorkflowRepository repository) {
-        this.workflowRepository = repository;
-    }
 
     public void create(Workflow workflow) {
 

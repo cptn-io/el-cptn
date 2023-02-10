@@ -34,3 +34,40 @@ CREATE TABLE event
 
 ALTER TABLE event
     ADD CONSTRAINT FK_EVENT_ON_WORKFLOW FOREIGN KEY (workflow_id) REFERENCES workflow (id);
+
+CREATE TABLE app
+(
+    id         UUID    NOT NULL,
+    version    INTEGER NOT NULL,
+    created_at TIMESTAMP with time zone,
+    updated_at TIMESTAMP with time zone,
+    created_by VARCHAR(36),
+    updated_by VARCHAR(36),
+    name       VARCHAR(100),
+    CONSTRAINT pk_app PRIMARY KEY (id)
+);
+
+CREATE TABLE operation
+(
+    id           UUID    NOT NULL,
+    version      INTEGER NOT NULL,
+    created_at   TIMESTAMP with time zone,
+    updated_at   TIMESTAMP with time zone,
+    created_by   VARCHAR(36),
+    updated_by   VARCHAR(36),
+    operation_id VARCHAR(36),
+    name         VARCHAR(100),
+    script       TEXT,
+    type         INTEGER,
+    op_version   INTEGER,
+    script_hash  VARCHAR(32),
+    locked       BOOLEAN,
+    app_id       UUID,
+    CONSTRAINT pk_operation PRIMARY KEY (id)
+);
+
+ALTER TABLE operation
+    ADD CONSTRAINT uc_operationId_opVersion UNIQUE (operation_id, op_version);
+
+ALTER TABLE operation
+    ADD CONSTRAINT FK_OPERATION_ON_APP FOREIGN KEY (app_id) REFERENCES app (id);
