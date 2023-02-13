@@ -5,6 +5,7 @@ package com.elcptn.mgmtsvc.entities;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -53,6 +54,7 @@ public class Operation extends BaseEntity {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "app_id")
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private App app;
 
 }
