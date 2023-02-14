@@ -32,7 +32,7 @@ public class WorkflowController {
 
     private final WorkflowService workflowService;
     private final WorkflowMapper mapper;
-    
+
     @Validated(OnCreate.class)
     @PostMapping("/api/workflow")
     public ResponseEntity<WorkflowDto> create(@Valid @RequestBody WorkflowDto workflowDto, BindingResult bindingResult) {
@@ -41,8 +41,8 @@ public class WorkflowController {
         }
 
         Workflow workflow = convert(workflowDto);
-        workflowService.create(workflow);
-        return ResponseEntity.ok(convert((workflow)));
+
+        return ResponseEntity.ok(convert(workflowService.create(workflow)));
     }
 
     @GetMapping("/api/workflow/{id}")
@@ -69,16 +69,16 @@ public class WorkflowController {
 
         Workflow workflow = getById(id);
         mapper.updateWorkflowFromWorkflowDto(workflowDto, workflow);
-        workflowService.update(workflow);
 
-        return ResponseEntity.ok(convert((workflow)));
+
+        return ResponseEntity.ok(convert(workflowService.update(workflow)));
     }
 
     @PutMapping("/api/workflow/{id}/rotateKeys")
     public ResponseEntity<WorkflowDto> rotateKeys(@PathVariable String id) {
         Workflow workflow = getById(id);
-        workflowService.rotateKeys(workflow);
-        return ResponseEntity.ok(convert((workflow)));
+
+        return ResponseEntity.ok(convert(workflowService.rotateKeys(workflow)));
     }
 
     @DeleteMapping("/api/workflow/{id}")

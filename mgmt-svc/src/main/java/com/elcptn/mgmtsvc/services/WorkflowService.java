@@ -20,28 +20,28 @@ public class WorkflowService extends CommonService {
 
     private final WorkflowRepository workflowRepository;
 
-    public void create(Workflow workflow) {
+    public Workflow create(Workflow workflow) {
 
         if (workflow.getSecured()) {
             workflow.setupNewKeys();
         }
-        workflowRepository.save(workflow);
+        return workflowRepository.save(workflow);
     }
 
     public Optional<Workflow> getById(String id) {
         return workflowRepository.findById(UUID.fromString(id));
     }
 
-    public void update(Workflow workflow) {
+    public Workflow update(Workflow workflow) {
         if (workflow.getSecured() && !workflow.hasAnyKeysSetup()) {
             workflow.setupNewKeys();
         }
-        workflowRepository.save(workflow);
+        return workflowRepository.save(workflow);
     }
 
-    public void rotateKeys(Workflow workflow) {
+    public Workflow rotateKeys(Workflow workflow) {
         workflow.rotateKeys();
-        workflowRepository.save(workflow);
+        return workflowRepository.save(workflow);
     }
 
     public List<Workflow> getAll(ListEntitiesParam param) {

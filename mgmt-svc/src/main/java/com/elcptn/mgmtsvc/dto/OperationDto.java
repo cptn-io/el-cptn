@@ -40,6 +40,5 @@ public class OperationDto extends BaseDto {
 
     @NotNull(message = "App is required", groups = OnCreate.class)
     @Null(message = "App cannot be updated", groups = OnUpdate.class)
-    @Size(min = 36, max = 36, message = "Invalid appId value")
     private UUID appId;
 }

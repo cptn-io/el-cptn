@@ -18,14 +18,15 @@ import java.util.stream.Collectors;
 public class AppService extends CommonService {
     private final AppRepository appRepository;
 
-    public void create(App app) {
-        appRepository.save(app);
+    public App create(App app) {
+        return appRepository.save(app);
+
     }
 
     public Optional<App> getById(String id) {
         return appRepository.findById(UUID.fromString(id));
     }
-    
+
 
     public List<App> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
@@ -36,8 +37,8 @@ public class AppService extends CommonService {
         return appRepository.count();
     }
 
-    public void update(App app) {
-        appRepository.save(app);
+    public App update(App app) {
+        return appRepository.save(app);
     }
 
     public void delete(App app) {

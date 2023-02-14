@@ -40,8 +40,8 @@ public class AppController {
         }
 
         App app = convert(appDto);
-        appService.create(app);
-        return ResponseEntity.ok(convert((app)));
+
+        return ResponseEntity.ok(convert(appService.create(app)));
     }
 
     @GetMapping("/api/app/{id}")
@@ -69,9 +69,9 @@ public class AppController {
 
         App app = getById(id);
         appMapper.updateAppFromAppDto(appDto, app);
-        appService.update(app);
 
-        return ResponseEntity.ok(convert((app)));
+
+        return ResponseEntity.ok(convert(appService.update(app)));
     }
 
     @DeleteMapping("/api/app/{id}")

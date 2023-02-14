@@ -1,8 +1,11 @@
 package com.elcptn.mgmtsvc.services;
 
+import com.elcptn.mgmtsvc.entities.App;
 import com.elcptn.mgmtsvc.entities.Operation;
+import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.OperationRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,12 +21,23 @@ import java.util.stream.Collectors;
 public class OperationService extends CommonService {
     private final OperationRepository operationRepository;
 
-    public void create(Operation operation) {
-        operationRepository.save(operation);
+    private final AppService appService;
+
+    public Operation create(@NonNull Operation operation) {
+
+        UUID appId = Optional.ofNullable(operation.getApp().getId()).orElseThrow(() -> new BadRequestException("appId" +
+                " is required"));
+
+        Optional<App> appOptional = appService.getById(appId.toString());
+        if (appOptional.isEmpty()) {
+            throw new BadRequestException("App not found with passed ID");
+        }
+
+        return operationRepository.save(operation);
     }
 
-    public void update(Operation operation) {
-        operationRepository.save(operation);
+    public Operation update(Operation operation) {
+        return operationRepository.save(operation);
     }
 
     public Optional<Operation> getById(String id) {

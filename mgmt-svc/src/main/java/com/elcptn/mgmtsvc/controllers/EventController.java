@@ -40,9 +40,9 @@ public class EventController {
         Event event = new Event();
         event.setPayload(jsonPayload);
         event.setWorkflow(workflowOptional.get());
-        eventService.create(event);
 
-        return ResponseEntity.ok(convert(event));
+
+        return ResponseEntity.ok(convert(eventService.create(event)));
     }
 
     private EventDto convert(Event event) {

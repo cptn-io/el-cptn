@@ -12,7 +12,7 @@ public class EventService extends CommonService {
 
     private final EventRepository eventRepository;
 
-    public void create(Event event) {
-        eventRepository.save(event);
+    public Event create(Event event) {
+        return eventRepository.save(event);
     }
 }
