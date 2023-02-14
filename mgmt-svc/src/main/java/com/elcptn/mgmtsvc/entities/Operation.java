@@ -5,10 +5,10 @@ package com.elcptn.mgmtsvc.entities;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
@@ -54,7 +54,12 @@ public class Operation extends BaseEntity {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "app_id")
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private App app;
+
+    public void createNextVersion(Integer nextVersion) {
+        this.setId(UUID.randomUUID());
+        this.setOpVersion(nextVersion);
+        this.setLocked(false);
+    }
 
 }

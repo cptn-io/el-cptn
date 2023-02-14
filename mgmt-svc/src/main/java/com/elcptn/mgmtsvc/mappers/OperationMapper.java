@@ -12,9 +12,10 @@ public interface OperationMapper {
     @Mapping(ignore = true, target = "createdBy")
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
+    @Mapping(ignore = true, target = "operationId")
     @Mapping(source = "appId", target = "app.id")
     Operation operationDtoToOperation(OperationDto operationDto);
-
+    
     @Mapping(source = "app.id", target = "appId")
     OperationDto operationToOperationDto(Operation operation);
 
@@ -23,7 +24,8 @@ public interface OperationMapper {
     @Mapping(ignore = true, target = "createdBy")
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
-    @Mapping(source = "appId", target = "app.id")
+    @Mapping(ignore = true, target = "operationId")
+    @Mapping(ignore = true, target = "app.id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Operation updateOperationFromOperationDto(OperationDto operationDto, @MappingTarget Operation operation);
 }

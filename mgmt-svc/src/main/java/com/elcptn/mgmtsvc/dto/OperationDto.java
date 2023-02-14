@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
@@ -21,14 +22,17 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OperationDto extends BaseDto {
 
+    @Null
+    private String operationId;
+
     @NotNull(message = "Name is required", groups = OnCreate.class)
     @Size(min = 5, max = 128, message = "Length must be between 5 and 128 characters")
     private String name;
 
-    @NotNull
+    @NotBlank(groups = OnCreate.class)
     private String script;
 
-    @NotNull
+    @NotNull(groups = OnCreate.class)
     private OperationType type;
 
     @Null
@@ -36,7 +40,7 @@ public class OperationDto extends BaseDto {
 
     @Null
     private String scriptHash;
-    
+
     private Boolean locked = false;
 
     @NotNull(message = "App is required", groups = OnCreate.class)

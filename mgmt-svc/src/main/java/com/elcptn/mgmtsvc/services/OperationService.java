@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,9 @@ public class OperationService extends CommonService {
 
     private final AppService appService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public Operation create(@NonNull Operation operation) {
 
         UUID appId = Optional.ofNullable(operation.getApp().getId()).orElseThrow(() -> new BadRequestException("appId" +
@@ -34,12 +39,24 @@ public class OperationService extends CommonService {
         if (appOptional.isEmpty()) {
             throw new BadRequestException("App not found with passed ID");
         }
+        operation.setOperationId(UUID.randomUUID().toString());
         operation.setOpVersion(1);
         operation.setScriptHash(getHash(operation.getScript()));
         return operationRepository.save(operation);
     }
 
     public Operation update(Operation operation) {
+        operation.setScriptHash(getHash(operation.getScript()));
+        return operationRepository.save(operation);
+    }
+
+    public Operation addNewVersion(Operation operation) {
+        Operation latestVersion =
+                operationRepository.getFirstByOperationIdOrderByCreatedAtDesc(operation.getOperationId());
+
+        entityManager.detach(operation);
+
+        operation.createNextVersion(latestVersion.getOpVersion() + 1);
         return operationRepository.save(operation);
     }
 
@@ -47,9 +64,17 @@ public class OperationService extends CommonService {
         return operationRepository.findById(UUID.fromString(id));
     }
 
-    public List<Operation> getAll(String appId, ListEntitiesParam param) {
+    public List<Operation> getAll(UUID appId, ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return operationRepository.findAllByApp(UUID.fromString(appId), pageable).stream().collect(Collectors.toList());
+        return operationRepository.findAllByApp(new App(appId), pageable).stream().collect(Collectors.toList());
+    }
+
+    public void delete(Operation operation) {
+        operationRepository.delete(operation);
+    }
+
+    public long count(UUID appId) {
+        return operationRepository.countAllByApp(new App(appId));
     }
 
     public String getHash(String content) {
