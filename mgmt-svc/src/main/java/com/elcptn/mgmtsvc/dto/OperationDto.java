@@ -31,11 +31,12 @@ public class OperationDto extends BaseDto {
     @NotNull
     private OperationType type;
 
+    @Null
     private Integer opVersion;
 
     @Null
     private String scriptHash;
-
+    
     private Boolean locked = false;
 
     @NotNull(message = "App is required", groups = OnCreate.class)

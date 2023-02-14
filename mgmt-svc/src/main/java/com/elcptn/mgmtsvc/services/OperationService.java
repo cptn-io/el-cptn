@@ -9,7 +9,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +34,8 @@ public class OperationService extends CommonService {
         if (appOptional.isEmpty()) {
             throw new BadRequestException("App not found with passed ID");
         }
-
+        operation.setOpVersion(1);
+        operation.setScriptHash(getHash(operation.getScript()));
         return operationRepository.save(operation);
     }
 
@@ -47,5 +50,9 @@ public class OperationService extends CommonService {
     public List<Operation> getAll(String appId, ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
         return operationRepository.findAllByApp(UUID.fromString(appId), pageable).stream().collect(Collectors.toList());
+    }
+
+    public String getHash(String content) {
+        return DigestUtils.md5DigestAsHex(content.getBytes(StandardCharsets.UTF_8));
     }
 }
