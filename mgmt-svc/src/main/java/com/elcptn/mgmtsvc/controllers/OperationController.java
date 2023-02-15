@@ -48,7 +48,7 @@ public class OperationController {
 
     @Validated(OnUpdate.class)
     @PutMapping("/api/operation/{id}")
-    public ResponseEntity<OperationDto> updateOperation(@PathVariable String id,
+    public ResponseEntity<OperationDto> updateOperation(@PathVariable UUID id,
                                                         @Valid @RequestBody OperationDto operationDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
@@ -63,7 +63,7 @@ public class OperationController {
     }
 
     @PostMapping("/api/operation/{id}/nextVersion")
-    public ResponseEntity<OperationDto> nextVersion(@PathVariable String id) {
+    public ResponseEntity<OperationDto> nextVersion(@PathVariable UUID id) {
         Operation operation = getById(id);
         return ResponseEntity.ok(convert(operationService.addNewVersion(operation)));
     }
@@ -84,19 +84,19 @@ public class OperationController {
     }
 
     @GetMapping("/api/operation/{id}")
-    public ResponseEntity<OperationDto> get(@PathVariable String id) {
+    public ResponseEntity<OperationDto> get(@PathVariable UUID id) {
         Operation operation = getById(id);
         return ResponseEntity.ok(convert((operation)));
     }
 
     @DeleteMapping("/api/operation/{id}")
-    public ResponseEntity deleteOperation(@PathVariable String id) {
+    public ResponseEntity deleteOperation(@PathVariable UUID id) {
         Operation operation = getById(id);
         operationService.delete(operation);
         return ResponseEntity.noContent().build();
     }
 
-    private Operation getById(String id) {
+    private Operation getById(UUID id) {
         Optional<Operation> operationOptional = operationService.getById(id);
         if (operationOptional.isEmpty()) {
             throw new NotFoundException("Operation not found with the passed id");

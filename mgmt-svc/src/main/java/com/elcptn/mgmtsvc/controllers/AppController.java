@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /* @author: kc, created on 2/9/23 */
@@ -45,7 +46,7 @@ public class AppController {
     }
 
     @GetMapping("/api/app/{id}")
-    public ResponseEntity<AppDto> get(@PathVariable String id) {
+    public ResponseEntity<AppDto> get(@PathVariable UUID id) {
         App app = getById(id);
         return ResponseEntity.ok(convert((app)));
     }
@@ -61,7 +62,7 @@ public class AppController {
 
     @Validated(OnUpdate.class)
     @PutMapping("/api/app/{id}")
-    public ResponseEntity<AppDto> update(@PathVariable String id, @Valid @RequestBody AppDto appDto,
+    public ResponseEntity<AppDto> update(@PathVariable UUID id, @Valid @RequestBody AppDto appDto,
                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
@@ -75,13 +76,13 @@ public class AppController {
     }
 
     @DeleteMapping("/api/app/{id}")
-    public ResponseEntity delete(@PathVariable String id) {
+    public ResponseEntity delete(@PathVariable UUID id) {
         App app = getById(id);
         appService.delete(app);
         return ResponseEntity.noContent().build();
     }
 
-    private App getById(String id) {
+    private App getById(UUID id) {
         Optional<App> appOptional = appService.getById(id);
         if (appOptional.isEmpty()) {
             throw new NotFoundException("App not found with the passed id");

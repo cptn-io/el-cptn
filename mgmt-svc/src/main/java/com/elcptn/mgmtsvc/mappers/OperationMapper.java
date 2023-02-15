@@ -15,6 +15,7 @@ public interface OperationMapper {
     @Mapping(ignore = true, target = "operationId")
     @Mapping(source = "appId", target = "app.id")
     Operation operationDtoToOperation(OperationDto operationDto);
+
     
     @Mapping(source = "app.id", target = "appId")
     OperationDto operationToOperationDto(Operation operation);

@@ -23,7 +23,7 @@ import java.util.UUID;
 public class OperationDto extends BaseDto {
 
     @Null
-    private String operationId;
+    private UUID operationId;
 
     @NotNull(message = "Name is required", groups = OnCreate.class)
     @Size(min = 5, max = 128, message = "Length must be between 5 and 128 characters")

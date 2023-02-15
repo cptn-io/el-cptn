@@ -26,5 +26,6 @@ public interface WorkflowMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateWorkflowFromWorkflowDto(WorkflowDto workflowDto, @MappingTarget Workflow workflow);
 
+    
     WorkflowDto workflowToWorkflowDto(Workflow workflow);
 }

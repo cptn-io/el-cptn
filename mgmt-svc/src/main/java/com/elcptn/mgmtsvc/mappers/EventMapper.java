@@ -9,8 +9,8 @@ import org.mapstruct.ReportingPolicy;
 /* @author: kc, created on 2/8/23 */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface EventMapper {
-
     @Mapping(source = "workflow.id", target = "workflowId")
     EventDto eventToEventDto(Event event);
+
 
 }

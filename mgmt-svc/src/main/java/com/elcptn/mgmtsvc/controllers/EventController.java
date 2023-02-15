@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.UUID;
 
 /* @author: kc, created on 2/8/23 */
 @RestController
@@ -30,7 +31,7 @@ public class EventController {
     private final EventMapper eventMapper;
 
     @PostMapping("/api/workflow/{workflowId}/event")
-    public ResponseEntity<EventDto> createEvent(@PathVariable String workflowId,
+    public ResponseEntity<EventDto> createEvent(@PathVariable UUID workflowId,
                                                 @Valid @RequestBody JsonNode jsonPayload) {
         Optional<Workflow> workflowOptional = workflowService.getById(workflowId);
         if (workflowOptional.isEmpty()) {

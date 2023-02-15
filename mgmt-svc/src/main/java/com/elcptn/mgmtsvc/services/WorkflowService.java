@@ -28,8 +28,8 @@ public class WorkflowService extends CommonService {
         return workflowRepository.save(workflow);
     }
 
-    public Optional<Workflow> getById(String id) {
-        return workflowRepository.findById(UUID.fromString(id));
+    public Optional<Workflow> getById(UUID id) {
+        return workflowRepository.findById(id);
     }
 
     public Workflow update(Workflow workflow) {

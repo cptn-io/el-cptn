@@ -4,13 +4,14 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 /* @author: kc, created on 2/7/23 */
 
 @Data
 public class BaseDto implements Serializable {
 
-    private String id;
+    private UUID id;
 
     private ZonedDateTime createdAt;
 

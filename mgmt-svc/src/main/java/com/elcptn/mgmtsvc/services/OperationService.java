@@ -35,7 +35,7 @@ public class OperationService extends CommonService {
         UUID appId = Optional.ofNullable(operation.getApp().getId()).orElseThrow(() -> new BadRequestException("appId" +
                 " is required"));
 
-        Optional<App> appOptional = appService.getById(appId.toString());
+        Optional<App> appOptional = appService.getById(appId);
         if (appOptional.isEmpty()) {
             throw new BadRequestException("App not found with passed ID");
         }
@@ -60,8 +60,8 @@ public class OperationService extends CommonService {
         return operationRepository.save(operation);
     }
 
-    public Optional<Operation> getById(String id) {
-        return operationRepository.findById(UUID.fromString(id));
+    public Optional<Operation> getById(UUID id) {
+        return operationRepository.findById(id);
     }
 
     public List<Operation> getAll(UUID appId, ListEntitiesParam param) {

@@ -23,8 +23,8 @@ public class AppService extends CommonService {
 
     }
 
-    public Optional<App> getById(String id) {
-        return appRepository.findById(UUID.fromString(id));
+    public Optional<App> getById(UUID id) {
+        return appRepository.findById(id);
     }
 
 

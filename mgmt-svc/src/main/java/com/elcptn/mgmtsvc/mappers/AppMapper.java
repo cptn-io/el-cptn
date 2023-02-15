@@ -14,7 +14,7 @@ public interface AppMapper {
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
     App appDtoToApp(AppDto appDto);
-    
+
     AppDto appToAppDto(App app);
 
     @Mapping(ignore = true, target = "createdAt")
