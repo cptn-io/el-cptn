@@ -12,7 +12,7 @@ import java.util.Set;
 /* @author: kc, created on 2/15/23 */
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
-public class Listener extends BaseEntity {
+public class Action extends BaseEntity {
 
     @Getter
     @Setter
@@ -25,14 +25,17 @@ public class Listener extends BaseEntity {
     @Column(name = "script")
     private String script;
 
+    @Getter
+    @Setter
+    private Boolean active = true;
 
     @Getter
     @Setter
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "workflow_listener_map",
-            joinColumns = {@JoinColumn(name = "workflow_id")},
-            inverseJoinColumns = {@JoinColumn(name = "listener_id")}
+            name = "workflow_action_map",
+            joinColumns = {@JoinColumn(name = "action_id")},
+            inverseJoinColumns = {@JoinColumn(name = "workflow_id")}
     )
     private Set<Workflow> workflows = new HashSet<>();
 

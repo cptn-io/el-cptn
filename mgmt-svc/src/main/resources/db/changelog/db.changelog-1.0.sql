@@ -35,6 +35,33 @@ CREATE TABLE event
 ALTER TABLE event
     ADD CONSTRAINT FK_EVENT_ON_WORKFLOW FOREIGN KEY (workflow_id) REFERENCES workflow (id);
 
+CREATE TABLE action
+(
+    id         UUID    NOT NULL,
+    version    INTEGER NOT NULL,
+    created_at TIMESTAMP with time zone,
+    updated_at TIMESTAMP with time zone,
+    created_by VARCHAR(36),
+    updated_by VARCHAR(36),
+    name       VARCHAR(100),
+    script     TEXT,
+    active     BOOLEAN,
+    CONSTRAINT pk_action PRIMARY KEY (id)
+);
+
+CREATE TABLE workflow_action_map
+(
+    action_id   UUID NOT NULL,
+    workflow_id UUID NOT NULL,
+    CONSTRAINT pk_workflow_action_map PRIMARY KEY (action_id, workflow_id)
+);
+
+ALTER TABLE workflow_action_map
+    ADD CONSTRAINT fk_woractmap_on_action FOREIGN KEY (action_id) REFERENCES action (id);
+
+ALTER TABLE workflow_action_map
+    ADD CONSTRAINT fk_woractmap_on_workflow FOREIGN KEY (workflow_id) REFERENCES workflow (id);
+
 CREATE TABLE app
 (
     id         UUID    NOT NULL,

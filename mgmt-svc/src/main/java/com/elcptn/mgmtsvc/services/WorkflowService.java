@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /* @author: kc, created on 2/7/23 */
@@ -55,5 +53,19 @@ public class WorkflowService extends CommonService {
 
     public void delete(Workflow workflow) {
         workflowRepository.delete(workflow);
+    }
+
+    public Set<UUID> getInvalidWorkflows(Set<Workflow> workflows) {
+        if (workflows == null) {
+            return new HashSet<>();
+        }
+
+        Set<UUID> invalidIds = new HashSet<>();
+        for (Workflow wf : workflows) {
+            if (getById(wf.getId()).isEmpty()) {
+                invalidIds.add(wf.getId());
+            }
+        }
+        return invalidIds;
     }
 }

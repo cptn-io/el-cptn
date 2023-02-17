@@ -2,6 +2,7 @@ package com.elcptn.mgmtsvc.entities;
 
 import com.elcptn.mgmtsvc.helpers.StringHelper;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
@@ -10,11 +11,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 /* @author: kc, created on 2/7/23 */
 
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
+@NoArgsConstructor
 public class Workflow extends BaseEntity {
 
     @Getter
@@ -42,6 +45,10 @@ public class Workflow extends BaseEntity {
     @Getter
     @Column(columnDefinition = "timestamp with time zone")
     private ZonedDateTime lastKeyRotationAt;
+
+    public Workflow(UUID id) {
+        this.setId(id);
+    }
 
     public void rotateKeys() {
         String newKey = StringHelper.getSecureRandomString(16);
