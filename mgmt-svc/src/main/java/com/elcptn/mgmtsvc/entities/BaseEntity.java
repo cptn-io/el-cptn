@@ -1,5 +1,6 @@
 package com.elcptn.mgmtsvc.entities;
 
+import com.elcptn.mgmtsvc.listeners.EntityListener;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.Getter;

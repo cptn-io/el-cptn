@@ -1,4 +1,6 @@
-package com.elcptn.mgmtsvc.entities;
+package com.elcptn.mgmtsvc.listeners;
+
+import com.elcptn.mgmtsvc.entities.BaseEntity;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
