@@ -29,6 +29,7 @@ CREATE TABLE event
     updated_by VARCHAR(36),
     payload    JSON,
     source_id  UUID,
+    state      VARCHAR(25) DEFAULT 'QUEUED',
     CONSTRAINT pk_event PRIMARY KEY (id)
 );
 

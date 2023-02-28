@@ -24,4 +24,10 @@ public class Event extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_id")
     private Source source;
+
+    @Enumerated(EnumType.STRING)
+    @Setter
+    @Getter
+    @Column(length = 25)
+    private State state = State.QUEUED;
 }

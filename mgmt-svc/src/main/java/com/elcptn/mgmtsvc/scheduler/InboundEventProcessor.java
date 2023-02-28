@@ -1,11 +1,14 @@
 package com.elcptn.mgmtsvc.scheduler;
 
+import com.elcptn.mgmtsvc.entities.Event;
 import com.elcptn.mgmtsvc.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /* @author: kc, created on 2/22/23 */
 @Component
@@ -18,7 +21,10 @@ public class InboundEventProcessor {
 
     @Scheduled(fixedDelay = 5000)
     public void process() {
-        System.out.println("Event count=" + eventRepository.count());
+
+        List<Event> eventList = eventRepository.fetchEventsForProcessing(10);
+        System.out.println(eventList.size());
+
     }
 
 }
