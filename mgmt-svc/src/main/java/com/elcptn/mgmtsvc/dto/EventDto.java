@@ -16,5 +16,5 @@ import java.util.UUID;
 @JsonIgnoreProperties({"createdBy", "updatedBy"})
 public class EventDto extends BaseDto {
 
-    private UUID workflowId;
+    private UUID sourceId;
 }

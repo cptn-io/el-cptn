@@ -78,15 +78,15 @@ public class ActionController {
     }
 
     @Validated(OnReference.class)
-    @PostMapping("/api/action/{id}/workflow")
-    public ResponseEntity<ActionDto> addActionToWorkflow(@PathVariable UUID id, @Valid @RequestBody ActionDto actionDto,
-                                                         BindingResult bindingResult) {
+    @PostMapping("/api/action/{id}/source")
+    public ResponseEntity<ActionDto> addActionToSource(@PathVariable UUID id, @Valid @RequestBody ActionDto actionDto,
+                                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
         }
 
         Action action = getById(id);
-        mapper.mergeActionWorkflowsfromActionDto(actionDto, action);
+        mapper.mergeActionSourcesfromActionDto(actionDto, action);
         return ResponseEntity.ok(convert(actionService.update(action)));
     }
 

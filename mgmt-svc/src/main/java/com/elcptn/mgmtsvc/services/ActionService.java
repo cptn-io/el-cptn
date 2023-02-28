@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.mgmtsvc.entities.Action;
-import com.elcptn.mgmtsvc.entities.Workflow;
+import com.elcptn.mgmtsvc.entities.Source;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.ActionRepository;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class ActionService extends CommonService {
     private final ActionRepository actionRepository;
 
-    private final WorkflowService workflowService;
+    private final SourceService sourceService;
 
     public Action create(Action action) {
         return save(action);
@@ -37,11 +37,11 @@ public class ActionService extends CommonService {
     }
 
     private Action save(Action action) {
-        Set<Workflow> workflows = action.getWorkflows();
-        Set<UUID> invalidWorkflows = workflowService.getInvalidWorkflows(workflows);
-        if (invalidWorkflows.size() > 0) {
-            FieldError fieldError = new FieldError("action", "workflowIds", "Invalid references - " + invalidWorkflows);
-            throw new BadRequestException("Action could not be associated to selected Workflows", List.of(fieldError));
+        Set<Source> sources = action.getSources();
+        Set<UUID> invalidSources = sourceService.getInvalidSources(sources);
+        if (invalidSources.size() > 0) {
+            FieldError fieldError = new FieldError("action", "sourceIds", "Invalid references - " + invalidSources);
+            throw new BadRequestException("Action could not be associated to selected Sources", List.of(fieldError));
         }
 
         return actionRepository.save(action);

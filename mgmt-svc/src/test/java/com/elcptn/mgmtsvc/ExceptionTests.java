@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc;
 
-import com.elcptn.mgmtsvc.dto.WorkflowDto;
+import com.elcptn.mgmtsvc.dto.SourceDto;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.exceptions.RestExceptionHandler;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /* @author: kc, created on 2/7/23 */
 public class ExceptionTests {
-    
+
     private RestExceptionHandler exceptionHandler = new RestExceptionHandler();
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -95,9 +95,9 @@ public class ExceptionTests {
 
     @Test
     void constraintViolationTest() {
-        WorkflowDto workflowDto = new WorkflowDto();
+        SourceDto sourceDto = new SourceDto();
 
-        Set<ConstraintViolation<WorkflowDto>> violations = validator.validate(workflowDto, OnCreate.class);
+        Set<ConstraintViolation<SourceDto>> violations = validator.validate(sourceDto, OnCreate.class);
 
         ConstraintViolationException exception = new ConstraintViolationException("error message", violations);
 

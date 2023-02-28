@@ -1,5 +1,6 @@
 package com.elcptn.mgmtsvc.dto;
 
+import com.elcptn.mgmtsvc.entities.Source;
 import com.elcptn.mgmtsvc.validation.OnCreate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +14,12 @@ import java.time.ZonedDateTime;
 /* @author: kc, created on 2/7/23 */
 
 /**
- * A DTO for the {@link com.elcptn.mgmtsvc.entities.Workflow} entity
+ * A DTO for the {@link Source} entity
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkflowDto extends BaseDto {
+public class SourceDto extends BaseDto {
 
     @NotNull(message = "Name is required", groups = OnCreate.class)
     @Size(min = 5, max = 128, message = "Length must be between 5 and 128 characters")

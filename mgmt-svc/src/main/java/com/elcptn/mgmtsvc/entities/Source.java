@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
-public class Workflow extends BaseEntity {
+public class Source extends BaseEntity {
 
     @Getter
     @Setter
@@ -46,7 +46,7 @@ public class Workflow extends BaseEntity {
     @Column(columnDefinition = "timestamp with time zone")
     private ZonedDateTime lastKeyRotationAt;
 
-    public Workflow(UUID id) {
+    public Source(UUID id) {
         this.setId(id);
     }
 
@@ -75,8 +75,8 @@ public class Workflow extends BaseEntity {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
             return false;
         }
-        Workflow workflow = (Workflow) o;
-        return getId() != null && Objects.equals(getId(), workflow.getId());
+        Source source = (Source) o;
+        return getId() != null && Objects.equals(getId(), source.getId());
     }
 
     @Override

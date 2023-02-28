@@ -30,6 +30,6 @@ public class ActionDto extends BaseDto {
 
     private Boolean active;
 
-    @NotNull(message = "WorkflowIds are required", groups = OnReference.class)
-    private Set<UUID> workflowIds;
+    @NotNull(message = "SourceIds are required", groups = OnReference.class)
+    private Set<UUID> sourceIds;
 }

@@ -22,6 +22,6 @@ public class Event extends BaseEntity {
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workflow_id")
-    private Workflow workflow;
+    @JoinColumn(name = "source_id")
+    private Source source;
 }

@@ -2,7 +2,7 @@ package com.elcptn.mgmtsvc.mappers;
 
 import com.elcptn.mgmtsvc.dto.ActionDto;
 import com.elcptn.mgmtsvc.entities.Action;
-import com.elcptn.mgmtsvc.entities.Workflow;
+import com.elcptn.mgmtsvc.entities.Source;
 import org.mapstruct.*;
 
 import java.util.Set;
@@ -19,11 +19,11 @@ public interface ActionMapper {
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
     @Mapping(source = "active", target = "active", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    @Mapping(target = "workflows", expression = "java(workflowIdsToWorkflows(actionDto.getWorkflowIds()))")
+    @Mapping(target = "sources", expression = "java(sourceIdsToSources(actionDto.getSourceIds()))")
     Action actionDtoToAction(ActionDto actionDto);
 
 
-    @Mapping(target = "workflowIds", expression = "java(workflowsToWorkflowIds(action.getWorkflows()))")
+    @Mapping(target = "sourceIds", expression = "java(sourcesToSourceIds(action.getSources()))")
     ActionDto actionToActionDto(Action action);
 
 
@@ -43,20 +43,20 @@ public interface ActionMapper {
     @Mapping(ignore = true, target = "name")
     @Mapping(ignore = true, target = "active")
     @Mapping(ignore = true, target = "script")
-    @Mapping(target = "workflows", expression = "java(mergeWorkflowIds(action.getWorkflows(), actionDto" +
-            ".getWorkflowIds()))")
-    Action mergeActionWorkflowsfromActionDto(ActionDto actionDto, @MappingTarget Action action);
+    @Mapping(target = "sources", expression = "java(mergeSourceIds(action.getSources(), actionDto" +
+            ".getSourceIds()))")
+    Action mergeActionSourcesfromActionDto(ActionDto actionDto, @MappingTarget Action action);
 
-    default Set<UUID> workflowsToWorkflowIds(Set<Workflow> workflows) {
-        return workflows.stream().map(Workflow::getId).collect(Collectors.toSet());
+    default Set<UUID> sourcesToSourceIds(Set<Source> sources) {
+        return sources.stream().map(com.elcptn.mgmtsvc.entities.Source::getId).collect(Collectors.toSet());
     }
 
-    default Set<Workflow> workflowIdsToWorkflows(Set<UUID> workflowIds) {
-        return workflowIds.stream().map(Workflow::new).collect(Collectors.toSet());
+    default Set<Source> sourceIdsToSources(Set<UUID> sourceIds) {
+        return sourceIds.stream().map(com.elcptn.mgmtsvc.entities.Source::new).collect(Collectors.toSet());
     }
 
-    default Set<Workflow> mergeWorkflowIds(Set<Workflow> workflows, Set<UUID> workflowIds) {
-        workflows.addAll(workflowIdsToWorkflows(workflowIds));
-        return workflows;
+    default Set<Source> mergeSourceIds(Set<Source> sources, Set<UUID> SourceIds) {
+        sources.addAll(sourceIdsToSources(SourceIds));
+        return sources;
     }
 }

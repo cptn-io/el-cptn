@@ -33,10 +33,10 @@ public class Action extends BaseEntity {
     @Setter
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "workflow_action_map",
+            name = "source_action_map",
             joinColumns = {@JoinColumn(name = "action_id")},
-            inverseJoinColumns = {@JoinColumn(name = "workflow_id")}
+            inverseJoinColumns = {@JoinColumn(name = "source_id")}
     )
-    private Set<Workflow> workflows = new HashSet<>();
+    private Set<Source> sources = new HashSet<>();
 
 }
