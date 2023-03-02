@@ -1,14 +1,14 @@
 package com.elcptn.mgmtsvc.entities;
 
 import com.elcptn.mgmtsvc.helpers.StringHelper;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;

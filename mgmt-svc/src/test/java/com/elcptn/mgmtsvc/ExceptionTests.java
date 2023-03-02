@@ -7,15 +7,15 @@ import com.elcptn.mgmtsvc.exceptions.RestExceptionHandler;
 import com.elcptn.mgmtsvc.exceptions.WebApplicationException;
 import com.elcptn.mgmtsvc.exceptions.models.AppError;
 import com.elcptn.mgmtsvc.validation.OnCreate;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.Set;
 

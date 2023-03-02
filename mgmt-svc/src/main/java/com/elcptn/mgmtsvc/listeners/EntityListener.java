@@ -1,9 +1,9 @@
 package com.elcptn.mgmtsvc.listeners;
 
 import com.elcptn.mgmtsvc.entities.BaseEntity;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import java.time.ZonedDateTime;
 
 /* @author: kc, created on 2/7/23 */

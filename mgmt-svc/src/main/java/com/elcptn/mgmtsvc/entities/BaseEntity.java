@@ -1,15 +1,11 @@
 package com.elcptn.mgmtsvc.entities;
 
 import com.elcptn.mgmtsvc.listeners.EntityListener;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -18,10 +14,10 @@ import java.util.UUID;
 @MappedSuperclass
 @EntityListeners(EntityListener.class)
 @ToString(onlyExplicitlyIncluded = true)
-@TypeDefs({
-        @TypeDef(name = "json", typeClass = JsonStringType.class),
-        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-})
+//@TypeDefs({
+//        @TypeDef(name = "json", typeClass = JsonStringType.class),
+//        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+//})
 public class BaseEntity {
 
     @Id

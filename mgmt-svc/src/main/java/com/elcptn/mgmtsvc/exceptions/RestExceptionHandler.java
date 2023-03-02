@@ -1,6 +1,9 @@
 package com.elcptn.mgmtsvc.exceptions;
 
 import com.elcptn.mgmtsvc.exceptions.models.AppError;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +13,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
 import java.util.*;
 
 /* @author: kc, created on 2/7/23 */
@@ -23,7 +23,9 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {
-        log.debug(ex.getMessage(), ex);
+        if (log.isDebugEnabled()) {
+            log.debug(ex.getMessage(), ex);
+        }
         AppError error = new AppError("There was an error processing your request");
         if (ex instanceof HttpMessageNotReadableException) {
             error.setMessage("Unable to process the payload sent");

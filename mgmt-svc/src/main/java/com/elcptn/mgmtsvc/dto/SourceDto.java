@@ -2,13 +2,13 @@ package com.elcptn.mgmtsvc.dto;
 
 import com.elcptn.mgmtsvc.entities.Source;
 import com.elcptn.mgmtsvc.validation.OnCreate;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 
 /* @author: kc, created on 2/7/23 */

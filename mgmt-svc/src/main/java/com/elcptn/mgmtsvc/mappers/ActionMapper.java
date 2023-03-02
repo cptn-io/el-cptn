@@ -5,6 +5,7 @@ import com.elcptn.mgmtsvc.entities.Action;
 import com.elcptn.mgmtsvc.entities.Source;
 import org.mapstruct.*;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,7 +22,6 @@ public interface ActionMapper {
     @Mapping(source = "active", target = "active", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "sources", expression = "java(sourceIdsToSources(actionDto.getSourceIds()))")
     Action actionDtoToAction(ActionDto actionDto);
-
 
     @Mapping(target = "sourceIds", expression = "java(sourcesToSourceIds(action.getSources()))")
     ActionDto actionToActionDto(Action action);
@@ -52,6 +52,9 @@ public interface ActionMapper {
     }
 
     default Set<Source> sourceIdsToSources(Set<UUID> sourceIds) {
+        if (sourceIds == null) {
+            return Collections.EMPTY_SET;
+        }
         return sourceIds.stream().map(com.elcptn.mgmtsvc.entities.Source::new).collect(Collectors.toSet());
     }
 

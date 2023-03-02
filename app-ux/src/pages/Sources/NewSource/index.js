@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
+import { renderErrors } from "../../../common/formHelpers";
 
 const breadcrumbs = [{ label: 'Sources', url: '/app/sources' }];
 
@@ -55,7 +56,6 @@ const NewSource = () => {
         })
     };
 
-
     return <Fragment>
         <PageTitle itemKey="sources" label="New Source" breadcrumbs={breadcrumbs} />
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -69,21 +69,21 @@ const NewSource = () => {
                                     <span className="label-text">Source Name</span>
                                 </label>
                                 <input type="text" placeholder="Provide a name for the Source" value={name} className="input input-bordered w-full" onChange={e => setName(e.target.value)} />
-                                {error?.fieldErrors?.['name']?.map(error => <label className="label"><span key={`name${error}`} className="label-text-alt text-error">{error}</span></label>)}
+                                {renderErrors(error, 'name')}
                             </div>
                             <div className="form-control w-full">
                                 <label className="label">
                                     <span className="label-text">Secured</span>
                                 </label>
                                 <input type="checkbox" className="toggle toggle-lg" checked={secured} onChange={(e) => setSecured(e.target.checked)} />
-                                {error?.fieldErrors?.['secured']?.map(error => <label className="label"><span key={`secured${error}`} className="label-text-alt text-error">{error}</span></label>)}
+                                {renderErrors(error, 'secured')}
                             </div>
                             <div className="form-control w-full">
                                 <label className="label">
                                     <span className="label-text">Active</span>
                                 </label>
                                 <input type="checkbox" className="toggle toggle-lg" checked={active} onChange={(e) => setActive(e.target.checked)} />
-                                {error?.fieldErrors?.['active']?.map(error => <label className="label"><span key={`active${error}`} className="label-text-alt text-error">{error}</span></label>)}
+                                {renderErrors(error, 'active')}
                             </div>
 
                         </div>

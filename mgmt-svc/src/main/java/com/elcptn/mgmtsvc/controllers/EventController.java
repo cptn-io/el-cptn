@@ -8,6 +8,7 @@ import com.elcptn.mgmtsvc.mappers.EventMapper;
 import com.elcptn.mgmtsvc.services.EventService;
 import com.elcptn.mgmtsvc.services.SourceService;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 

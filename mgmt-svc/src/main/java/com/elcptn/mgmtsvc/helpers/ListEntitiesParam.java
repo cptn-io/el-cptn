@@ -1,10 +1,10 @@
 package com.elcptn.mgmtsvc.helpers;
 
 import com.google.common.primitives.Ints;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.NonNull;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 /* @author: kc, created on 2/7/23 */
