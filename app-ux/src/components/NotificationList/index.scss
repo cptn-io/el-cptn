@@ -1,0 +1,13 @@
+.toast {
+    .alert {
+        width: 320px;
+        position: relative;
+
+        .clear-btn {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            margin: 0px;
+        }
+    }
+}
