@@ -9,3 +9,6 @@ updates:
     directory: "/mgmt-svc" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "spring-boot-starter-parent"
+        versions: ["3.x"]         # Ignore 3.x updates for Spring
