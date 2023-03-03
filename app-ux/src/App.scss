@@ -1,4 +1,8 @@
 #root {
   max-width: 1800px;
   margin: 0 auto;
+
+  .table-container {
+    min-height: calc(80vh - 250px);
+  }
 }

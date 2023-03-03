@@ -38,25 +38,27 @@ const Sources = () => {
 
     return <Fragment>
         <PageTitle itemKey="sources">
-            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus width={24} className="mr-2" /> New Source</Link>
+            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" /> New Source</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
-                <thead>
-                    <tr>
-                        <th className="bg-base-300 text-left w-1/2 md:w-2/3">Name</th>
-                        <th className="bg-base-300 text-center">Secured</th>
-                        <th className="bg-base-300 text-center">Active</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(source => <tr key={source.id}>
-                        <td className="whitespace-pre-wrap break-words"><Link to={`/sources/${source.id}`}>{source.name}</Link></td>
-                        <td className="text-center"><div className="flex justify-center">{source.secured ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>
-                        <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>
-                    </tr>)}
-                </tbody>
-            </table>
+            <div className="table-container">
+                <table className="table data-table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th className="bg-base-300 text-left w-1/2 md:w-2/3">Name</th>
+                            <th className="bg-base-300 text-center">Secured</th>
+                            <th className="bg-base-300 text-center">Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.map(source => <tr key={source.id}>
+                            <td className="whitespace-pre-wrap break-words"><Link to={`/sources/${source.id}`}>{source.name}</Link></td>
+                            <td className="text-center"><div className="flex justify-center">{source.secured ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>
+                            <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>
+                        </tr>)}
+                    </tbody>
+                </table>
+            </div>
             <Pagination totalCount={totalCount} currentPage={page} />
         </div>
         }

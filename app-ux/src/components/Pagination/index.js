@@ -20,10 +20,10 @@ const Pagination = (props) => {
             {`${startCount} - ${endCount} of ${totalCount} records`}
         </div>
         <div className="btn-group">
-            <button disabled={page === 0} onClick={() => setPage(0)} className="btn btn-sm"><IconChevronsLeft width={24} /></button>
-            <button disabled={page === 0} onClick={() => setPage(page => page - 1)} className="btn btn-sm"><IconChevronLeft width={24} /></button>
-            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(page => page + 1)} className="btn btn-sm"><IconChevronRight width={24} /></button>
-            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(Math.floor(totalCount / pageSize))} className="btn btn-sm"><IconChevronsRight width={24} /></button>
+            <button disabled={page === 0} onClick={() => setPage(0)} className="btn btn-sm"><IconChevronsLeft size={24} /></button>
+            <button disabled={page === 0} onClick={() => setPage(page => page - 1)} className="btn btn-sm"><IconChevronLeft size={24} /></button>
+            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(page => page + 1)} className="btn btn-sm"><IconChevronRight size={24} /></button>
+            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(Math.floor(totalCount / pageSize))} className="btn btn-sm"><IconChevronsRight size={24} /></button>
         </div>
     </div>
 }

@@ -26,14 +26,14 @@ const NavBar = () => {
             </div>
             <div className="navbar-end">
                 <button className="btn btn-ghost" onClick={() => changeTheme(currentTheme === 'dark' ? 'light' : 'dark')}>
-                    {currentTheme === 'dark' ? <IconSun width={24} />
-                        : <IconMoon width={24} />}
+                    {currentTheme === 'dark' ? <IconSun size={24} />
+                        : <IconMoon size={24} />}
                 </button>
 
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost p-2">
-                        <IconUser width={24} />
-                        <IconChevronDown width={16} />
+                        <IconUser size={24} />
+                        <IconChevronDown size={16} />
                     </label>
                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                         <li><button>Profile</button></li>

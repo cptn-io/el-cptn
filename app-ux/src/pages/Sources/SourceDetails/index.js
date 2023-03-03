@@ -6,8 +6,11 @@ import Loading from "../../../components/Loading";
 import { useEffect, useState } from "react";
 import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
-import { IconCheck, IconX } from '@tabler/icons-react';
-import SetupInstructions from "./SetupInstructions";
+import SourceDetailsCard from "./SourceDetailsCard";
+import SourceMetrics from "./SourceMetrics";
+import Tabs from "../../../components/Tabs";
+
+const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'destinations', label: 'Destinations' }, { 'key': 'events', label: 'Events' }];
 
 const SourceDetails = (props) => {
     const navigate = useNavigate();
@@ -15,6 +18,7 @@ const SourceDetails = (props) => {
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
+    const [tab, setTab] = useState('overview');
 
     useEffect(() => {
         axios.get(`/api/source/${id}`).then(response => {
@@ -34,61 +38,29 @@ const SourceDetails = (props) => {
         return <Loading />
     }
 
+
+
     return <div>
-        <PageTitle itemKey="sources" label="Source Details" breadcrumbs={breadcrumbs} />
-        <div className="grid grid-flow-row-dense grid-cols-1 md:grid-cols-8 gap-4 ">
-            <div className="md:col-span-6">
-                <div className="card bg-base-100 shadow">
-                    <div className="card-body">
-                        <h2 className="card-title">Basic information</h2>
-                        <div className="form-control w-full">
-                            <label className="label">
-                                <span className="label-text">Source Name</span>
-                            </label>
-                            <div className="label text-lg">{data.name}</div>
-                        </div>
-                        <div className="flex">
-                            <div className="form-control w-6/12">
-                                <label className="label">
-                                    <span className="label-text">Secured</span>
-                                </label>
-                                <div className="label">{data.secured ? <IconCheck size={24} /> : <IconX size={24} />}</div>
-                            </div>
-                            <div className="form-control w-6/12">
-                                <label className="label">
-                                    <span className="label-text">Active</span>
-                                </label>
-                                <div className="label">{data.active ? <IconCheck size={24} /> : <IconX size={24} />}</div>
+        <PageTitle itemKey="sources" label={data.name} breadcrumbs={breadcrumbs} />
+        <SourceMetrics />
+        <Tabs tabs={tabs} activeTab={tab} onTabChange={setTab} />
+        {tab === 'overview' &&
+            <div className="grid grid-flow-row-dense grid-cols-1 xl:grid-cols-8 gap-4 ">
+                <div className="xl:col-span-6">
+                    <SourceDetailsCard data={data} />
+                </div>
+                <div className="hidden xl:col-span-2 xl:block">
+                    <div className="card bg-base-100 shadow">
+                        <div className="card-body">
+                            <h2 className="card-title">Help</h2>
+                            <div>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             </div>
                         </div>
                     </div>
                 </div>
-                <SetupInstructions data={data} />
             </div>
-            <div className="md:col-span-2">
-                <div className="stats stats-vertical shadow w-full">
-
-                    <div className="stat">
-                        <div className="stat-title">Events Received</div>
-                        <div className="stat-value text-primary">31K</div>
-                        <div className="stat-desc">Jan 1st - Feb 1st</div>
-                    </div>
-
-                    <div className="stat">
-                        <div className="stat-title">Events Pending</div>
-                        <div className="stat-value text-primary">1K</div>
-                        <div className="stat-desc">↗︎ 400 (22%)</div>
-                    </div>
-
-                    <div className="stat">
-                        <div className="stat-title">Events Failed</div>
-                        <div className="stat-value text-error">12</div>
-                        <div className="stat-desc">↘︎ 90 (14%)</div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        }
     </div>
 }
 

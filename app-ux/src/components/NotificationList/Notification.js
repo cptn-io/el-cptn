@@ -21,13 +21,13 @@ const Notification = (props) => {
 
     return <div className={`alert alert-${item.type} shadow-lg`}>
         <div className="flex items-center"><span>
-            {item.type === 'success' && <IconCircleCheck width={24} />}
-            {item.type === 'info' && <IconInfoCircle width={24} />}
-            {item.type === 'error' && <IconCircleX width={24} />}
-            {item.type === 'warning' && <IconExclamationCircle width={24} />}</span>
+            {item.type === 'success' && <IconCircleCheck size={24} />}
+            {item.type === 'info' && <IconInfoCircle size={24} />}
+            {item.type === 'error' && <IconCircleX size={24} />}
+            {item.type === 'warning' && <IconExclamationCircle size={24} />}</span>
             <span>{item.message}</span>
         </div>
-        <button className="clear-btn btn-circle btn btn-ghost btn-sm" onClick={() => onClear(item.id)}><IconX width={16} /></button>
+        <button className="clear-btn btn-circle btn btn-ghost btn-sm" onClick={() => onClear(item.id)}><IconX size={16} /></button>
     </div>
 }
 

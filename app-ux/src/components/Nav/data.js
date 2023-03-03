@@ -1,29 +1,35 @@
-import { IconCloudDownload, IconCloudUpload, IconHome, IconTransform } from '@tabler/icons-react';
+import { IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconHome, IconTransform } from '@tabler/icons-react';
 
 const navItems = [
     {
         key: "home",
         label: "Home",
         url: "/home",
-        icon: () => <IconHome width={24} />
+        icon: () => <IconHome size={24} />
+    },
+    {
+        key: "pipelines",
+        label: "Data Pipelines",
+        url: "/pipelines",
+        icon: () => <IconCloudComputing size={24} />
     },
     {
         key: "sources",
-        label: "Sources",
+        label: "Data Sources",
         url: "/sources",
-        icon: () => <IconCloudDownload width={24} />
+        icon: () => <IconDatabaseExport size={24} />
     },
     {
         key: "destinations",
-        label: "Destinations",
+        label: "Data Destinations",
         url: "/destinations",
-        icon: () => <IconCloudUpload width={24} />
+        icon: () => <IconDatabaseImport size={24} />
     },
     {
         key: "transformations",
         label: "Transformations",
         url: "/transformations",
-        icon: () => <IconTransform width={24} />
+        icon: () => <IconTransform size={24} />
     }
 ];
 
