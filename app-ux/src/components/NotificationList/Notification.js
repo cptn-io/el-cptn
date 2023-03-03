@@ -1,5 +1,7 @@
 import { useEffect } from "react";
-import { CheckCircleIcon, ExclamationTriangleIcon, InformationCircleIcon, XCircleIcon, XMarkIcon } from "@heroicons/react/24/solid";
+
+import { IconCircleX, IconExclamationCircle, IconInfoCircle, IconCircleCheck, IconX } from '@tabler/icons-react';
+
 const Notification = (props) => {
     const { item, onClear } = props;
 
@@ -17,17 +19,15 @@ const Notification = (props) => {
         }
     }, [item, onClear]);
 
-
-
-    return <div className={`alert shadow-lg alert-` + item.type}>
+    return <div className={`alert alert-${item.type} shadow-lg`}>
         <div className="flex items-center"><span>
-            {item.type === 'success' && <CheckCircleIcon className="h-6 w-6 mr-1" />}
-            {item.type === 'info' && <InformationCircleIcon className="h-6 w-6 mr-1" />}
-            {item.type === 'error' && <XCircleIcon className="h-6 w-6 mr-1" />}
-            {item.type === 'warning' && <ExclamationTriangleIcon className="h-6 w-6 mr-1" />}</span>
+            {item.type === 'success' && <IconCircleCheck width={24} />}
+            {item.type === 'info' && <IconInfoCircle width={24} />}
+            {item.type === 'error' && <IconCircleX width={24} />}
+            {item.type === 'warning' && <IconExclamationCircle width={24} />}</span>
             <span>{item.message}</span>
         </div>
-        <button className="clear-btn btn-circle btn btn-ghost btn-sm" onClick={() => onClear(item.id)}><XMarkIcon className="h-4 w-4" /></button>
+        <button className="clear-btn btn-circle btn btn-ghost btn-sm" onClick={() => onClear(item.id)}><IconX width={16} /></button>
     </div>
 }
 

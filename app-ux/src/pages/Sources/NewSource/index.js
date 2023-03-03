@@ -5,8 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
 import { renderErrors } from "../../../common/formHelpers";
-
-const breadcrumbs = [{ label: 'Sources', url: '/app/sources' }];
+import { breadcrumbs } from "..";
 
 const NewSource = () => {
     const navigate = useNavigate();
@@ -44,7 +43,7 @@ const NewSource = () => {
                 message: 'Source has been created',
                 type: 'success'
             });
-            navigate('/app/sources');
+            navigate('/sources');
         }).catch(err => {
             addNotification({
                 message: get(err, 'response.data.message', 'An error occurred while creating Source'),
@@ -88,7 +87,7 @@ const NewSource = () => {
 
                         </div>
                         <div className="bg-base-200 px-4 py-3 text-right sm:px-6">
-                            <Link to="/app/sources" className="btn btn-ghost mr-2">Cancel</Link>
+                            <Link to="/sources" className="btn btn-ghost mr-2">Cancel</Link>
                             <button disabled={executing} type="submit" className="btn btn-primary">Submit</button>
                         </div>
                     </div>

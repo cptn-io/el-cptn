@@ -1,4 +1,4 @@
-import { ChevronDownIcon, MoonIcon, UserIcon, SunIcon } from '@heroicons/react/24/solid'
+import { IconUser, IconChevronDown, IconSun, IconMoon } from '@tabler/icons-react';
 import { navItems } from "../data";
 import Logo from '../Logo';
 import { Link, useLocation } from 'react-router-dom';
@@ -26,14 +26,14 @@ const NavBar = () => {
             </div>
             <div className="navbar-end">
                 <button className="btn btn-ghost" onClick={() => changeTheme(currentTheme === 'dark' ? 'light' : 'dark')}>
-                    {currentTheme === 'dark' ? <SunIcon className="h-4 w-4 transition-all duration-200 md:h-6 md:w-6" />
-                        : <MoonIcon className="h-4 w-4 transition-all duration-200 md:h-6 md:w-6" />}
+                    {currentTheme === 'dark' ? <IconSun width={24} />
+                        : <IconMoon width={24} />}
                 </button>
 
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost p-2">
-                        <UserIcon className="h-4 w-4 transition-all duration-200 md:h-6 md:w-6" />
-                        <ChevronDownIcon className="h-4 mx-2 w-4" />
+                        <IconUser width={24} />
+                        <IconChevronDown width={16} />
                     </label>
                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                         <li><button>Profile</button></li>

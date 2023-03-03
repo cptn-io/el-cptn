@@ -10,25 +10,27 @@ import Home from './pages/Home';
 import Destinations from './pages/Destinations';
 import Transformations from './pages/Transformations';
 import NewSource from './pages/Sources/NewSource';
+import SourceDetails from './pages/Sources/SourceDetails';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/app">
       <Routes>
-        <Route path="/app" element={<App />}>
+        <Route path="/" element={<App />}>
           <Route path="home" element={<Home />} />
           <Route path="sources">
             <Route path="" element={<Sources />} />
             <Route path="new" element={<NewSource />} />
+            <Route path=":id" element={<SourceDetails />} />
           </Route>
           <Route path="destinations" element={<Destinations />} />
           <Route path="transformations" element={<Transformations />} />
-          <Route exact path="" element={<Navigate to="/app/home" replace />} />
+          <Route exact path="" element={<Navigate to="/home" replace />} />
         </Route>
         <Route path="/" element={<Public />}>
         </Route>
-        <Route path="*" element={<Navigate to="/app/home" replace />} />
+        <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

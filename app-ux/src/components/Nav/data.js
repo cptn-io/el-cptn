@@ -1,29 +1,29 @@
-import { ArrowPathRoundedSquareIcon, HomeIcon, CloudArrowDownIcon, CloudArrowUpIcon } from '@heroicons/react/24/solid'
+import { IconCloudDownload, IconCloudUpload, IconHome, IconTransform } from '@tabler/icons-react';
 
 const navItems = [
     {
         key: "home",
         label: "Home",
-        url: "/app/home",
-        icon: () => <HomeIcon className="h-6 w-6" />
+        url: "/home",
+        icon: () => <IconHome width={24} />
     },
     {
         key: "sources",
         label: "Sources",
-        url: "/app/sources",
-        icon: () => <CloudArrowDownIcon className="h-6 w-6" />
+        url: "/sources",
+        icon: () => <IconCloudDownload width={24} />
     },
     {
         key: "destinations",
         label: "Destinations",
-        url: "/app/destinations",
-        icon: () => <CloudArrowUpIcon className="h-6 w-6" />
+        url: "/destinations",
+        icon: () => <IconCloudUpload width={24} />
     },
     {
         key: "transformations",
         label: "Transformations",
-        url: "/app/transformations",
-        icon: () => <ArrowPathRoundedSquareIcon className="h-6 w-6" />
+        url: "/transformations",
+        icon: () => <IconTransform width={24} />
     }
 ];
 

@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom"
 import { ThemeContextProvider } from "./context/ThemeContext"
 import { NotificationContextProvider } from "./context/NotificationContext"
 import NotificationList from "./components/NotificationList"
+import './App.scss';
 
 export default function App() {
   return (

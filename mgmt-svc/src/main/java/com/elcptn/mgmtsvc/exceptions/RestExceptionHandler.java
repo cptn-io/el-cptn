@@ -23,9 +23,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {
-        if (log.isDebugEnabled()) {
-            log.debug(ex.getMessage(), ex);
-        }
+        log.debug(ex.getMessage(), ex);
         AppError error = new AppError("There was an error processing your request");
         if (ex instanceof HttpMessageNotReadableException) {
             error.setMessage("Unable to process the payload sent");

@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import PageTitle from "../../components/Nav/PageTitle";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { IconCirclePlus } from '@tabler/icons-react';
 
 const Destinations = () => {
     return <Fragment>
         <PageTitle itemKey="destinations">
-            <button className="btn btn-primary btn-sm md:btn-md"><PlusIcon className="h-4 w-4 mr-2" /> New Destination</button>
+            <button className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus width={24} className="mr-2" /> New Destination</button>
         </PageTitle>
     </Fragment>
 }
