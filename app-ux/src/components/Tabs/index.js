@@ -8,9 +8,9 @@ const Tabs = (props) => {
             onTabChange(tabKey);
         }
     }
-    return <div className="tabs">
+    return <div className="tabs bg-base-200 mb-4 rounded">
         {tabs.map(tab => {
-            return <a className={`tab tab-lifted ${tab.key === activeTab && 'tab-active'}`} onClick={() => changeTab(tab.key)}>{tab.label}</a>
+            return <a key={tab.key} className={`tab tab-lg tab-lifted ${tab.key === activeTab && 'tab-active'}`} onClick={() => changeTab(tab.key)}>{tab.label}</a>
         })}
     </div>
 }

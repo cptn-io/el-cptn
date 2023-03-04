@@ -5,6 +5,7 @@ import { ThemeContextProvider } from "./context/ThemeContext"
 import { NotificationContextProvider } from "./context/NotificationContext"
 import NotificationList from "./components/NotificationList"
 import './App.scss';
+import { Fragment } from "react"
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
             <NotificationList />
           </div>
           <LeftNav />
+        </div>
+        <div id="modal">
         </div>
       </NotificationContextProvider>
     </ThemeContextProvider>
