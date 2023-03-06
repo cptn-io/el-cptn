@@ -19,7 +19,7 @@ public class InboundEventProcessor {
 
     private final EventRepository eventRepository;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 5000, initialDelay = 5000)
     public void process() {
 
         List<Event> eventList = eventRepository.fetchEventsForProcessing(10);

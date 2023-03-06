@@ -1,8 +1,7 @@
 package com.elcptn.mgmtsvc.dto;
 
-import com.elcptn.mgmtsvc.entities.Action;
+import com.elcptn.mgmtsvc.entities.Destination;
 import com.elcptn.mgmtsvc.validation.OnCreate;
-import com.elcptn.mgmtsvc.validation.OnReference;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,16 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-import java.util.UUID;
-
 /**
- * A DTO for the {@link Action} entity
+ * A DTO for the {@link Destination} entity
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActionDto extends BaseDto {
+public class DestinationDto extends BaseDto {
 
     @NotNull(message = "Name is required", groups = OnCreate.class)
     @Size(min = 5, max = 128, message = "Length must be between 5 and 128 characters")
@@ -29,7 +25,4 @@ public class ActionDto extends BaseDto {
     private String script;
 
     private Boolean active;
-
-    @NotNull(message = "SourceIds are required", groups = OnReference.class)
-    private Set<UUID> sourceIds;
 }

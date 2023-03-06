@@ -36,7 +36,7 @@ CREATE TABLE event
 ALTER TABLE event
     ADD CONSTRAINT FK_EVENT_ON_SOURCE FOREIGN KEY (source_id) REFERENCES source (id);
 
-CREATE TABLE action
+CREATE TABLE destination
 (
     id         UUID    NOT NULL,
     version    INTEGER NOT NULL,
@@ -47,18 +47,5 @@ CREATE TABLE action
     name       VARCHAR(100),
     script     TEXT,
     active     BOOLEAN,
-    CONSTRAINT pk_action PRIMARY KEY (id)
+    CONSTRAINT pk_destination PRIMARY KEY (id)
 );
-
-CREATE TABLE source_action_map
-(
-    action_id UUID NOT NULL,
-    source_id UUID NOT NULL,
-    CONSTRAINT pk_source_action_map PRIMARY KEY (action_id, source_id)
-);
-
-ALTER TABLE source_action_map
-    ADD CONSTRAINT fk_woractmap_on_action FOREIGN KEY (action_id) REFERENCES action (id);
-
-ALTER TABLE source_action_map
-    ADD CONSTRAINT fk_woractmap_on_source FOREIGN KEY (source_id) REFERENCES source (id);

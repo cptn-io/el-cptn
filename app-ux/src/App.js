@@ -5,7 +5,6 @@ import { ThemeContextProvider } from "./context/ThemeContext"
 import { NotificationContextProvider } from "./context/NotificationContext"
 import NotificationList from "./components/NotificationList"
 import './App.scss';
-import { Fragment } from "react"
 
 export default function App() {
   return (
