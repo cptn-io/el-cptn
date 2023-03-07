@@ -71,7 +71,7 @@ public class DestinationController {
         }
         Destination destination = getById(id);
 
-        mapper.updateDestinationFromDestinationDto(destinationDto, destination);
+        mapper.partialUpdate(destinationDto, destination);
 
         return ResponseEntity.ok(convert(destinationService.update(destination)));
     }
@@ -94,10 +94,10 @@ public class DestinationController {
     }
 
     private Destination convert(DestinationDto destinationDto) {
-        return mapper.destinationDtoToDestination(destinationDto);
+        return mapper.toEntity(destinationDto);
     }
 
     private DestinationDto convert(Destination destination) {
-        return mapper.destinationToDestinationDto(destination);
+        return mapper.toDto(destination);
     }
 }

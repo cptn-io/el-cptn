@@ -70,7 +70,7 @@ public class SourceController {
         }
 
         Source source = getById(id);
-        mapper.updateSourceFromSourceDto(sourceDto, source);
+        mapper.partialUpdate(sourceDto, source);
 
 
         return ResponseEntity.ok(convert(sourceService.update(source)));
@@ -78,32 +78,32 @@ public class SourceController {
 
     @PutMapping("/api/source/{id}/rotateKeys")
     public ResponseEntity<SourceDto> rotateKeys(@PathVariable UUID id) {
-        Source Source = getById(id);
+        Source source = getById(id);
 
-        return ResponseEntity.ok(convert(sourceService.rotateKeys(Source)));
+        return ResponseEntity.ok(convert(sourceService.rotateKeys(source)));
     }
 
     @DeleteMapping("/api/source/{id}")
     public ResponseEntity delete(@PathVariable UUID id) {
-        Source Source = getById(id);
-        sourceService.delete(Source);
+        Source source = getById(id);
+        sourceService.delete(source);
         return ResponseEntity.noContent().build();
     }
 
     private Source getById(UUID id) {
-        Optional<Source> SourceOptional = sourceService.getById(id);
-        if (SourceOptional.isEmpty()) {
+        Optional<Source> sourceOptional = sourceService.getById(id);
+        if (sourceOptional.isEmpty()) {
             throw new NotFoundException("Source not found with the passed id");
         }
 
-        return SourceOptional.get();
+        return sourceOptional.get();
     }
 
-    private Source convert(SourceDto SourceDto) {
-        return mapper.sourceDtoToSource(SourceDto);
+    private Source convert(SourceDto sourceDto) {
+        return mapper.toEntity(sourceDto);
     }
 
-    private SourceDto convert(Source Source) {
-        return mapper.sourceToSourceDto(Source);
+    private SourceDto convert(Source source) {
+        return mapper.toDto(source);
     }
 }

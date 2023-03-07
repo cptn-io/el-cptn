@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@monaco-editor/react": "^4.4.6",
     "@tabler/icons-react": "^2.7.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -43,9 +44,11 @@
   "proxy": "http://localhost:8080",
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/lodash": "^4.14.191",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
     "postcss-import": "^15.1.0",
+    "raw-loader": "^4.0.2",
     "react-scripts": "5.0.1",
     "sass": "^1.58.3",
     "tailwindcss": "^3.2.6"

@@ -8,7 +8,6 @@ import com.elcptn.mgmtsvc.mappers.EventMapper;
 import com.elcptn.mgmtsvc.services.EventService;
 import com.elcptn.mgmtsvc.services.SourceService;
 import com.fasterxml.jackson.databind.JsonNode;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class EventController {
 
     @PostMapping("/api/source/{sourceId}/event")
     public ResponseEntity<EventDto> createEvent(@PathVariable UUID sourceId,
-                                                @Valid @RequestBody JsonNode jsonPayload) {
+                                                @RequestBody JsonNode jsonPayload) {
         Optional<Source> sourceOptional = sourceService.getById(sourceId);
         if (sourceOptional.isEmpty()) {
             throw new NotFoundException("Source not found with passed ID");
@@ -47,6 +46,6 @@ public class EventController {
     }
 
     private EventDto convert(Event event) {
-        return eventMapper.eventToEventDto(event);
+        return eventMapper.toDto(event);
     }
 }

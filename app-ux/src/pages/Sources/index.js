@@ -38,7 +38,7 @@ const Sources = () => {
 
     return <Fragment>
         <PageTitle itemKey="sources">
-            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" /> New Source</Link>
+            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" />New Source</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">

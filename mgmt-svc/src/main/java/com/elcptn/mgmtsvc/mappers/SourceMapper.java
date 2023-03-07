@@ -16,7 +16,7 @@ public interface SourceMapper {
     @Mapping(ignore = true, target = "id")
     @Mapping(source = "secured", target = "secured", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(source = "active", target = "active", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    Source sourceDtoToSource(SourceDto sourceDto);
+    Source toEntity(SourceDto sourceDto);
 
     @Mapping(ignore = true, target = "createdAt")
     @Mapping(ignore = true, target = "updatedAt")
@@ -24,8 +24,8 @@ public interface SourceMapper {
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateSourceFromSourceDto(SourceDto sourceDto, @MappingTarget Source source);
+    void partialUpdate(SourceDto sourceDto, @MappingTarget Source source);
 
 
-    SourceDto sourceToSourceDto(Source source);
+    SourceDto toDto(Source source);
 }

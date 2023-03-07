@@ -14,7 +14,7 @@ public interface DestinationMapper {
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
     @Mapping(source = "active", target = "active", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
-    Destination destinationDtoToDestination(DestinationDto destinationDto);
+    Destination toEntity(DestinationDto destinationDto);
 
 
     @Mapping(ignore = true, target = "createdAt")
@@ -23,8 +23,8 @@ public interface DestinationMapper {
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Destination updateDestinationFromDestinationDto(DestinationDto destinationDto, @MappingTarget Destination destination);
+    Destination partialUpdate(DestinationDto destinationDto, @MappingTarget Destination destination);
 
 
-    DestinationDto destinationToDestinationDto(Destination source);
+    DestinationDto toDto(Destination source);
 }

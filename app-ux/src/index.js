@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -12,28 +12,37 @@ import Transformations from './pages/Transformations';
 import NewSource from './pages/Sources/NewSource';
 import SourceDetails from './pages/Sources/SourceDetails';
 import Pipelines from './pages/Pipelines';
+import NewDestination from './pages/Destinations/NewDestination';
+import Loading from './components/Loading';
+import DestinationDetails from './pages/Destinations/DestinationDetails';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter basename="/app">
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route path="home" element={<Home />} />
-          <Route path="sources">
-            <Route path="" element={<Sources />} />
-            <Route path="new" element={<NewSource />} />
-            <Route path=":id" element={<SourceDetails />} />
+      <Suspense fallback={<div><Loading /></div>}>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route path="home" element={<Home />} />
+            <Route path="sources">
+              <Route path="" element={<Sources />} />
+              <Route path="new" element={<NewSource />} />
+              <Route path=":id" element={<SourceDetails />} />
+            </Route>
+            <Route path="destinations">
+              <Route path="" element={<Destinations />} />
+              <Route path="new" element={<NewDestination />} />
+              <Route path=":id" element={<DestinationDetails />} />
+            </Route>
+            <Route path="pipelines" element={<Pipelines />} />
+            <Route path="transformations" element={<Transformations />} />
+            <Route exact path="" element={<Navigate to="/home" replace />} />
           </Route>
-          <Route path="destinations" element={<Destinations />} />
-          <Route path="pipelines" element={<Pipelines />} />
-          <Route path="transformations" element={<Transformations />} />
-          <Route exact path="" element={<Navigate to="/home" replace />} />
-        </Route>
-        <Route path="/" element={<Public />}>
-        </Route>
-        <Route path="*" element={<Navigate to="/home" replace />} />
-      </Routes>
+          <Route path="/" element={<Public />}>
+          </Route>
+          <Route path="*" element={<Navigate to="/home" replace />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   </React.StrictMode>
 );
