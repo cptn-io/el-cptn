@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PipelineDto extends BaseDto {
 
+
     @NotNull(message = "Name is required", groups = OnCreate.class)
     @Size(min = 5, max = 128, message = "Length must be between 5 and 128 characters")
     private String name;

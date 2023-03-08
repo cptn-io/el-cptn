@@ -3,14 +3,19 @@ import { useState, useEffect, Fragment } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const Pagination = (props) => {
-    const { totalCount = 0, pageSize = 15 } = props;
+    const { totalCount = 0, pageSize = 15, currentPage, setCurrentPage } = props;
     const [searchParams, setSearchParams] = useSearchParams();
-    const [page, setPage] = useState(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
+    const [page, setPage] = useState(currentPage || (searchParams.has('page') ? searchParams.get('page') * 1 : 0));
 
     const startCount = totalCount > 0 ? page * pageSize + 1 : 0;
     const endCount = (page * pageSize + pageSize) < totalCount ? (page * pageSize + pageSize) : totalCount;
 
     useEffect(() => {
+        if (setCurrentPage) {
+            setCurrentPage(page);
+            return;
+        }
+
         searchParams.set("page", page);
         setSearchParams(searchParams);
     }, [page, searchParams, setSearchParams])

@@ -10,7 +10,6 @@ import com.elcptn.mgmtsvc.services.SourceService;
 import com.elcptn.mgmtsvc.validation.OnCreate;
 import com.elcptn.mgmtsvc.validation.OnUpdate;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +33,9 @@ public class SourceController {
     private final SourceService sourceService;
     private final SourceMapper mapper;
 
-    @Validated(OnCreate.class)
+
     @PostMapping("/api/source")
-    public ResponseEntity<SourceDto> create(@Valid @RequestBody SourceDto sourceDto, BindingResult bindingResult) {
+    public ResponseEntity<SourceDto> create(@Validated(OnCreate.class) @RequestBody SourceDto sourceDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
         }
@@ -61,9 +60,9 @@ public class SourceController {
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
     }
 
-    @Validated(OnUpdate.class)
+
     @PutMapping("/api/source/{id}")
-    public ResponseEntity<SourceDto> update(@PathVariable UUID id, @Valid @RequestBody SourceDto sourceDto,
+    public ResponseEntity<SourceDto> update(@PathVariable UUID id, @Validated(OnUpdate.class) @RequestBody SourceDto sourceDto,
                                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());

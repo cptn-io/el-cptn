@@ -56,7 +56,7 @@ const Destinations = () => {
                     </tbody>
                 </table>
             </div>
-            <Pagination totalCount={totalCount} currentPage={page} />
+            <Pagination totalCount={totalCount} />
         </div>
         }
     </Fragment>

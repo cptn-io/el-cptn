@@ -33,9 +33,10 @@ public class PipelineController {
     private final PipelineService pipelineService;
     private final PipelineMapper mapper;
 
-    @Validated(OnCreate.class)
+
     @PostMapping("/api/pipeline")
-    public ResponseEntity<PipelineDto> create(@Valid @RequestBody PipelineDto pipelineDto, BindingResult bindingResult) {
+    public ResponseEntity<PipelineDto> create(@Validated(OnCreate.class) @RequestBody PipelineDto pipelineDto,
+                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
         }

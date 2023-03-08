@@ -10,7 +10,6 @@ import com.elcptn.mgmtsvc.services.DestinationService;
 import com.elcptn.mgmtsvc.validation.OnCreate;
 import com.elcptn.mgmtsvc.validation.OnUpdate;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +33,9 @@ public class DestinationController {
 
     private final DestinationMapper mapper;
 
-    @Validated(OnCreate.class)
+
     @PostMapping("/api/destination")
-    public ResponseEntity<DestinationDto> create(@Valid @RequestBody DestinationDto destinationDto, BindingResult bindingResult) {
+    public ResponseEntity<DestinationDto> create(@Validated(OnCreate.class) @RequestBody DestinationDto destinationDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
         }
@@ -62,9 +61,8 @@ public class DestinationController {
     }
 
 
-    @Validated(OnUpdate.class)
     @PutMapping("/api/destination/{id}")
-    public ResponseEntity<DestinationDto> updateAction(@PathVariable UUID id, @Valid @RequestBody DestinationDto destinationDto,
+    public ResponseEntity<DestinationDto> updateAction(@PathVariable UUID id, @Validated(OnUpdate.class) @RequestBody DestinationDto destinationDto,
                                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
