@@ -139,9 +139,9 @@ const NewPipeline = (props) => {
                 </div>
             </div>
         </div>
-        {showSourceSelector && <ItemSelectorModal url="/api/source" title="Select a Source" cols={[{ "label": "Name", "datacss": "text-left", "css": "w-1/2", "name": "name" }, { "label": "Active", "datacss": "flex justify-center", "css": "text-center", "name": "active" }]}
+        {showSourceSelector && <ItemSelectorModal url="/api/source" title="Select a Source" cols={[{ "label": "Name", "datacss": "text-left", "css": "w-1/2", "name": "name" }, { "label": "Active", "datacss": "", "css": "text-center", "name": "active" }, { "label": "Secured", "datacss": "", "css": "text-center", "name": "secured" }]}
             onCancel={() => setShowSourceSelector(false)} onSelect={onSourceSelection} />}
-        {showDestinationSelector && <ItemSelectorModal url="/api/destination" title="Select a Destination" cols={[{ "label": "Name", "datacss": "text-left", "css": "w-1/2", "name": "name" }, { "label": "Active", "datacss": "flex justify-center", "css": "text-center", "name": "active" }]}
+        {showDestinationSelector && <ItemSelectorModal url="/api/destination" title="Select a Destination" cols={[{ "label": "Name", "datacss": "text-left", "css": "w-1/2", "name": "name" }, { "label": "Active", "datacss": "", "css": "text-center", "name": "active" }]}
             onCancel={() => setShowDestinationSelector(false)} onSelect={onDestinationSelection} />}
     </Fragment>
 }

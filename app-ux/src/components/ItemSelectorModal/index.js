@@ -9,7 +9,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 
 const renderColData = (val) => {
     if (typeof val === 'boolean') {
-        return val ? <IconCheck size={24} /> : <IconX size={24} />;
+        return <div className="flex justify-center items-center">{val ? <IconCheck size={24} /> : <IconX size={24} />}</div>;
     }
     return val;
 }
@@ -26,10 +26,10 @@ const ItemSelectorModal = (props) => {
     const renderRow = (item, cols) => {
         const { id, name } = item;
         return <tr key={id}>
-            {cols.map(col => {
-                return <td key={col.name} className={`whitespace-pre-wrap break-words ${col.datacss}`}>{renderColData(item[col.name])}</td>
+            {cols.map((col, i) => {
+                return <td key={col.name} className={`whitespace-pre-wrap break-words ${col.datacss}`}>{i === 0 ? <button onClick={() => onSelect({ id, name })} className="btn btn-link btn-xs">{renderColData(item[col.name])}</button> : renderColData(item[col.name])}</td>
             })}
-            <td><div className="flex justify-center items-center"><button onClick={() => onSelect({ id, name })} className="btn btn-primary btn-xs">Select</button></div></td>
+            {/* <td><div className="flex justify-center items-center"><button onClick={() => onSelect({ id, name })} className="btn btn-primary btn-xs">Select</button></div></td> */}
         </tr>
     }
 
@@ -45,7 +45,7 @@ const ItemSelectorModal = (props) => {
         }).finally(() => {
             setLoading(false);
         });
-    }, [page, addNotification]);
+    }, [url, page, addNotification]);
 
 
     useEffect(() => {
@@ -76,9 +76,9 @@ const ItemSelectorModal = (props) => {
                             <thead>
                                 <tr>
                                     {cols.map(col => {
-                                        return <th className={`bg-base-300 ${col.css}`}>{col.label}</th>
+                                        return <th key={col.name} className={`bg-base-300 ${col.css}`}>{col.label}</th>
                                     })}
-                                    <th className="bg-base-300"></th>
+                                    {/* <th className="bg-base-300"></th> */}
                                 </tr>
                             </thead>
                             <tbody>

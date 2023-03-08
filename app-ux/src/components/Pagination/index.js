@@ -18,7 +18,7 @@ const Pagination = (props) => {
 
         searchParams.set("page", page);
         setSearchParams(searchParams);
-    }, [page, searchParams, setSearchParams])
+    }, [page, searchParams, setSearchParams, setCurrentPage])
 
     return <div className="mt-3 px-3 flex justify-between items-center">
         <div>

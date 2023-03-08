@@ -15,7 +15,7 @@ public class PipelineDto extends BaseDto {
 
 
     @NotNull(message = "Name is required", groups = OnCreate.class)
-    @Size(min = 5, max = 128, message = "Length must be between 5 and 128 characters")
+    @Size(min = 3, max = 128, message = "Length must be between 3 and 128 characters")
     private String name;
 
     private Boolean active;
