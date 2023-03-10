@@ -10,9 +10,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.concurrent.RecursiveAction;
+import java.util.concurrent.ForkJoinPool;
 
 /* @author: kc, created on 2/22/23 */
 @Component
@@ -22,52 +21,40 @@ import java.util.concurrent.RecursiveAction;
 public class InboundEventScheduler {
 
     private final EventRepository eventRepository;
-
     private final InboundEventProcessor inboundEventProcessor;
+    private final ForkJoinPool forkJoinPool;
+
     @Value("${inbound.event.processor.batch-size:20}")
     private Integer batchSize;
 
-    @Scheduled(fixedDelayString = "${inbound.event.processor.interval:1000}")
+    @Scheduled(fixedDelayString = "${inbound.event.processor.interval:5000}")
     public void run() {
-        log.debug("Running inbound event processor");
-        long startTime = ZonedDateTime.now().toEpochSecond();
-        while (processRecords() > 0) {
-        }
-        long endTime = ZonedDateTime.now().toEpochSecond();
-        log.error("Time to process=" + (endTime - startTime));
-    }
 
+        log.debug("Running inbound event processor");
+        while (true) {
+            //keep going as long as there are outstanding records to be fetched
+            int count = processRecords();
+            if (count == 0) {
+                break;
+            }
+        }
+    }
 
     private int processRecords() {
         List<Event> eventList = eventRepository.fetchEventsForProcessing(batchSize);
+        if (eventList.size() == 0) {
+            return 0;
+        }
+
         try {
-            eventList.forEach(event -> {
-                log.error("processing event=" + event.getId());
-
-                new RecursiveAction() {
-                    @Override
-                    protected void compute() {
-                        inboundEventProcessor.processEvent(event);
-                    }
-                }.fork();
-            });
-
+            forkJoinPool.submit(() -> eventList.stream().parallel()
+                    .forEach(event ->
+                            inboundEventProcessor.processEvent(event)
+                    )
+            );
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
-//        eventList.forEach(event -> {
-//            try {
-//                Thread t = new Thread(() -> forkJoinPool.submit(() -> {
-//                    inboundEventProcessor.processEvent(event);
-//                }).invoke());
-//                t.start();
-//                t.join();
-//            } catch (Exception e) {
-//                log.error(e.getMessage(), e);
-//            }
-//        });
-
         return eventList.size();
     }
 

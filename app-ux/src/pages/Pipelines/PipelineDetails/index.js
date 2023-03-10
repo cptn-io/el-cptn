@@ -9,32 +9,6 @@ import get from 'lodash/get';
 import axios from "axios";
 import Loading from "../../../components/Loading";
 
-const defaultNodes = [
-    {
-        id: 'a',
-        type: 'input',
-        data: { label: 'Node A' },
-        connectable: true,
-        position: { x: 250, y: 25 },
-    },
-
-    {
-        id: 'b',
-        data: { label: 'Node B' },
-        position: { x: 100, y: 125 },
-    },
-    {
-        id: 'c',
-        type: 'output',
-        data: { label: 'Node C' },
-        connectable: true,
-        position: { x: 250, y: 250 },
-    },
-];
-
-const defaultEdges = [{ id: 'a-b', source: 'a', target: 'b' }, { id: 'b-c', source: 'b', target: 'c' }];
-
-const connectionLineStyle = { stroke: 'white' };
 const edgeOptions = {
     animated: true,
     style: {
@@ -66,14 +40,28 @@ const PipelineDetails = () => {
                 position: { x: 250, y: 25 },
             },
             {
+                id: 'filter',
+                data: { label: 'Filter data' },
+                connectable: true,
+                position: { x: 300, y: 125 },
+            },
+            {
+                id: 'enrich',
+                data: { label: 'Enrich data' },
+                connectable: true,
+                position: { x: 350, y: 225 },
+            },
+            {
                 id: response.data.destination.id,
                 type: 'output',
                 data: { label: response.data.destination.name },
-                position: { x: 350, y: 325 },
+                position: { x: 400, y: 425 },
             }])
 
             setEdges(() => [
-                { id: response.data.id, source: response.data.source.id, target: response.data.destination.id }
+                { id: response.data.id, source: response.data.source.id, target: 'filter' },
+                { id: response.data.id + "f", source: 'filter', target: 'enrich' },
+                { id: response.data.id + "e", source: 'enrich', target: response.data.destination.id }
             ])
         }).catch(err => {
             addNotification({

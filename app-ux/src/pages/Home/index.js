@@ -1,53 +1,119 @@
-import { Fragment, useEffect } from "react";
+import axios from "axios";
+import { Fragment, useEffect, useState } from "react";
+import Loading from "../../components/Loading";
 import PageTitle from "../../components/Nav/PageTitle";
+import useNotifications from "../../hooks/useNotifications";
+import find from 'lodash/find';
+import get from 'lodash/get';
+import pluralize from "pluralize";
+import { IconTimelineEventExclamation, IconTimelineEventPlus, IconCircleCheck, IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconTransform } from '@tabler/icons-react';
 
 const Home = () => {
+    const { addNotification } = useNotifications();
+    const [loading, setLoading] = useState(true);
+
+    const [metrics, setMetrics] = useState(null);
 
     useEffect(() => {
-        console.log('loading home');
-    }, []);
+        axios.get('/api/dashboard/metrics').then(response => {
+            const inboundTotal = response.data.inbound.reduce((sum, status) => sum + status.count, 0);
+            const inboundProcessed = find(response.data.inbound, { 'state': 'COMPLETED' })?.count || 0;
+            const inboundPercentComplete = inboundTotal > 0 ? Math.floor(inboundProcessed / inboundTotal * 100) : 100;
+            const inboundFailed = find(response.data.inbound, { 'state': 'FAILED' })?.count || 0;
+
+            setMetrics({
+                entities: response.data?.entities,
+                inboundTotal,
+                inboundProcessed,
+                inboundPercentComplete,
+                inboundFailed
+            });
+        }).catch(err => {
+            addNotification({
+                message: get(err, 'response.data.message', 'An error occurred while fetching dashboard metrics'),
+                type: 'error'
+            });
+        }).finally(() => {
+            setLoading(false);
+        })
+    }, [addNotification]);
+
+    if (loading) {
+        return <Loading />
+    }
+
     return <Fragment>
         <PageTitle itemKey="home" />
-
-        <div className="stats shadow flex">
-
-            <div className="stat">
-                <div className="stat-figure text-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+        <div className="grid grid-cols-4 gap-2 mb-4">
+            <div className="stats shadow bg-primary text-primary-content col-span-2 md:col-span-1 rounded-2xl">
+                <div className="stat text-center">
+                    <div className="flex justify-center my-4"><IconCloudComputing size={64} /></div>
+                    <div className="stat-title text-primary-content">Pipelines</div>
+                    <div className="stat-value text-6xl">{metrics.entities.pipelines}</div>
                 </div>
-                <div className="stat-title">Events Received</div>
-                <div className="stat-value text-primary">25.6K</div>
-                <div className="stat-desc">21% more than last month</div>
             </div>
-
-            <div className="stat">
-                <div className="stat-figure text-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div className="stats shadow bg-secondary text-secondary-content col-span-2 md:col-span-1 rounded-2xl">
+                <div className="stat text-center">
+                    <div className="flex justify-center my-4"><IconDatabaseExport size={64} /></div>
+                    <div className="stat-title text-secondary-content">Sources</div>
+                    <div className="stat-value text-6xl">{metrics.entities.sources}</div>
                 </div>
-                <div className="stat-title">Event Sent</div>
-                <div className="stat-value text-secondary">55K</div>
-                <div className="stat-desc">21% more than last month</div>
             </div>
-
-            <div className="stat">
-                <div className="stat-figure text-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div className="stats shadow bg-info text-info-content col-span-2 md:col-span-1 rounded-2xl">
+                <div className="stat text-center">
+                    <div className="flex justify-center my-4"><IconDatabaseImport size={64} /></div>
+                    <div className="stat-title text-info-content">Destinations</div>
+                    <div className="stat-value text-6xl">{metrics.entities.destinations}</div>
                 </div>
-                <div className="stat-value">98%</div>
-                <div className="stat-title">Success rate</div>
-                <div className="stat-desc text-secondary">1.2K events remaining</div>
             </div>
-
-            <div className="stat">
-                <div className="stat-figure text-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div className="stats shadow bg-accent text-accent-content  col-span-2 md:col-span-1 rounded-2xl">
+                <div className="stat text-center">
+                    <div className="flex justify-center my-4"><IconTransform size={64} /></div>
+                    <div className="stat-title text-accent-content">Transformations</div>
+                    <div className="stat-value text-6xl">{0}</div>
                 </div>
-                <div className="stat-value">2%</div>
-                <div className="stat-title">Failure rate</div>
-                <div className="stat-desc text-secondary">31 tasks remaining</div>
             </div>
-
         </div>
+        <div className="bg-base-200 p-3 rounded-box mb-4 shadow">
+            <div className="text-xl font-extrabold mb-4">Source metrics</div>
+            <div className="grid grid-cols-4 gap-2">
+                <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
+                    <div className="stat-figure text-primary hidden xl:block">
+                        <IconTimelineEventPlus size={64} />
+                    </div>
+                    <div className="stat-title ">Events Received</div>
+                    <div className="stat-value text-base-content">{metrics.inboundTotal}</div>
+                    <div className="stat-desc">Last 24 hours</div>
+                </div>
+                <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
+                    <div className="stat-figure text-success hidden xl:block">
+                        <IconCircleCheck size={64} />
+                    </div>
+                    <div className="stat-title">Events Processed</div>
+                    <div className="stat-value text-base-content">{metrics.inboundProcessed}</div>
+                    <div className="stat-desc">Last 24 hours</div>
+                </div>
+                <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
+                    <div className="stat-figure text-primary hidden xl:block">
+                        <div className="radial-progress text-primary" style={{ "--value": metrics.inboundPercentComplete, "--size": "4.2rem" }}>{`${metrics.inboundPercentComplete}%`}</div>
+                    </div>
+                    <div className="stat-title ">Events processed</div>
+                    <div className="stat-value text-base-content">{`${metrics.inboundPercentComplete}%`}</div>
+                    <div className="stat-desc">{`${pluralize('event', metrics.inboundTotal - metrics.inboundProcessed, true)} remaining`}</div>
+                </div>
+                <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
+                    <div className="stat-figure text-error hidden xl:block">
+                        <IconTimelineEventExclamation size={64} />
+                    </div>
+                    <div className="stat-title">Events Failed</div>
+                    <div className="stat-value text-base-content">{metrics.inboundFailed}</div>
+                    <div className="stat-desc">Last 24 hours</div>
+                </div>
+            </div>
+        </div>
+
+
+
     </Fragment>
 }
 

@@ -1,9 +1,13 @@
 package com.elcptn.mgmtsvc.services;
 
+import com.elcptn.mgmtsvc.dto.StatusMetricDto;
 import com.elcptn.mgmtsvc.entities.Event;
 import com.elcptn.mgmtsvc.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.ZonedDateTime;
+import java.util.List;
 
 /* @author: kc, created on 2/8/23 */
 @Service
@@ -14,5 +18,9 @@ public class EventService extends CommonService {
 
     public Event create(Event event) {
         return eventRepository.save(event);
+    }
+
+    public List<StatusMetricDto> getEventMetrics() {
+        return eventRepository.getStatusCountsForCollectionRun(ZonedDateTime.now().minusHours(24));
     }
 }

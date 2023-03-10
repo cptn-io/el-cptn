@@ -24,15 +24,13 @@ public class InboundEventProcessor {
 
     private final OutboundWriteEventRepository outboundWriteEventRepository;
 
-    //@Async("inboundEventExecutor")
     public void processEvent(Event event) {
-        log.info(Thread.currentThread().getName() + " processing event " + event.getId());
         try {
             dispatchEventToPipelines(event);
-            markEvent(event.getId(), State.COMPLETED);
+            updateEvent(event.getId(), State.COMPLETED);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            markEvent(event.getId(), State.FAILED);
+            updateEvent(event.getId(), State.FAILED);
         }
     }
 
@@ -43,11 +41,10 @@ public class InboundEventProcessor {
         });
     }
 
-    private void markEvent(UUID eventId, State state) {
+    private void updateEvent(UUID eventId, State state) {
         if (eventId == null) {
             return;
         }
-
         eventRepository.updateEventState(eventId, state);
     }
 

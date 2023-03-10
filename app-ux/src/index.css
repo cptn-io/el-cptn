@@ -5,3 +5,10 @@
 :root {
     --btn-text-case: none
 }
+
+/* @layer base {
+    html {
+        font-family: 'Avenir', 'Arial', 'sans-serif';
+        font-size: 16px;
+    }
+} */
