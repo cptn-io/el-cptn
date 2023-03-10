@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.concurrent.RecursiveAction;
 
 /* @author: kc, created on 2/22/23 */
 @Component
@@ -23,7 +24,6 @@ public class InboundEventScheduler {
     private final EventRepository eventRepository;
 
     private final InboundEventProcessor inboundEventProcessor;
-
     @Value("${inbound.event.processor.batch-size:20}")
     private Integer batchSize;
 
@@ -40,9 +40,34 @@ public class InboundEventScheduler {
 
     private int processRecords() {
         List<Event> eventList = eventRepository.fetchEventsForProcessing(batchSize);
-        eventList.forEach(event -> {
-            inboundEventProcessor.processEvent(event);
-        });
+        try {
+            eventList.forEach(event -> {
+                log.error("processing event=" + event.getId());
+
+                new RecursiveAction() {
+                    @Override
+                    protected void compute() {
+                        inboundEventProcessor.processEvent(event);
+                    }
+                }.fork();
+            });
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+//        eventList.forEach(event -> {
+//            try {
+//                Thread t = new Thread(() -> forkJoinPool.submit(() -> {
+//                    inboundEventProcessor.processEvent(event);
+//                }).invoke());
+//                t.start();
+//                t.join();
+//            } catch (Exception e) {
+//                log.error(e.getMessage(), e);
+//            }
+//        });
+
         return eventList.size();
     }
 

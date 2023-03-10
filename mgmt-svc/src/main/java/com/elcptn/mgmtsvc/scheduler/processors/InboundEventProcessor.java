@@ -8,7 +8,6 @@ import com.elcptn.mgmtsvc.repositories.OutboundWriteEventRepository;
 import com.elcptn.mgmtsvc.repositories.PipelineRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -25,7 +24,7 @@ public class InboundEventProcessor {
 
     private final OutboundWriteEventRepository outboundWriteEventRepository;
 
-    @Async("inboundEventExecutor")
+    //@Async("inboundEventExecutor")
     public void processEvent(Event event) {
         log.info(Thread.currentThread().getName() + " processing event " + event.getId());
         try {
