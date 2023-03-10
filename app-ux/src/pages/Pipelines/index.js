@@ -53,7 +53,7 @@ const Pipelines = () => {
                     </thead>
                     <tbody>
                         {data.map(pipeline => <tr key={pipeline.id}>
-                            <td className="whitespace-pre-wrap break-words">{pipeline.name}</td>
+                            <td className="whitespace-pre-wrap break-words"><Link to={`/pipelines/${pipeline.id}`}>{pipeline.name}</Link></td>
                             <td className="whitespace-pre-wrap break-words">{pipeline.source.name}</td>
                             <td className="whitespace-pre-wrap break-words">{pipeline.destination.name}</td>
                             <td className="text-center"><div className="flex justify-center">{pipeline.active ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>

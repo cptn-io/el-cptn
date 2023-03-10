@@ -14,10 +14,6 @@ import java.util.UUID;
 @MappedSuperclass
 @EntityListeners(EntityListener.class)
 @ToString(onlyExplicitlyIncluded = true)
-//@TypeDefs({
-//        @TypeDef(name = "json", typeClass = JsonStringType.class),
-//        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-//})
 public class BaseEntity {
 
     @Id
@@ -25,7 +21,8 @@ public class BaseEntity {
     @Setter
     @Column(columnDefinition = "uuid", updatable = false)
     @ToString.Include
-    private UUID id = UUID.randomUUID();
+    @GeneratedValue
+    private UUID id = null;
 
     @Getter
     @Version

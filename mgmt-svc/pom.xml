@@ -18,6 +18,7 @@
         <commonstext.version>1.10.0</commonstext.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
+        <liquibase.version>4.20.0</liquibase.version>
     </properties>
     <dependencies>
         <dependency>
@@ -36,6 +37,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
 
 
