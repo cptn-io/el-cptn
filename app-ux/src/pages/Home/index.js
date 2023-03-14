@@ -48,21 +48,21 @@ const Home = () => {
             <div className="stats shadow bg-primary text-primary-content col-span-2 md:col-span-1 rounded-2xl">
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconCloudComputing size={64} /></div>
-                    <div className="stat-title text-primary-content">Pipelines</div>
+                    <div className="stat-title text-primary-content">Data Pipelines</div>
                     <div className="stat-value text-6xl">{metrics.entities.pipelines}</div>
                 </div>
             </div>
             <div className="stats shadow bg-secondary text-secondary-content col-span-2 md:col-span-1 rounded-2xl">
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconDatabaseExport size={64} /></div>
-                    <div className="stat-title text-secondary-content">Sources</div>
+                    <div className="stat-title text-secondary-content">Data Sources</div>
                     <div className="stat-value text-6xl">{metrics.entities.sources}</div>
                 </div>
             </div>
             <div className="stats shadow bg-info text-info-content col-span-2 md:col-span-1 rounded-2xl">
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconDatabaseImport size={64} /></div>
-                    <div className="stat-title text-info-content">Destinations</div>
+                    <div className="stat-title text-info-content">Data Destinations</div>
                     <div className="stat-value text-6xl">{metrics.entities.destinations}</div>
                 </div>
             </div>
