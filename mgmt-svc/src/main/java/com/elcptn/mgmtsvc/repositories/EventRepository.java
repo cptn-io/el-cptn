@@ -12,19 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
 
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE event SET state='IN_PROGRESS' WHERE id IN (SELECT id FROM event e WHERE e" +
-            ".state='QUEUED'" +
-            "ORDER BY " +
-            "created_at " +
-            "FOR UPDATE " +
-            "SKIP " +
-            "LOCKED LIMIT :size) RETURNING *", nativeQuery = true)
-    List<Event> fetchEventsForProcessing(int size);
+
+    @Query(value = "SELECT * FROM event WHERE state='QUEUED'" +
+            " ORDER BY created_at FOR UPDATE SKIP LOCKED", nativeQuery = true)
+    Stream<Event> fetchEventsForProcessing(int size);
 
     @Modifying
     @Transactional

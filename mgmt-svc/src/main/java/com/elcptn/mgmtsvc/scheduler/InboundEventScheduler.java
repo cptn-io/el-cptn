@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Stream;
 
 /* @author: kc, created on 2/22/23 */
 @Component
@@ -22,6 +22,7 @@ public class InboundEventScheduler {
 
     private final EventRepository eventRepository;
     private final InboundEventProcessor inboundEventProcessor;
+
     private final ForkJoinPool forkJoinPool;
 
     @Value("${inbound.event.processor.batch-size:20}")
@@ -31,31 +32,20 @@ public class InboundEventScheduler {
     public void run() {
 
         log.debug("Running inbound event processor");
-        while (true) {
-            //keep going as long as there are outstanding records to be fetched
-            int count = processRecords();
-            if (count == 0) {
-                break;
-            }
-        }
+        processRecords();
     }
 
-    private int processRecords() {
-        List<Event> eventList = eventRepository.fetchEventsForProcessing(batchSize);
-        if (eventList.size() == 0) {
-            return 0;
-        }
-
-        try {
-            forkJoinPool.submit(() -> eventList.stream().parallel()
-                    .forEach(event ->
-                            inboundEventProcessor.processEvent(event)
-                    )
-            );
+    @Transactional
+    public void processRecords() {
+        try (Stream<Event> eventStream = eventRepository.fetchEventsForProcessing(batchSize)) {
+            eventStream.forEach(event -> {
+                forkJoinPool.submit(() -> {
+                    inboundEventProcessor.processEvent(event);
+                });
+            });
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return eventList.size();
     }
 
 }
