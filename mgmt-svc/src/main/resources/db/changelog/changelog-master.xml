@@ -8,4 +8,5 @@
     <include file="db/changelog/db.changelog-1.0.sql"/>
     <include file="db/changelog/db.changelog-2.0.sql"/>
     <include file="db/changelog/db.changelog-3.0.sql"/>
+    <include file="db/changelog/db.changelog-4.0.sql"/>
 </databaseChangeLog>

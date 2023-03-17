@@ -9,6 +9,6 @@ import java.util.UUID;
 
 public interface PipelineRepository extends JpaRepository<Pipeline, UUID> {
 
-    @Query(value = "SELECT p.id FROM Pipeline p WHERE p.active=true AND p.source.id=:sourceId")
-    Set<UUID> findActivePipelinesBySource(UUID sourceId);
+    @Query(value = "FROM Pipeline p WHERE p.active=true AND p.source.id=:sourceId")
+    Set<Pipeline> findActivePipelinesBySource(UUID sourceId);
 }

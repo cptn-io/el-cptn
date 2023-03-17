@@ -28,4 +28,10 @@ public class BaseOutboundQueue extends BaseEntity {
     @Getter
     @Column(length = 25)
     private State state = State.QUEUED;
+
+    @Getter
+    @Setter
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private JsonNode steps;
 }
