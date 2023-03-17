@@ -8,8 +8,6 @@ import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.UUID;
-
 /* @author: kc, created on 3/7/23 */
 @Entity
 @Table(name = "pipeline")
@@ -40,8 +38,4 @@ public class Pipeline extends BaseEntity {
     @JoinColumn(name = "destination_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Destination destination;
-
-    public Pipeline(UUID id) {
-        this.setId(id);
-    }
 }

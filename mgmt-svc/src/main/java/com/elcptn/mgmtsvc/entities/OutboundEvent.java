@@ -8,6 +8,6 @@ import lombok.ToString;
 @Entity
 @Table(name = "outbound_queue")
 @ToString(onlyExplicitlyIncluded = true)
-public class OutboundEvent extends BaseOutboundQueue {
+public class OutboundEvent extends BaseOutboundEvent {
 
 }

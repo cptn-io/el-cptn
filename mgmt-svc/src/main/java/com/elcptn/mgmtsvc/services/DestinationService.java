@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 public class DestinationService extends CommonService {
     private final DestinationRepository destinationRepository;
 
-    private final SourceService sourceService;
-
     public Destination create(Destination destination) {
         return save(destination);
     }

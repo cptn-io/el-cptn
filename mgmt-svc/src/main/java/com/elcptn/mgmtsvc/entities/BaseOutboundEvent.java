@@ -10,7 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 @MappedSuperclass
-public class BaseOutboundQueue extends BaseEntity {
+public class BaseOutboundEvent extends BaseEntity {
 
     @Getter
     @Setter

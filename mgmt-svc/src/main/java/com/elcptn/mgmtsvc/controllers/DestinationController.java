@@ -48,10 +48,10 @@ public class DestinationController {
     @GetMapping("/api/destination")
     public ResponseEntity<List<DestinationDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
-        List<DestinationDto> actionList = destinationService.getAll(listParam).stream()
+        List<DestinationDto> destinationDtoList = destinationService.getAll(listParam).stream()
                 .map(this::convert).collect(Collectors.toList());
         long count = destinationService.count();
-        return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(actionList);
+        return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(destinationDtoList);
     }
 
     @GetMapping("/api/destination/{id}")
@@ -83,12 +83,12 @@ public class DestinationController {
     }
 
     private Destination getById(UUID id) {
-        Optional<Destination> actionOptional = destinationService.getById(id);
-        if (actionOptional.isEmpty()) {
+        Optional<Destination> destinationOptional = destinationService.getById(id);
+        if (destinationOptional.isEmpty()) {
             throw new NotFoundException("Action not found with the passed id");
         }
 
-        return actionOptional.get();
+        return destinationOptional.get();
     }
 
     private Destination convert(DestinationDto destinationDto) {

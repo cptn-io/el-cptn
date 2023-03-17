@@ -4,6 +4,7 @@ class ScriptedStep {
         this.id = row.id;
         this.script = row.script;
         this.version = row.version;
+        this.active = row.active;
     }
 }
 

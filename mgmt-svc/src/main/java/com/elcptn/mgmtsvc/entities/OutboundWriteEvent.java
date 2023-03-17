@@ -10,6 +10,6 @@ import lombok.ToString;
 @Table(name = "outbound_write_queue")
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-public class OutboundWriteEvent extends BaseOutboundQueue {
-    
+public class OutboundWriteEvent extends BaseOutboundEvent {
+
 }
