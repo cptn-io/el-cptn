@@ -10,7 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "pg": "^8.10.0",
-    "pg-query-stream": "^4.4.0",
     "workerpool": "^6.4.0"
   }
 }

@@ -2,8 +2,13 @@ const { processQueuedEvents } = require('./outboundEvents');
 
 async function main() {
     while (true) {
-        await processQueuedEvents();
+        try {
+            await processQueuedEvents();
+        } catch (err) {
+            console.error(`Error in main function: ${err}. Retrying in 10 secs`)
+            await new Promise(r => setTimeout(r, 10000));
+        }
     }
 }
 
-main().catch(err => console.error(`Error in main function: ${err}`));
+main();
