@@ -1,4 +1,4 @@
-const { processQueuedEvents } = require('./outboundEvents');
+const { processQueuedEvents } = require('./eventManager');
 
 async function main() {
     while (true) {
