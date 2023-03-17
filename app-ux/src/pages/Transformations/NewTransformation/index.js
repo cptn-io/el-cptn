@@ -10,9 +10,10 @@ import { breadcrumbs } from "..";
 
 const scriptTemplate = `return (function (evt, ctx){
     //add your script here to send the event to your destination service
+    return evt;
 })(evt, ctx);`;
 
-const NewDestination = () => {
+const NewTransformation = () => {
     const navigate = useNavigate();
     const editorRef = useRef(null);
     const { addNotification } = useNotifications();
@@ -63,16 +64,16 @@ const NewDestination = () => {
             script,
             active
         };
-        axios.post('/api/destination', payload).then(response => {
+        axios.post('/api/transformation', payload).then(response => {
             resetAll();
             addNotification({
                 message: 'Destination has been created',
                 type: 'success'
             });
-            navigate('/destinations');
+            navigate('/transformations');
         }).catch(err => {
             addNotification({
-                message: get(err, 'response.data.message', 'An error occurred while creating Destination'),
+                message: get(err, 'response.data.message', 'An error occurred while creating Transformation'),
                 type: 'error'
             });
             setError(err.response.data);
@@ -82,7 +83,7 @@ const NewDestination = () => {
     };
 
     return <Fragment>
-        <PageTitle itemKey="destinations" label="New Destination" breadcrumbs={breadcrumbs} />
+        <PageTitle itemKey="transformations" label="New Transformation" breadcrumbs={breadcrumbs} />
         <div className="md:grid md:grid-cols-3 md:gap-6">
             <div className="mt-5 md:col-span-2 md:mt-0">
                 <form onSubmit={submit}>
@@ -91,9 +92,9 @@ const NewDestination = () => {
 
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text">Destination Name</span>
+                                    <span className="label-text">Transformation Name</span>
                                 </label>
-                                <input type="text" placeholder="Provide a name for the Destination" value={name} className="input input-bordered w-full" onChange={e => setName(e.target.value)} />
+                                <input type="text" placeholder="Provide a name for the Transformation" value={name} className="input input-bordered w-full" onChange={e => setName(e.target.value)} />
                                 {renderErrors(error, 'name')}
                             </div>
 
@@ -126,7 +127,7 @@ const NewDestination = () => {
 
                         </div>
                         <div className="bg-base-200 px-4 py-3 text-right sm:px-6">
-                            <Link to="/destinations" className="btn btn-ghost mr-2">Cancel</Link>
+                            <Link to="/transformations" className="btn btn-ghost mr-2">Cancel</Link>
                             <button disabled={executing} type="submit" className="btn btn-primary">Submit</button>
                         </div>
                     </div>
@@ -134,7 +135,7 @@ const NewDestination = () => {
             </div>
             <div className="md:col-span-1">
                 <div className="px-4 sm:px-0">
-                    <h3 className="text-base font-semibold leading-6">Create a new Destination</h3>
+                    <h3 className="text-base font-semibold leading-6">Create a new Transformation</h3>
                     <p className="text-base-content mt-1 text-sm">
                         This information will be displayed publicly so be careful what you share.
                     </p>
@@ -144,4 +145,4 @@ const NewDestination = () => {
     </Fragment>
 }
 
-export default NewDestination;
+export default NewTransformation;

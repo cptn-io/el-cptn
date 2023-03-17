@@ -17,6 +17,7 @@ import Loading from './components/Loading';
 import DestinationDetails from './pages/Destinations/DestinationDetails';
 import NewPipeline from './pages/Pipelines/NewPipeline';
 import PipelineDetails from './pages/Pipelines/PipelineDetails';
+import NewTransformation from './pages/Transformations/NewTransformation';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -41,7 +42,10 @@ root.render(
               <Route path="new" element={<NewPipeline />} />
               <Route path=":id" element={<PipelineDetails />} />
             </Route>
-            <Route path="transformations" element={<Transformations />} />
+            <Route path="transformations" >
+              <Route path="" element={<Transformations />} />
+              <Route path="new" element={<NewTransformation />} />
+            </Route>
             <Route exact path="" element={<Navigate to="/home" replace />} />
           </Route>
           <Route path="/" element={<Public />}>
