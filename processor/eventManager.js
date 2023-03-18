@@ -23,7 +23,7 @@ async function processQueuedEvents() {
             return workerExecPool.exec('processEvent', [new Event(row)]);
         })
         const workerStatuses = await Promise.all(workers);
-        workerStatuses.forEach(({ id, success, error }) => {
+        workerStatuses.forEach(({ id, success, message }) => {
             if (success) {
                 completed.push(id);
             } else {
@@ -35,7 +35,7 @@ async function processQueuedEvents() {
         }
 
         if (failed.length > 0) {
-            await client.query('UPDATE outbound_queue SET state= $1 WHERE id  = ANY($2::uuid[])', ['FAILED', completed]);
+            await client.query('UPDATE outbound_queue SET state= $1 WHERE id  = ANY($2::uuid[])', ['FAILED', failed]);
         }
         await client.query('COMMIT');
     } catch (err) {

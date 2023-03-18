@@ -19,7 +19,7 @@ async function getEventSteps(event) {
                 throw "Destination not found with id:" + step.id;
             }
 
-            return destination.script;
+            return destination;
         } else {
             return null
         }
@@ -44,7 +44,7 @@ async function processEvent(event) {
                 }
             }
 
-            evt = await runStep(step, evt, ctx);
+            evt = await runStep(step.script, evt, ctx);
             if (!evt) {
                 break;
             }
@@ -52,7 +52,7 @@ async function processEvent(event) {
         return { id, success: true, message }
     } catch (error) {
         console.error("Error while processing event", error);
-        return { id, success: false, message: error }
+        return { id, success: false, message: error.message }
     }
 }
 
