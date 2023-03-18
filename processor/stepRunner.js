@@ -9,18 +9,16 @@ async function runStep(stepScript, evt, ctx) {
         sandbox: {},
         require: {
             external: {
-                modules: ['lodash', 'moment']
+                modules: []
             },
-            builtin: ["*"],
+            builtin: ['*'],
             mock: {
                 fs: readOnlyFS,
             },
         },
         eval: false,
         wasm: false,
-        timeout: 15000,
-        memoryLimit: 64,
-        networkEnabled: true
+        timeout: 15000
     });
     const script = `module.exports = function(evt, ctx) {            
         ${stepScript}
