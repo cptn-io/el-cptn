@@ -11,7 +11,7 @@ import get from 'lodash/get';
 import axios from 'axios';
 import Editor from '@monaco-editor/react';
 
-const DestinationDetailsCard = (props) => {
+const TransformationDetailsCard = (props) => {
     const { data: { id, name, script, active }, onUpdate } = props;
 
     const editorRef = useRef(null);
@@ -54,16 +54,16 @@ const DestinationDetailsCard = (props) => {
             return;
         }
         setExecuting(true);
-        axios.put(`/api/destination/${id}`, payload).then(response => {
+        axios.put(`/api/transformation/${id}`, payload).then(response => {
             onUpdate(response.data);
             setEditMode(false);
             addNotification({
-                message: 'Destination has been updated',
+                message: 'Transformation has been updated',
                 type: 'success'
             });
         }).catch(err => {
             addNotification({
-                message: get(err, 'response.data.message', 'An error occurred while updating Destination'),
+                message: get(err, 'response.data.message', 'An error occurred while updating Transformation'),
                 type: 'error'
             });
             setError(err.response.data);
@@ -82,9 +82,9 @@ const DestinationDetailsCard = (props) => {
         <div className="card-body">
             <div className="form-control w-full">
                 <label className="label">
-                    <span className="label-text">Destination Name</span>
+                    <span className="label-text">Transformation Name</span>
                 </label>
-                {editMode ? <Fragment><input type="text" placeholder="Provide a name for the Destination" defaultValue={name}
+                {editMode ? <Fragment><input type="text" placeholder="Provide a name for the Transformation" defaultValue={name}
                     className="input input-bordered w-full"
                     onChange={e => setChanges(current => ({
                         ...current,
@@ -124,7 +124,7 @@ const DestinationDetailsCard = (props) => {
             </div>
 
             <div className="card-actions justify-end">
-                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Destination</button>}
+                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Transformation</button>}
                 {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
                     changes</button>}
@@ -133,4 +133,4 @@ const DestinationDetailsCard = (props) => {
     </div>
 }
 
-export default DestinationDetailsCard;
+export default TransformationDetailsCard;

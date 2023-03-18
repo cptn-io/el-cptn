@@ -5,7 +5,6 @@ import com.elcptn.mgmtsvc.repositories.EventRepository;
 import com.elcptn.mgmtsvc.scheduler.processors.InboundEventProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,22 +21,17 @@ public class InboundEventScheduler {
 
     private final EventRepository eventRepository;
     private final InboundEventProcessor inboundEventProcessor;
-
     private final ForkJoinPool forkJoinPool;
-
-    @Value("${inbound.event.processor.batch-size:20}")
-    private Integer batchSize;
 
     @Scheduled(fixedDelayString = "${inbound.event.processor.interval:5000}")
     public void run() {
-
         log.debug("Running inbound event processor");
         processRecords();
     }
 
     @Transactional
     public void processRecords() {
-        try (Stream<Event> eventStream = eventRepository.fetchEventsForProcessing(batchSize)) {
+        try (Stream<Event> eventStream = eventRepository.fetchEventsForProcessing()) {
             eventStream.forEach(event -> {
                 forkJoinPool.submit(() -> {
                     inboundEventProcessor.processEvent(event);

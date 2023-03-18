@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 @MappedSuperclass
 @EntityListeners(EntityListener.class)
 @ToString(onlyExplicitlyIncluded = true)
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 
     @Id
     @Getter

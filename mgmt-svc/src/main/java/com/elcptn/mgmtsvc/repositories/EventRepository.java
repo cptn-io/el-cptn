@@ -19,7 +19,7 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query(value = "SELECT * FROM event WHERE state='QUEUED'" +
             " ORDER BY created_at FOR UPDATE SKIP LOCKED", nativeQuery = true)
-    Stream<Event> fetchEventsForProcessing(int size);
+    Stream<Event> fetchEventsForProcessing();
 
     @Modifying
     @Transactional
