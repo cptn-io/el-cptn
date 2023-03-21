@@ -22,7 +22,11 @@ public interface PipelineMapper {
             expression = "java(destinationDtoToDestination(pipelineDto.getDestination()))")
     Pipeline toEntity(PipelineDto pipelineDto);
 
+    @Mapping(ignore = true, target = "transformations")
+    @Mapping(ignore = true, target = "transformationMap")
     PipelineDto toDto(Pipeline pipeline);
+
+    PipelineDto toDtoWithTransformations(Pipeline pipeline);
 
     @Mapping(ignore = true, target = "createdAt")
     @Mapping(ignore = true, target = "updatedAt")

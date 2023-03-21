@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.time.ZonedDateTime;
 
 /* @author: kc, created on 2/7/23 */
@@ -21,6 +22,8 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 public class SourceDto extends BaseDto {
 
+    @Serial
+    private static final long serialVersionUID = -508186201767170237L;
     @NotNull(message = "Name is required", groups = OnCreate.class)
     @Size(min = 3, max = 128, message = "Length must be between 3 and 128 characters")
     private String name;

@@ -7,10 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 
+import java.io.Serial;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 /* @author: kc, created on 2/7/23 */
@@ -19,6 +18,9 @@ import java.util.UUID;
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 public class Source extends BaseEntity {
+
+    @Serial
+    private static final long serialVersionUID = -3691670877572267385L;
 
     @Getter
     @Setter
@@ -65,22 +67,5 @@ public class Source extends BaseEntity {
 
     public boolean hasAnyKeysSetup() {
         return primaryKey != null || secondaryKey != null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-            return false;
-        }
-        Source source = (Source) o;
-        return getId() != null && Objects.equals(getId(), source.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

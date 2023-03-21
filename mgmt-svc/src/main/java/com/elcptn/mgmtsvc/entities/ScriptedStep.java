@@ -9,11 +9,15 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serial;
+
 /* @author: kc, created on 3/17/23 */
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ScriptedStep extends BaseEntity {
 
+    @Serial
+    private static final long serialVersionUID = 8585075555944933505L;
     @Getter
     @Setter
     @Column(length = 100)

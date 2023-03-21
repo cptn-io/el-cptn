@@ -3,9 +3,14 @@ package com.elcptn.mgmtsvc.services;
 import com.elcptn.mgmtsvc.entities.Destination;
 import com.elcptn.mgmtsvc.entities.Pipeline;
 import com.elcptn.mgmtsvc.entities.Source;
+import com.elcptn.mgmtsvc.entities.Transformation;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
+import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.PipelineRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,11 +27,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PipelineService extends CommonService {
 
+    private static final ObjectMapper mapper = new ObjectMapper();
     private final PipelineRepository pipelineRepository;
 
     private final SourceService sourceService;
 
     private final DestinationService destinationService;
+
+    private final TransformationService transformationService;
 
     public Pipeline create(Pipeline pipeline) {
         validateOnCreate(pipeline);
@@ -134,5 +142,43 @@ public class PipelineService extends CommonService {
         }
     }
 
+    public void addTransformation(Pipeline pipeline, UUID transformationId) {
+        Transformation transformation = getTransformation(transformationId);
+        if (pipeline.getTransformations().contains(transformation)) {
+            throw new BadRequestException("Selected Transformation is already associated to the Pipeline");
+        }
+        JsonNode transformationMap = pipeline.getTransformationMap();
+        if (transformationMap == null) {
+            transformationMap = mapper.createObjectNode();
+        }
+        ((ObjectNode) transformationMap).put(transformationId.toString(), mapper.createObjectNode());
+        pipeline.setTransformationMap(transformationMap);
+        pipeline.addTransformation(transformation);
+        pipelineRepository.save(pipeline);
+    }
+
+    public void removeTransformation(Pipeline pipeline, UUID transformationId) {
+        Transformation transformation = getTransformation(transformationId);
+
+        if (!pipeline.getTransformations().contains(transformation)) {
+            return;
+        }
+
+        JsonNode transformationMap = pipeline.getTransformationMap();
+        if (transformationMap != null) {
+            ((ObjectNode) transformationMap).remove(transformationId.toString());
+        }
+        pipeline.setTransformationMap(transformationMap);
+        pipeline.removeTransformation(transformation);
+        pipelineRepository.save(pipeline);
+    }
+
+    private Transformation getTransformation(UUID id) {
+        Optional<Transformation> transformationOptional = transformationService.getById(id);
+        if (transformationOptional.isEmpty()) {
+            throw new NotFoundException("Transformation not found with the passed id");
+        }
+        return transformationOptional.get();
+    }
 
 }

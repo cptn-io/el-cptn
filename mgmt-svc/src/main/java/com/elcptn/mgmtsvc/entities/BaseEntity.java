@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 /* @author: kc, created on 2/7/23 */
@@ -15,7 +17,7 @@ import java.util.UUID;
 @MappedSuperclass
 @EntityListeners(EntityListener.class)
 @ToString(onlyExplicitlyIncluded = true)
-public class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
     @Id
     @Getter
@@ -49,4 +51,21 @@ public class BaseEntity implements Serializable {
     @Setter
     @Column(length = 36)
     private String updatedBy;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        BaseEntity entity = (BaseEntity) o;
+        return getId() != null && Objects.equals(getId(), entity.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
