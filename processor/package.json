@@ -13,6 +13,7 @@
     "lodash": "^4.17.21",
     "memfs": "^3.4.13",
     "pg": "^8.10.0",
+    "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.14",
     "workerpool": "^6.4.0"
   }

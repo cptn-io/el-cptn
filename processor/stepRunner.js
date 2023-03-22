@@ -6,7 +6,7 @@ async function runStep(stepScript, evt, ctx) {
 
     const vm = new NodeVM({
         console: 'inherit',
-        sandbox: {},
+        sandbox: { fetch },
         require: {
             external: {
                 modules: []

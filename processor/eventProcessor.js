@@ -1,8 +1,32 @@
+const cache = require('./cache');
 const pgPool = require('./database');
 const Destination = require('./entities/Destination');
+const Pipeline = require('./entities/Pipeline');
 const { runStep } = require('./stepRunner');
+const Transformation = require('./entities/Transformation');
+
+async function getTransformation(transformationId) {
+    const key = `transformation:${transformationId}`;
+    const cached = await cache.get(key);
+    if (cached) {
+        return new Transformation(cached);
+    }
+
+    const result = await pgPool.query('SELECT t.id, t.script, t.version, t.active FROM transformation t WHERE t.id=$1', [transformationId]);
+    const row = result.rows?.[0];
+    if (row) {
+        return new Transformation(row);
+    }
+    return null;
+}
 
 async function getDestination(destinationId) {
+    const key = `destination:${destinationId}`;
+    const cached = await cache.get(key);
+    if (cached) {
+        return new Destination(cached);
+    }
+
     const result = await pgPool.query('SELECT d.id, d.script, d.version, d.active FROM destination d WHERE d.id=$1', [destinationId]);
     const row = result.rows?.[0];
     if (row) {
@@ -11,20 +35,31 @@ async function getDestination(destinationId) {
     return null;
 }
 
-async function getEventSteps(event) {
-    const steps = await Promise.all(event.steps.map(async step => {
-        if (step.type === 'destination') {
-            const destination = await getDestination(step.id);
-            if (!destination) {
-                throw "Destination not found with id:" + step.id;
-            }
+async function getPipeline(event) {
+    const key = `pipeline:${event.pipelineId}`;
+    const cached = await cache.get(key);
+    if (cached) {
+        return new Pipeline(cached);
+    }
 
-            return destination;
-        } else {
-            return null
-        }
-    }));
-    return steps;
+    const result = await pgPool.query('SELECT p.id, p.route, p.source_id, p.destination_id, p.active FROM pipeline p WHERE p.id=$1', [event.pipelineId]);
+    const row = result.rows?.[0];
+    if (row) {
+        await cache.set(key, row);
+        return new Pipeline(row);
+    }
+    return null;
+}
+
+async function resolveSteps(pipeline) {
+    const transformations = pipeline.transformations;
+    const destinationId = pipeline.destinationId;
+
+    const stepsPromises = transformations.map(id => getTransformation(id));
+    const steps = await Promise.all(stepsPromises);
+    const destination = await getDestination(destinationId);
+    console.log(steps, destination);
+    return [...steps, destination];
 }
 
 async function processEvent(event) {
@@ -32,20 +67,22 @@ async function processEvent(event) {
     let ctx = {}, evt = { ...payload };
     try {
         let message;
-        const steps = await getEventSteps(event);
+        const pipeline = await getPipeline(event);
+        if (!pipeline) {
+            throw "Pipeline not found";
+        } else if (!pipeline.active) {
+            throw "Pipeline is not active";
+        }
+
+        const steps = await resolveSteps(pipeline);
         for (const step of steps) {
             if (!step.active) {
-                if (typeof step !== Destination) {
-                    //skip this inactive transformer step
-                    continue;
-                } else {
-                    message = 'Aborting as the destination is inactive';
-                    break;
-                }
+                continue;
             }
 
             evt = await runStep(step.script, evt, ctx);
-            if (!evt) {
+            if (!evt && typeof step !== Destination) {
+                //transformations must return processed event for continuing with next steps
                 break;
             }
         }

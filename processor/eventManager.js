@@ -20,10 +20,12 @@ async function processQueuedEvents() {
             return;
         }
         const workers = result.rows.map(async row => {
-            return workerExecPool.exec('processEvent', [new Event(row)]).timeout(15000)
-                .catch(err => {
-                    return { id: row.id, success: false, message: err.message };
-                });
+            return workerExecPool.exec('processEvent', [new Event(row)]);
+            // return workerExecPool.exec('processEvent', [new Event(row)]).timeout(15000)
+            //     .catch(err => {
+            //         console.log(err);
+            //         return { id: row.id, success: false, message: err.message };
+            //     });
         })
         const workerStatuses = await Promise.all(workers);
         workerStatuses.forEach(({ id, success, message }) => {
