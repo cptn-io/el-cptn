@@ -72,8 +72,9 @@ public class PipelineController {
 
         Pipeline pipeline = getById(id);
         mapper.partialUpdate(pipelineDto, pipeline);
+        pipelineService.addTransformation(pipeline, pipelineDto.getTransformations());
 
-        return ResponseEntity.ok(convert(pipelineService.update(pipeline)));
+        return ResponseEntity.ok(mapper.toDtoWithTransformations(pipelineService.update(pipeline)));
     }
 
     @DeleteMapping("/api/pipeline/{id}")
@@ -92,7 +93,7 @@ public class PipelineController {
         }
 
         Pipeline pipeline = getById(id);
-        pipelineService.addTransformation(pipeline, pipelineTransformationDto.getTransformationId());
+        //pipelineService.addTransformation(pipeline, pipelineTransformationDto.getTransformationId());
 
         return ResponseEntity.ok(mapper.toDtoWithTransformations(pipeline));
     }

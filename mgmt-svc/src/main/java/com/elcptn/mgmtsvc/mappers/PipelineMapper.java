@@ -33,6 +33,7 @@ public interface PipelineMapper {
     @Mapping(ignore = true, target = "createdBy")
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
+    @Mapping(ignore = true, target = "transformations")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Pipeline partialUpdate(PipelineDto pipelineDto, @MappingTarget Pipeline pipeline);
 

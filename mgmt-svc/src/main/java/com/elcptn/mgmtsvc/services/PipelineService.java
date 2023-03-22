@@ -1,5 +1,6 @@
 package com.elcptn.mgmtsvc.services;
 
+import com.elcptn.mgmtsvc.dto.TransformationDto;
 import com.elcptn.mgmtsvc.entities.Destination;
 import com.elcptn.mgmtsvc.entities.Pipeline;
 import com.elcptn.mgmtsvc.entities.Source;
@@ -10,6 +11,7 @@ import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.PipelineRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +40,20 @@ public class PipelineService extends CommonService {
 
     public Pipeline create(Pipeline pipeline) {
         validateOnCreate(pipeline);
+
+        ObjectNode defaultEdge = mapper.createObjectNode();
+        defaultEdge.put("source", pipeline.getSource().getId().toString());
+        defaultEdge.put("target", pipeline.getDestination().getId().toString());
+        ArrayNode edges = mapper.createArrayNode();
+        edges.add(defaultEdge);
+
+        ObjectNode positions = mapper.createObjectNode();
+
+        ObjectNode transformationMap = mapper.createObjectNode();
+        transformationMap.put("positions", positions);
+        transformationMap.put("edgeMap", edges);
+
+        pipeline.setTransformationMap(transformationMap);
         return save(pipeline);
     }
 
@@ -142,19 +158,25 @@ public class PipelineService extends CommonService {
         }
     }
 
-    public void addTransformation(Pipeline pipeline, UUID transformationId) {
-        Transformation transformation = getTransformation(transformationId);
-        if (pipeline.getTransformations().contains(transformation)) {
-            throw new BadRequestException("Selected Transformation is already associated to the Pipeline");
-        }
-        JsonNode transformationMap = pipeline.getTransformationMap();
-        if (transformationMap == null) {
-            transformationMap = mapper.createObjectNode();
-        }
-        ((ObjectNode) transformationMap).put(transformationId.toString(), mapper.createObjectNode());
-        pipeline.setTransformationMap(transformationMap);
-        pipeline.addTransformation(transformation);
-        pipelineRepository.save(pipeline);
+    public void addTransformation(Pipeline pipeline, List<TransformationDto> transformationDtoList) {
+
+        transformationDtoList.stream().forEach(transformationDto -> {
+            Transformation transformation = getTransformation(transformationDto.getId());
+            pipeline.addTransformation(transformation);
+        });
+
+//        Transformation transformation = getTransformation(transformationId);
+//        if (pipeline.getTransformations().contains(transformation)) {
+//            throw new BadRequestException("Selected Transformation is already associated to the Pipeline");
+//        }
+//        JsonNode transformationMap = pipeline.getTransformationMap();
+//        if (transformationMap == null) {
+//            transformationMap = mapper.createObjectNode();
+//        }
+//        ((ObjectNode) transformationMap).put(transformationId.toString(), mapper.createObjectNode());
+//        pipeline.setTransformationMap(transformationMap);
+//        pipeline.addTransformation(transformation);
+//        pipelineRepository.save(pipeline);
     }
 
     public void removeTransformation(Pipeline pipeline, UUID transformationId) {
