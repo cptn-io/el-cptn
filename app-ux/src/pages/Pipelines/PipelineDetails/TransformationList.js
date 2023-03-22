@@ -1,4 +1,4 @@
-import { IconMinus, IconPlus, IconX } from "@tabler/icons-react";
+import { IconPlus, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 import ConfirmModal from "../../../components/ConfirmModal";
 

@@ -1,4 +1,4 @@
-import ReactFlow, { ReactFlowProvider, Controls, Background, useReactFlow, useEdgesState, updateEdge, addEdge, useNodesState, MarkerType } from 'reactflow';
+import ReactFlow, { Controls, Background, useReactFlow, useEdgesState, updateEdge, addEdge, useNodesState } from 'reactflow';
 import filter from 'lodash/filter';
 import ButtonEdge from './ButtonEdge.js';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
@@ -45,12 +45,12 @@ const PipelineEditor = forwardRef((props, ref) => {
         }
     }));
 
-    const removeEdge = (evt, edgeId) => {
+    const removeEdge = useCallback((evt, edgeId) => {
         evt.preventDefault();
         setEdges((current) => {
             return current.filter((e) => e.id !== edgeId);
         });
-    }
+    }, [setEdges]);
 
     useEffect(() => {
         if (!draft) {
@@ -66,7 +66,7 @@ const PipelineEditor = forwardRef((props, ref) => {
         setEdges(() => edgesWithButtons);
 
         setTimeout(reactFlowInstance.fitView, 100);
-    }, [draft.transformations, draft.transformationMap])
+    }, [draft, reactFlowInstance, setEdges, setNodes, removeEdge])
 
     const onConnect = (params) => {
         //check if there is an existing edge from the source
@@ -100,14 +100,14 @@ const PipelineEditor = forwardRef((props, ref) => {
     const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
         edgeUpdateSuccessful.current = true;
         setEdges((els) => updateEdge(oldEdge, newConnection, els));
-    }, []);
+    }, [setEdges]);
 
     const onEdgeUpdateEnd = useCallback((_, edge) => {
         if (!edgeUpdateSuccessful.current) {
             setEdges((eds) => eds.filter((e) => e.id !== edge.id));
         }
         edgeUpdateSuccessful.current = true;
-    }, []);
+    }, [setEdges]);
 
     return <ReactFlow fitView edgeTypes={edgeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} nodes={nodes} edges={edges} defaultEdgeOptions={edgeOptions} proOptions={proOptions} onConnect={onConnect} onEdgeUpdate={onEdgeUpdate}
         onEdgeUpdateStart={onEdgeUpdateStart} onEdgeUpdateEnd={onEdgeUpdateEnd}>

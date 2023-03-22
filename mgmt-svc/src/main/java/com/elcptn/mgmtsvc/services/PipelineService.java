@@ -13,15 +13,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /* @author: kc, created on 3/7/23 */
@@ -52,7 +52,9 @@ public class PipelineService extends CommonService {
         ObjectNode transformationMap = mapper.createObjectNode();
         transformationMap.put("positions", positions);
         transformationMap.put("edgeMap", edges);
+        transformationMap.put("route", mapper.createArrayNode());
 
+        pipeline.setRoute(mapper.createArrayNode());
         pipeline.setTransformationMap(transformationMap);
         return save(pipeline);
     }
@@ -68,6 +70,7 @@ public class PipelineService extends CommonService {
 
     public Pipeline update(Pipeline pipeline) {
         validateOnUpdate(pipeline);
+        validateAndComputeRoute(pipeline);
         return save(pipeline);
     }
 
@@ -84,6 +87,72 @@ public class PipelineService extends CommonService {
         return pipelineRepository.count();
     }
 
+
+    private void validateAndComputeRoute(Pipeline pipeline) {
+        boolean isValid = false;
+        JsonNode transformationMap = pipeline.getTransformationMap();
+        ArrayNode edgeMap = (ArrayNode) transformationMap.get("edgeMap");
+        Map<String, String> edges = getEdges(edgeMap);
+        //start from source and ensure that route exists to destination
+        String source = pipeline.getSource().getId().toString();
+        String destination = pipeline.getDestination().getId().toString();
+
+        ArrayNode route = mapper.createArrayNode();
+        String currentNode = source;
+
+        HashSet<String> visited = Sets.newHashSet();
+        Queue<String> queue = Queues.newArrayDeque();
+        queue.add(currentNode);
+
+        while (!queue.isEmpty()) {
+            currentNode = queue.poll();
+
+            if (!currentNode.equals(source) && !currentNode.equals(destination)) {
+                //check if the transformation is valid
+                Transformation currentTransformation = new Transformation();
+                currentTransformation.setId(UUID.fromString(currentNode));
+                if (!pipeline.getTransformations().contains(currentTransformation)) {
+                    throw new BadRequestException("Transformation reference is missing for " + currentNode);
+                }
+                route.add(currentNode);
+            }
+
+            if (currentNode.equals(destination)) {
+                isValid = true;
+                break;
+            }
+
+            //there should not be duplicate nodes or loops in the pipeline
+            if (visited.contains(currentNode)) {
+                throw new BadRequestException("A loop exists in the pipeline. Loops are not supported.");
+            }
+            visited.add(currentNode);
+            String nextNode = edges.get(currentNode);
+            if (nextNode == null) {
+                break;
+            }
+            queue.add(nextNode);
+        }
+
+        pipeline.setRoute(route);
+
+        if (!isValid) {
+            throw new BadRequestException("A valid route doesn't exist from Source to Destination");
+        }
+    }
+
+    private Map<String, String> getEdges(ArrayNode edgeMap) {
+        Map<String, String> edges = Maps.newHashMap();
+        edgeMap.forEach(edge -> {
+            String source = edge.get("source").textValue();
+            String target = edge.get("target").textValue();
+            if (edges.containsKey(source)) {
+                throw new BadRequestException("Invalid transformation Map. Multiple edges exist for source node " + source);
+            }
+            edges.put(source, target);
+        });
+        return edges;
+    }
 
     private void validateOnCreate(Pipeline pipeline) {
         List<FieldError> fieldErrorList = new ArrayList<>();
@@ -156,43 +225,16 @@ public class PipelineService extends CommonService {
         if (fieldErrorList.size() > 0) {
             throw new BadRequestException("Invalid data", fieldErrorList);
         }
+
+
     }
 
-    public void addTransformation(Pipeline pipeline, List<TransformationDto> transformationDtoList) {
+    public void addTransformations(Pipeline pipeline, List<TransformationDto> transformationDtoList) {
 
         transformationDtoList.stream().forEach(transformationDto -> {
             Transformation transformation = getTransformation(transformationDto.getId());
             pipeline.addTransformation(transformation);
         });
-
-//        Transformation transformation = getTransformation(transformationId);
-//        if (pipeline.getTransformations().contains(transformation)) {
-//            throw new BadRequestException("Selected Transformation is already associated to the Pipeline");
-//        }
-//        JsonNode transformationMap = pipeline.getTransformationMap();
-//        if (transformationMap == null) {
-//            transformationMap = mapper.createObjectNode();
-//        }
-//        ((ObjectNode) transformationMap).put(transformationId.toString(), mapper.createObjectNode());
-//        pipeline.setTransformationMap(transformationMap);
-//        pipeline.addTransformation(transformation);
-//        pipelineRepository.save(pipeline);
-    }
-
-    public void removeTransformation(Pipeline pipeline, UUID transformationId) {
-        Transformation transformation = getTransformation(transformationId);
-
-        if (!pipeline.getTransformations().contains(transformation)) {
-            return;
-        }
-
-        JsonNode transformationMap = pipeline.getTransformationMap();
-        if (transformationMap != null) {
-            ((ObjectNode) transformationMap).remove(transformationId.toString());
-        }
-        pipeline.setTransformationMap(transformationMap);
-        pipeline.removeTransformation(transformation);
-        pipelineRepository.save(pipeline);
     }
 
     private Transformation getTransformation(UUID id) {

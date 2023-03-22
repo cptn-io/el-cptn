@@ -10,7 +10,7 @@ import axios from "axios";
 import Loading from "../../../components/Loading";
 import TransformationList from "./TransformationList";
 import ItemSelectorModal from "../../../components/ItemSelectorModal";
-import { IconDeviceFloppy } from "@tabler/icons-react";
+import { IconDeviceFloppy, IconArrowBackUp } from "@tabler/icons-react";
 import PipelineEditor from "./PipelineEditor";
 import { ReactFlowProvider } from "reactflow";
 
@@ -23,7 +23,13 @@ const isPipelineValid = (data, edgeMap) => {
     const visitedNodes = {};
 
     let currentNode = source.id, isValid = false;
-    while (!visitedNodes[currentNode]) {
+    while (currentNode && !visitedNodes[currentNode]) {
+
+        if (currentNode === destination.id) {
+            isValid = true;
+            break;
+        }
+
         visitedNodes[currentNode] = true;
         const currentNodeEdges = filter(edgeMap, { source: currentNode });
         //there should be exactly one edge from the node.
@@ -32,13 +38,7 @@ const isPipelineValid = (data, edgeMap) => {
         }
         const currentEdge = currentNodeEdges[0];
         currentNode = currentEdge.target;
-
-        if (currentNode === destination.id) {
-            isValid = true;
-            break;
-        }
     }
-
     return isValid;
 }
 
@@ -102,7 +102,6 @@ const PipelineDetails = () => {
 
     const savePipeline = (e) => {
         const transformationMap = ref.current.getCurrentTransformMap();
-
         if (!isPipelineValid(data, transformationMap.edgeMap)) {
             addNotification({
                 message: 'The pipeline does not have a valid route to destination. Changes are not saved.',
@@ -110,10 +109,7 @@ const PipelineDetails = () => {
             });
             return;
         }
-
         const payload = { transformationMap, transformations: draft.transformations };
-
-
         axios.put(`/api/pipeline/${id}`, payload)
             .then(response => {
                 setData(response.data);
@@ -126,11 +122,22 @@ const PipelineDetails = () => {
             })
     }
 
+    const discardChanges = (e) => {
+        e.preventDefault();
+        setData(() => ({
+            ...data
+        }));
+        setDraft(() => ({
+            ...data
+        }));
+    };
+
     if (loading) {
         return <Loading />
     }
 
     return <div><PageTitle itemKey="pipelines" label={data.name} breadcrumbs={breadcrumbs} >
+        <button onClick={discardChanges} className="btn btn-sm md:btn-md mr-2"><IconArrowBackUp size={24} className="mr-2" />Reset Changes</button>
         <button onClick={savePipeline} className="btn btn-primary btn-sm md:btn-md"><IconDeviceFloppy size={24} className="mr-2" />Save Changes</button>
     </PageTitle>
         <div className="grid lg:grid-cols-8 md:grid-cols-3 grid-cols-2 gap-2">

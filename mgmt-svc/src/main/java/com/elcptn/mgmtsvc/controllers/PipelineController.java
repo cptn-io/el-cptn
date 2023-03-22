@@ -3,7 +3,6 @@ package com.elcptn.mgmtsvc.controllers;
 /* @author: kc, created on 3/7/23 */
 
 import com.elcptn.mgmtsvc.dto.PipelineDto;
-import com.elcptn.mgmtsvc.dto.PipelineTransformationDto;
 import com.elcptn.mgmtsvc.entities.Pipeline;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
@@ -72,7 +71,9 @@ public class PipelineController {
 
         Pipeline pipeline = getById(id);
         mapper.partialUpdate(pipelineDto, pipeline);
-        pipelineService.addTransformation(pipeline, pipelineDto.getTransformations());
+        if (pipelineDto.getTransformations() != null) {
+            pipelineService.addTransformations(pipeline, pipelineDto.getTransformations());
+        }
 
         return ResponseEntity.ok(mapper.toDtoWithTransformations(pipelineService.update(pipeline)));
     }
@@ -82,34 +83,6 @@ public class PipelineController {
         Pipeline pipeline = getById(id);
         pipelineService.delete(pipeline);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/api/pipeline/{id}/link/transformation")
-    public ResponseEntity<PipelineDto> addTransformation(@PathVariable UUID id,
-                                                         @Valid @RequestBody PipelineTransformationDto pipelineTransformationDto,
-                                                         BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
-        }
-
-        Pipeline pipeline = getById(id);
-        //pipelineService.addTransformation(pipeline, pipelineTransformationDto.getTransformationId());
-
-        return ResponseEntity.ok(mapper.toDtoWithTransformations(pipeline));
-    }
-
-    @PostMapping("/api/pipeline/{id}/unlink/transformation")
-    public ResponseEntity<PipelineDto> removeTransformation(@PathVariable UUID id,
-                                                            @Valid @RequestBody PipelineTransformationDto pipelineTransformationDto,
-                                                            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
-        }
-
-        Pipeline pipeline = getById(id);
-        pipelineService.removeTransformation(pipeline, pipelineTransformationDto.getTransformationId());
-
-        return ResponseEntity.ok(mapper.toDtoWithTransformations(pipeline));
     }
 
     private Pipeline getById(UUID id) {

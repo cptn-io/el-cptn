@@ -67,11 +67,13 @@ public class Pipeline extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private JsonNode transformationMap;
 
+    @Getter
+    @Setter
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private JsonNode route;
+
     public void addTransformation(Transformation transformation) {
         transformations.add(transformation);
-    }
-
-    public void removeTransformation(Transformation transformation) {
-        transformations.remove(transformation);
     }
 }
