@@ -17,6 +17,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
@@ -68,12 +69,14 @@ public class PipelineService extends CommonService {
         return pipelineRepository.findAll(pageable).stream().collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
     public Pipeline update(Pipeline pipeline) {
         validateOnUpdate(pipeline);
         validateAndComputeRoute(pipeline);
         return save(pipeline);
     }
 
+    @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
     public void delete(Pipeline pipeline) {
         pipelineRepository.delete(pipeline);
     }

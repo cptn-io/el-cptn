@@ -8,6 +8,12 @@ const navItems = [
         icon: () => <IconHome size={24} />
     },
     {
+        key: "pipelines",
+        label: "Data Pipelines",
+        url: "/pipelines",
+        icon: () => <IconCloudComputing size={24} />
+    },
+    {
         key: "sources",
         label: "Data Sources",
         url: "/sources",
@@ -18,12 +24,6 @@ const navItems = [
         label: "Data Destinations",
         url: "/destinations",
         icon: () => <IconDatabaseImport size={24} />
-    },
-    {
-        key: "pipelines",
-        label: "Data Pipelines",
-        url: "/pipelines",
-        icon: () => <IconCloudComputing size={24} />
     },
     {
         key: "transformations",

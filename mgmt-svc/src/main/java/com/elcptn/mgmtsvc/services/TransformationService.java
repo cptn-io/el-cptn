@@ -4,6 +4,7 @@ import com.elcptn.mgmtsvc.entities.Transformation;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.TransformationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,12 @@ public class TransformationService extends CommonService {
         return save(transformation);
     }
 
+    @CacheEvict(value = "transformation-proc", key = "#transformation.id")
     public Transformation update(Transformation transformation) {
         return save(transformation);
     }
 
+    @CacheEvict(value = "transformation-proc", key = "#transformation.id")
     public void delete(Transformation transformation) {
         transformationRepository.delete(transformation);
     }

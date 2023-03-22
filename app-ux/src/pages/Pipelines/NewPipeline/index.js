@@ -4,14 +4,20 @@ import { breadcrumbs } from "..";
 import { Link, useNavigate } from "react-router-dom";
 import useNotifications from "../../../hooks/useNotifications";
 import { renderErrors } from "../../../common/formHelpers";
-import { IconSearch } from "@tabler/icons-react";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
 import ItemSelectorModal from "../../../components/ItemSelectorModal";
 import axios from "axios";
 import get from "lodash/get";
+import CreateSource from "../../Sources/NewSource/CreateSource";
+import Modal from "../../../components/Modal";
+import CreateDestination from "../../Destinations/NewDestination/CreateDestination";
 
 const NewPipeline = (props) => {
     const navigate = useNavigate();
     const { addNotification } = useNotifications();
+    const [showSourceDialog, setShowSourceDialog] = useState(false);
+    const [showDestinationDialog, setShowDestinationDialog] = useState(false);
+
     const [name, setName] = useState('');
     const [active, setActive] = useState(true);
     const [source, setSource] = useState(null);
@@ -72,6 +78,15 @@ const NewPipeline = (props) => {
         })
     };
 
+    const onCreateSource = (item) => {
+        setSource(item);
+        setShowSourceDialog(false)
+    }
+
+    const onCreateDestination = (item) => {
+        setDestination(item);
+        setShowDestinationDialog(false)
+    }
     return <Fragment>
         <PageTitle itemKey="pipelines" label="New Pipeline" breadcrumbs={breadcrumbs} />
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -94,8 +109,11 @@ const NewPipeline = (props) => {
                                 </label>
                                 <div className="input-group">
                                     <input type="text" readOnly disabled placeholder="Select" value={source?.name || ''} className="input input-bordered" />
-                                    <button className="btn btn-square" onClick={e => { e.preventDefault(); setShowSourceSelector(true) }}>
+                                    <button className="btn btn-square tooltip p-3" data-tip="Select a Source" onClick={e => { e.preventDefault(); setShowSourceSelector(true) }}>
                                         <IconSearch width={24} />
+                                    </button>
+                                    <button className="btn btn-success btn-square tooltip p-2" data-tip="Create Source" onClick={e => { e.preventDefault(); setShowSourceDialog(true) }}>
+                                        <IconPlus width={24} />
                                     </button>
                                 </div>
                                 {renderErrors(error, 'source')}
@@ -107,9 +125,14 @@ const NewPipeline = (props) => {
                                 </label>
                                 <div className="input-group">
                                     <input type="text" readOnly disabled placeholder="Select" value={destination?.name || ''} className="input input-bordered" />
-                                    <button className="btn btn-square" onClick={e => { e.preventDefault(); setShowDestinationSelector(true) }}>
+                                    <button className="btn btn-square tooltip p-3" data-tip="Select a Destination" onClick={e => { e.preventDefault(); setShowDestinationSelector(true) }}>
                                         <IconSearch width={24} />
                                     </button>
+
+                                    <button className="btn btn-success btn-square tooltip p-2" data-tip="Create Destination" onClick={e => { e.preventDefault(); setShowDestinationDialog(true) }}>
+                                        <IconPlus width={24} />
+                                    </button>
+
                                 </div>
                                 {renderErrors(error, 'destination')}
                             </div>
@@ -143,6 +166,11 @@ const NewPipeline = (props) => {
             onCancel={() => setShowSourceSelector(false)} onSelect={onSourceSelection} />}
         {showDestinationSelector && <ItemSelectorModal url="/api/destination" title="Select a Destination" cols={[{ "label": "Name", "datacss": "text-left", "css": "w-1/2", "name": "name" }, { "label": "Active", "datacss": "", "css": "text-center", "name": "active" }]}
             onCancel={() => setShowDestinationSelector(false)} onSelect={onDestinationSelection} />}
+        {showSourceDialog && <Modal title="Create Source" onCancel={() => setShowSourceDialog(false)}>
+            <CreateSource noShadow={true} onSuccess={onCreateSource} onCancel={() => setShowSourceDialog(false)} /></Modal>}
+        {showDestinationDialog && <Modal title="Create Destination" onCancel={() => setShowDestinationDialog(false)}>
+            <CreateDestination noShadow={true} onSuccess={onCreateDestination} onCancel={() => setShowDestinationDialog(false)} /></Modal>}
+
     </Fragment>
 }
 

@@ -6,7 +6,7 @@ const { runStep } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
 
 async function getTransformation(transformationId) {
-    const key = `transformation:${transformationId}`;
+    const key = `transformation-proc::${transformationId}`;
     const cached = await cache.get(key);
     if (cached) {
         return new Transformation(cached);
@@ -15,13 +15,14 @@ async function getTransformation(transformationId) {
     const result = await pgPool.query('SELECT t.id, t.script, t.version, t.active FROM transformation t WHERE t.id=$1', [transformationId]);
     const row = result.rows?.[0];
     if (row) {
+        await cache.set(key, row);
         return new Transformation(row);
     }
     return null;
 }
 
 async function getDestination(destinationId) {
-    const key = `destination:${destinationId}`;
+    const key = `destination-proc::${destinationId}`;
     const cached = await cache.get(key);
     if (cached) {
         return new Destination(cached);
@@ -30,13 +31,14 @@ async function getDestination(destinationId) {
     const result = await pgPool.query('SELECT d.id, d.script, d.version, d.active FROM destination d WHERE d.id=$1', [destinationId]);
     const row = result.rows?.[0];
     if (row) {
+        await cache.set(key, row);
         return new Destination(row);
     }
     return null;
 }
 
 async function getPipeline(event) {
-    const key = `pipeline:${event.pipelineId}`;
+    const key = `pipeline-proc::${event.pipelineId}`;
     const cached = await cache.get(key);
     if (cached) {
         return new Pipeline(cached);
@@ -58,7 +60,6 @@ async function resolveSteps(pipeline) {
     const stepsPromises = transformations.map(id => getTransformation(id));
     const steps = await Promise.all(stepsPromises);
     const destination = await getDestination(destinationId);
-    console.log(steps, destination);
     return [...steps, destination];
 }
 

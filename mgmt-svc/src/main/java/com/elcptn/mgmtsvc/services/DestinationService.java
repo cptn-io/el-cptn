@@ -4,6 +4,7 @@ import com.elcptn.mgmtsvc.entities.Destination;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.DestinationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,12 @@ public class DestinationService extends CommonService {
         return save(destination);
     }
 
+    @CacheEvict(value = "destination-proc", key = "#destination.id")
     public Destination update(Destination destination) {
         return save(destination);
     }
 
+    @CacheEvict(value = "destination-proc", key = "#destination.id")
     public void delete(Destination destination) {
         destinationRepository.delete(destination);
     }
