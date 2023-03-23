@@ -10,7 +10,7 @@ import SourceDetailsCard from "./SourceDetailsCard";
 import SourceMetrics from "./SourceMetrics";
 import Tabs from "../../../components/Tabs";
 
-const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'destinations', label: 'Destinations' }, { 'key': 'events', label: 'Events' }];
+const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Events' }];
 
 const SourceDetails = (props) => {
     const navigate = useNavigate();
@@ -42,7 +42,7 @@ const SourceDetails = (props) => {
 
     return <div>
         <PageTitle itemKey="sources" label={data.name} breadcrumbs={breadcrumbs} />
-        <SourceMetrics />
+        <SourceMetrics sourceId={id} />
         <Tabs tabs={tabs} activeTab={tab} onTabChange={setTab} />
         {tab === 'overview' &&
             <div className="grid grid-flow-row-dense grid-cols-1 xl:grid-cols-8 gap-4 ">

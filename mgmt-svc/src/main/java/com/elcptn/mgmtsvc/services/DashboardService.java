@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /* @author: kc, created on 3/9/23 */
 @Service
@@ -40,6 +41,21 @@ public class DashboardService {
         entityStats.put("pipelines", pipelineRepository.count());
         entityStats.put("sources", sourceRepository.count());
         entityStats.put("destinations", destinationRepository.count());
+        metricsDto.setEntities(entityStats);
+
+        return metricsDto;
+    }
+
+    public DashboardMetricsDto getSourceMetrics(UUID sourceId) {
+        DashboardMetricsDto metricsDto = new DashboardMetricsDto();
+
+        List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForCollectionRun(sourceId,
+                ZonedDateTime.now().minusHours(24));
+        metricsDto.setInbound(inboundEventMetrics);
+
+        //entity counts
+        ObjectNode entityStats = mapper.createObjectNode();
+        entityStats.put("pipelines", pipelineRepository.countBySource(sourceId));
         metricsDto.setEntities(entityStats);
 
         return metricsDto;

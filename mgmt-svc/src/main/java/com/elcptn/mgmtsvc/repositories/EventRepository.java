@@ -29,4 +29,9 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query(value = "SELECT new com.elcptn.mgmtsvc.dto.StatusMetricDto(e.state, COUNT(e.id)) " +
             "FROM Event e WHERE e.createdAt >= :createdAfter GROUP BY e.state")
     List<StatusMetricDto> getStatusCountsForCollectionRun(@Param("createdAfter") ZonedDateTime createdAfter);
+
+    @Query(value = "SELECT new com.elcptn.mgmtsvc.dto.StatusMetricDto(e.state, COUNT(e.id)) " +
+            "FROM Event e WHERE e.source.id = :source AND e.createdAt >= :createdAfter GROUP BY e.state")
+    List<StatusMetricDto> getStatusCountsForCollectionRun(@Param("source") UUID sourceId, @Param(
+            "createdAfter") ZonedDateTime createdAfter);
 }

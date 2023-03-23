@@ -10,5 +10,8 @@ import java.util.UUID;
 public interface PipelineRepository extends JpaRepository<Pipeline, UUID> {
 
     @Query(value = "FROM Pipeline p WHERE p.active=true AND p.source.id=:sourceId")
-    Set<Pipeline> findActivePipelinesBySource(UUID sourceId);
+    Set<Pipeline> findBySource(UUID sourceId);
+
+    @Query(value = "SELECT COUNT(p) FROM Pipeline p WHERE p.active=true AND p.source.id=:sourceId")
+    long countBySource(UUID sourceId);
 }

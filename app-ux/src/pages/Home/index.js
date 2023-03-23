@@ -7,6 +7,7 @@ import find from 'lodash/find';
 import get from 'lodash/get';
 import pluralize from "pluralize";
 import { IconTimelineEventExclamation, IconTimelineEventPlus, IconCircleCheck, IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconTransform } from '@tabler/icons-react';
+import { processInboundMetrics } from "../../common/metricHelpers";
 
 const Home = () => {
     const { addNotification } = useNotifications();
@@ -16,17 +17,11 @@ const Home = () => {
 
     useEffect(() => {
         axios.get('/api/dashboard/metrics').then(response => {
-            const inboundTotal = response.data.inbound.reduce((sum, status) => sum + status.count, 0);
-            const inboundProcessed = find(response.data.inbound, { 'state': 'COMPLETED' })?.count || 0;
-            const inboundPercentComplete = inboundTotal > 0 ? Math.floor(inboundProcessed / inboundTotal * 100) : 100;
-            const inboundFailed = find(response.data.inbound, { 'state': 'FAILED' })?.count || 0;
+            const inboundMetrics = processInboundMetrics(response.data);
 
             setMetrics({
                 entities: response.data?.entities,
-                inboundTotal,
-                inboundProcessed,
-                inboundPercentComplete,
-                inboundFailed
+                ...inboundMetrics
             });
         }).catch(err => {
             addNotification({

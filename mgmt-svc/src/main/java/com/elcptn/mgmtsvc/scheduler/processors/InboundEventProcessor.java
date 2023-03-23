@@ -37,7 +37,7 @@ public class InboundEventProcessor {
     }
 
     private void dispatchEventToPipelines(Event event) {
-        pipelineRepository.findActivePipelinesBySource(event.getSource().getId()).forEach(pipeline -> {
+        pipelineRepository.findBySource(event.getSource().getId()).forEach(pipeline -> {
             OutboundWriteEvent outboundWriteEvent = new OutboundWriteEvent();
             outboundWriteEvent.setPipeline(pipeline);
             outboundWriteEvent.setPayload(event.getPayload());
