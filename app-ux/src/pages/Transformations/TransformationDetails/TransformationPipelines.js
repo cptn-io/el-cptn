@@ -32,7 +32,7 @@ const TransformationPipelines = (props) => {
         }).finally(() => {
             setLoading(false);
         });
-    }, [page, addNotification]);
+    }, [page, addNotification, transformationId]);
 
     if (loading) {
         return <Loading />

@@ -30,7 +30,7 @@ public class DashboardController {
     }
 
     @GetMapping("/api/dashboard/source/{id}/metrics")
-    public ResponseEntity<DashboardMetricsDto> getDashboardMetrics(@PathVariable UUID id, @RequestParam(required =
+    public ResponseEntity<DashboardMetricsDto> getSourceMetrics(@PathVariable UUID id, @RequestParam(required =
             false, defaultValue = "1440") String interval) {
         Long intervalVal = parseInterval(interval);
 

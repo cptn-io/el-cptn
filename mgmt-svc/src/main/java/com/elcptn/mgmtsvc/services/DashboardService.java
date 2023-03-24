@@ -48,6 +48,7 @@ public class DashboardService {
         return metricsDto;
     }
 
+    @Cacheable(value = "dashboard", key = "\"source\" + #sourceId + #intervalVal")
     public DashboardMetricsDto getSourceMetrics(UUID sourceId, Long intervalVal) {
         DashboardMetricsDto metricsDto = new DashboardMetricsDto();
 

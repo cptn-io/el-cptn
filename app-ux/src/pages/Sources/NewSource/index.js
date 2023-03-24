@@ -9,11 +9,11 @@ const NewSource = () => {
 
     const onSuccess = useCallback(() => {
         navigate('/sources');
-    }, []);
+    }, [navigate]);
 
     const onCancel = useCallback(() => {
         navigate('/sources');
-    }, []);
+    }, [navigate]);
 
     return <Fragment>
         <PageTitle itemKey="sources" label="New Source" breadcrumbs={breadcrumbs} />

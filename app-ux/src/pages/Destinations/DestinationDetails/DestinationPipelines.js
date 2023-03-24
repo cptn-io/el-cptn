@@ -32,7 +32,7 @@ const DestinationPipelines = (props) => {
         }).finally(() => {
             setLoading(false);
         });
-    }, [page, addNotification]);
+    }, [page, addNotification, destinationId]);
 
     if (loading) {
         return <Loading />

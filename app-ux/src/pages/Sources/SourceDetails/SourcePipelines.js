@@ -32,7 +32,7 @@ const SourcePipelines = (props) => {
         }).finally(() => {
             setLoading(false);
         });
-    }, [page, addNotification]);
+    }, [page, addNotification, sourceId]);
 
     if (loading) {
         return <Loading />
