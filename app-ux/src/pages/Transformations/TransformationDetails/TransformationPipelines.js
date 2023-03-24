@@ -37,10 +37,10 @@ const TransformationPipelines = (props) => {
     if (loading) {
         return <Loading />
     }
-    return <>
-        <div className="my-4 text-lg font-bold">Related Pipelines</div>
+    return <div className="p-4">
+        <div className="mb-4 text-lg font-bold">Related Pipelines</div>
         <PipelineList data={data} totalCount={totalCount} isRelatedList={true} />
-    </>
+    </div>
 }
 
 export default TransformationPipelines;

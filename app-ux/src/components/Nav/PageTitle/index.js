@@ -17,7 +17,7 @@ const PageTitle = (props) => {
         </div>}
         <div className="flex justify-between mb-4">
             <div className="flex items-center">
-                {navItem.icon()}
+                <navItem.Icon size={36} />
                 <div className="text-xl transition-all duration-200 md:text-3xl font-bold ml-2">{props.label || navItem.label}</div>
             </div>
             <div>

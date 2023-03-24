@@ -5,31 +5,31 @@ const navItems = [
         key: "home",
         label: "Home",
         url: "/home",
-        icon: () => <IconHome size={24} />
+        Icon: IconHome
     },
     {
         key: "pipelines",
         label: "Data Pipelines",
         url: "/pipelines",
-        icon: () => <IconCloudComputing size={24} />
+        Icon: IconCloudComputing
     },
     {
         key: "sources",
         label: "Data Sources",
         url: "/sources",
-        icon: () => <IconDatabaseExport size={24} />
+        Icon: IconDatabaseExport
     },
     {
         key: "destinations",
         label: "Data Destinations",
         url: "/destinations",
-        icon: () => <IconDatabaseImport size={24} />
+        Icon: IconDatabaseImport
     },
     {
         key: "transformations",
         label: "Transformations",
         url: "/transformations",
-        icon: () => <IconTransform size={24} />
+        Icon: IconTransform
     }
 ];
 

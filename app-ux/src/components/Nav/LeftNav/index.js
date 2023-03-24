@@ -12,7 +12,7 @@ const LeftNav = () => {
             </div>
             <ul className="menu menu-compact flex flex-col p-0 px-4">
                 {navItems.map((item) => <li key={item.label} className="flex gap-4">
-                    <Link to={item.url} className={location.pathname.startsWith(item.url) ? 'active' : ''}>{item.icon()}{item.label}</Link>
+                    <Link to={item.url} className={location.pathname.startsWith(item.url) ? 'active' : ''}><item.Icon size={24} />{item.label}</Link>
                 </li>)}
             </ul>
         </aside>

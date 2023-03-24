@@ -20,7 +20,7 @@ const Pagination = (props) => {
         setSearchParams(searchParams);
     }, [page, searchParams, setSearchParams, setCurrentPage])
 
-    return <div className="mt-3 px-3 flex justify-between items-center">
+    return <div className="mt-3 p-3 flex justify-between items-center bg-base-200 rounded-xl">
         <div>
             {totalCount > 0 ? <Fragment>{`${startCount} - ${endCount} of ${totalCount} records`}</Fragment>
                 : <Fragment>No Records</Fragment>

@@ -82,8 +82,8 @@ const BasicInformation = (props) => {
     }, [])
 
     return <div className="card bg-base-100 mb-4">
-        <div className="card-body">
-            <h2 className="card-title">Source Details</h2>
+        <div className="card-body p-4">
+            <div className="text-lg font-bold">Source Details</div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Source Name</span>

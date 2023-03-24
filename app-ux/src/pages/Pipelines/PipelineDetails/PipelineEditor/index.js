@@ -65,7 +65,7 @@ const PipelineEditor = forwardRef((props, ref) => {
 
         setEdges(() => edgesWithButtons);
 
-        setTimeout(reactFlowInstance.fitView, 100);
+        setTimeout(() => { reactFlowInstance.fitView({ maxZoom: 1.1 }) }, 100);
     }, [draft, reactFlowInstance, setEdges, setNodes, removeEdge])
 
     const onConnect = (params) => {
@@ -109,7 +109,7 @@ const PipelineEditor = forwardRef((props, ref) => {
         edgeUpdateSuccessful.current = true;
     }, [setEdges]);
 
-    return <ReactFlow fitView edgeTypes={edgeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} nodes={nodes} edges={edges} defaultEdgeOptions={edgeOptions} proOptions={proOptions} onConnect={onConnect} onEdgeUpdate={onEdgeUpdate}
+    return <ReactFlow edgeTypes={edgeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} nodes={nodes} edges={edges} defaultEdgeOptions={edgeOptions} proOptions={proOptions} onConnect={onConnect} onEdgeUpdate={onEdgeUpdate}
         onEdgeUpdateStart={onEdgeUpdateStart} onEdgeUpdateEnd={onEdgeUpdateEnd}>
         <Background />
         <Controls />

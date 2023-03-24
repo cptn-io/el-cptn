@@ -7,8 +7,8 @@ import CreateSource from "./CreateSource";
 const NewSource = () => {
     const navigate = useNavigate();
 
-    const onSuccess = useCallback(() => {
-        navigate('/sources');
+    const onSuccess = useCallback((data) => {
+        navigate(`/sources/${data.id}`);
     }, [navigate]);
 
     const onCancel = useCallback(() => {

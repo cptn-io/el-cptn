@@ -79,7 +79,8 @@ const DestinationDetailsCard = (props) => {
     }
 
     return <div className="card bg-base-100 mb-4">
-        <div className="card-body">
+        <div className="card-body p-4">
+            <div className="text-lg font-bold">Destination Details</div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Destination Name</span>

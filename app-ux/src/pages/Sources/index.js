@@ -50,7 +50,7 @@ const Sources = () => {
                             <th className="bg-base-300 text-center">Active</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{ maxHeight: '600px' }}>
                         {data.map(source => <tr key={source.id}>
                             <td className="whitespace-pre-wrap break-words"><Link to={`/sources/${source.id}`}>{source.name}</Link></td>
                             <td className="text-center"><div className="flex justify-center">{source.secured ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>

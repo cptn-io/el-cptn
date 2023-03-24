@@ -17,7 +17,7 @@ const NavBar = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </label>
                     <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                        {navItems.map(item => <li key={item.label} className="flex gap-4"><Link to={item.url} className={location.pathname.startsWith(item.url) ? 'active' : ''}>{item.icon()}{item.label}</Link></li>)}
+                        {navItems.map(item => <li key={item.label} className="flex gap-4"><Link to={item.url} className={location.pathname.startsWith(item.url) ? 'active' : ''}><item.Icon size={24} />{item.label}</Link></li>)}
                     </ul>
                 </div>
                 <Logo className="lg:hidden" />
