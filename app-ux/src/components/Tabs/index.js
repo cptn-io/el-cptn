@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Tabs = (props) => {
     const { tabs, activeTab, onTabChange } = props;
 

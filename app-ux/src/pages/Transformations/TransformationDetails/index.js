@@ -8,16 +8,16 @@ import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
 import TransformationDetailsCard from "./TransformationDetailsCard";
 import Tabs from "../../../components/Tabs";
+import TransformationPipelines from "./TransformationPipelines";
 
 const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }];
 
 const TransformationDetails = (props) => {
     const navigate = useNavigate();
     const { addNotification } = useNotifications();
-    const { id } = useParams();
+    const { id, tab } = useParams();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
-    const [tab, setTab] = useState('overview');
 
     useEffect(() => {
         axios.get(`/api/transformation/${id}`).then(response => {
@@ -37,12 +37,14 @@ const TransformationDetails = (props) => {
         return <Loading />
     }
 
-
+    const onTabChange = (tab) => {
+        navigate(`/transformations/${id}/${tab}`);
+    }
 
     return <div>
         <PageTitle itemKey="sources" label={data.name} breadcrumbs={breadcrumbs} />
-        <Tabs tabs={tabs} activeTab={tab} onTabChange={setTab} />
-        {tab === 'overview' &&
+        <Tabs tabs={tabs} activeTab={tab} onTabChange={onTabChange} />
+        {(!tab || tab === 'overview') &&
             <div className="grid grid-flow-row-dense grid-cols-1 xl:grid-cols-8 gap-4 ">
                 <div className="xl:col-span-6">
                     <TransformationDetailsCard data={data} onUpdate={setData} />
@@ -59,6 +61,7 @@ const TransformationDetails = (props) => {
                 </div>
             </div>
         }
+        {tab === 'pipelines' && <TransformationPipelines transformationId={id} />}
     </div>
 }
 

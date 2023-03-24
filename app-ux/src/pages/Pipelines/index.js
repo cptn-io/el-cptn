@@ -1,12 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import PageTitle from "../../components/Nav/PageTitle";
-import { IconCirclePlus, IconCheck, IconX } from '@tabler/icons-react';
+import { IconCirclePlus } from '@tabler/icons-react';
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import get from "lodash/get";
 import useNotifications from "../../hooks/useNotifications";
 import Loading from "../../components/Loading";
-import Pagination from "../../components/Pagination";
+
+import PipelineList from "./PipelineList";
 
 const Pipelines = () => {
 
@@ -41,27 +42,7 @@ const Pipelines = () => {
             <Link to="/pipelines/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" />New Pipeline</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
-            <div className="table-container">
-                <table className="table data-table table-zebra w-full">
-                    <thead>
-                        <tr>
-                            <th className="bg-base-300 text-left w-1/3">Name</th>
-                            <th className="bg-base-300 text-left w-1/4">Source</th>
-                            <th className="bg-base-300 text-left w-1/4">Destination</th>
-                            <th className="bg-base-300 text-center">Active</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map(pipeline => <tr key={pipeline.id}>
-                            <td className="whitespace-pre-wrap break-words"><Link to={`/pipelines/${pipeline.id}`}>{pipeline.name}</Link></td>
-                            <td className="whitespace-pre-wrap break-words">{pipeline.source.name}</td>
-                            <td className="whitespace-pre-wrap break-words">{pipeline.destination.name}</td>
-                            <td className="text-center"><div className="flex justify-center">{pipeline.active ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>
-                        </tr>)}
-                    </tbody>
-                </table>
-            </div>
-            <Pagination totalCount={totalCount} />
+            <PipelineList data={data} totalCount={totalCount} />
         </div>
         }
     </Fragment>

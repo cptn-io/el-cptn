@@ -112,7 +112,7 @@ const NewPipeline = (props) => {
                                     <button className="btn btn-square tooltip p-3" data-tip="Select a Source" onClick={e => { e.preventDefault(); setShowSourceSelector(true) }}>
                                         <IconSearch width={24} />
                                     </button>
-                                    <button className="btn btn-success btn-square tooltip p-2" data-tip="Create Source" onClick={e => { e.preventDefault(); setShowSourceDialog(true) }}>
+                                    <button className="btn btn-square tooltip p-2" data-tip="Create Source" onClick={e => { e.preventDefault(); setShowSourceDialog(true) }}>
                                         <IconPlus width={24} />
                                     </button>
                                 </div>
@@ -129,7 +129,7 @@ const NewPipeline = (props) => {
                                         <IconSearch width={24} />
                                     </button>
 
-                                    <button className="btn btn-success btn-square tooltip p-2" data-tip="Create Destination" onClick={e => { e.preventDefault(); setShowDestinationDialog(true) }}>
+                                    <button className="btn btn-square tooltip p-2" data-tip="Create Destination" onClick={e => { e.preventDefault(); setShowDestinationDialog(true) }}>
                                         <IconPlus width={24} />
                                     </button>
 

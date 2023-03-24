@@ -9,16 +9,16 @@ import get from 'lodash/get';
 import SourceDetailsCard from "./SourceDetailsCard";
 import SourceMetrics from "./SourceMetrics";
 import Tabs from "../../../components/Tabs";
+import SourcePipelines from "./SourcePipelines";
 
 const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Events' }];
 
 const SourceDetails = (props) => {
     const navigate = useNavigate();
     const { addNotification } = useNotifications();
-    const { id } = useParams();
+    const { id, tab } = useParams();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
-    const [tab, setTab] = useState('overview');
 
     useEffect(() => {
         axios.get(`/api/source/${id}`).then(response => {
@@ -38,13 +38,15 @@ const SourceDetails = (props) => {
         return <Loading />
     }
 
-
+    const onTabChange = (tab) => {
+        navigate(`/sources/${id}/${tab}`);
+    }
 
     return <div>
         <PageTitle itemKey="sources" label={data.name} breadcrumbs={breadcrumbs} />
         <SourceMetrics sourceId={id} />
-        <Tabs tabs={tabs} activeTab={tab} onTabChange={setTab} />
-        {tab === 'overview' &&
+        <Tabs tabs={tabs} activeTab={tab} onTabChange={onTabChange} />
+        {(!tab || tab === 'overview') &&
             <div className="grid grid-flow-row-dense grid-cols-1 xl:grid-cols-8 gap-4 ">
                 <div className="xl:col-span-6">
                     <SourceDetailsCard data={data} onUpdate={setData} />
@@ -61,6 +63,7 @@ const SourceDetails = (props) => {
                 </div>
             </div>
         }
+        {tab === 'pipelines' && <SourcePipelines sourceId={id} />}
     </div>
 }
 

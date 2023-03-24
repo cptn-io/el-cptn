@@ -1,4 +1,4 @@
-import { IconHourglass, IconCircleCheck, IconTimelineEventPlus, IconDatabaseExport } from '@tabler/icons-react';
+import { IconCircleCheck, IconTimelineEventPlus, IconCloudComputing } from '@tabler/icons-react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Loading from '../../../components/Loading';
@@ -40,7 +40,7 @@ const SourceMetrics = (props) => {
     return <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="stat place-items-center shadow col-span-2 md:col-span-1 rounded-2xl">
             <div className="stat-figure text-primary hidden xl:block">
-                <IconTimelineEventPlus size={40} />
+                <IconTimelineEventPlus size={64} />
             </div>
             <div className="stat-title">Events Ingested</div>
             <div className="stat-value text-primary">{metrics.inboundTotal}</div>
@@ -48,7 +48,7 @@ const SourceMetrics = (props) => {
         </div>
         <div className="stat place-items-center shadow col-span-2 md:col-span-1 rounded-2xl">
             <div className="stat-figure text-success  hidden xl:block">
-                <IconCircleCheck size={40} />
+                <IconCircleCheck size={64} />
             </div>
             <div className="stat-title">Events Processed</div>
             <div className="stat-value text-success">{metrics.inboundProcessed}</div>
@@ -64,7 +64,7 @@ const SourceMetrics = (props) => {
         </div>
         <div className="stat place-items-center shadow col-span-2 md:col-span-1 rounded-2xl">
             <div className="stat-figure  hidden xl:block">
-                <IconDatabaseExport size={40} />
+                <IconCloudComputing size={64} />
             </div>
             <div className="stat-title">Pipelines</div>
             <div className="stat-value">{metrics.entities.pipelines}</div>

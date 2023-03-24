@@ -3,7 +3,7 @@ package com.elcptn.mgmtsvc.controllers;
 /* @author: kc, created on 3/7/23 */
 
 import com.elcptn.mgmtsvc.dto.PipelineDto;
-import com.elcptn.mgmtsvc.entities.Pipeline;
+import com.elcptn.mgmtsvc.entities.*;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
@@ -11,6 +11,7 @@ import com.elcptn.mgmtsvc.mappers.PipelineMapper;
 import com.elcptn.mgmtsvc.services.PipelineService;
 import com.elcptn.mgmtsvc.validation.OnCreate;
 import com.elcptn.mgmtsvc.validation.OnUpdate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -57,9 +58,46 @@ public class PipelineController {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
         List<PipelineDto> sourceList = pipelineService.getAll(listParam).stream()
                 .map(this::convert).collect(Collectors.toList());
-        long count = pipelineService.count();
+        long count = pipelineService.count(null);
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
     }
+
+    @GetMapping("/api/{entity}/{id}/pipeline")
+    public ResponseEntity<List<PipelineDto>> listByReference(HttpServletRequest request,
+                                                             @PathVariable String entity,
+                                                             @PathVariable UUID id) {
+        ListEntitiesParam listParam = new ListEntitiesParam(request);
+
+        BooleanExpression predicate;
+        QPipeline pipeline = QPipeline.pipeline;
+        switch (entity) {
+            case "destination":
+
+                predicate = pipeline.destination.eq(new Destination(id));
+                break;
+            case "source":
+                predicate = pipeline.source.eq(new Source(id));
+                break;
+            case "transformation":
+                predicate = pipeline.transformations.contains(new Transformation(id));
+                break;
+            default:
+                predicate = null;
+        }
+
+        if (predicate == null) {
+            throw new BadRequestException("Not a valid request");
+        }
+
+
+        List<PipelineDto> sourceList = pipelineService.getAll(listParam, predicate).stream()
+                .map(this::convert).collect(Collectors.toList());
+
+        long count = pipelineService.count(predicate);
+
+        return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
+    }
+
 
     @Validated(OnUpdate.class)
     @PutMapping("/api/pipeline/{id}")

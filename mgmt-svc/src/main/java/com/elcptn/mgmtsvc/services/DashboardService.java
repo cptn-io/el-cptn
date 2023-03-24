@@ -9,6 +9,7 @@ import com.elcptn.mgmtsvc.repositories.SourceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -29,11 +30,12 @@ public class DashboardService {
 
     private final EventRepository eventRepository;
 
-    public DashboardMetricsDto getMetrics() {
+    @Cacheable(value = "dashboard", key = "\"home\" + #intervalVal")
+    public DashboardMetricsDto getMetrics(Long intervalVal) {
         DashboardMetricsDto metricsDto = new DashboardMetricsDto();
 
         //inbound event metrics
-        List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForCollectionRun(ZonedDateTime.now().minusHours(24));
+        List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForCollectionRun(ZonedDateTime.now().minusMinutes(intervalVal));
         metricsDto.setInbound(inboundEventMetrics);
 
         //entity counts
@@ -46,11 +48,11 @@ public class DashboardService {
         return metricsDto;
     }
 
-    public DashboardMetricsDto getSourceMetrics(UUID sourceId) {
+    public DashboardMetricsDto getSourceMetrics(UUID sourceId, Long intervalVal) {
         DashboardMetricsDto metricsDto = new DashboardMetricsDto();
 
         List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForCollectionRun(sourceId,
-                ZonedDateTime.now().minusHours(24));
+                ZonedDateTime.now().minusMinutes(intervalVal));
         metricsDto.setInbound(inboundEventMetrics);
 
         //entity counts
@@ -60,5 +62,4 @@ public class DashboardService {
 
         return metricsDto;
     }
-
 }

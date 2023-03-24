@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +70,12 @@ public class PipelineService extends CommonService {
         return pipelineRepository.findAll(pageable).stream().collect(Collectors.toList());
     }
 
+    public List<Pipeline> getAll(ListEntitiesParam param, Predicate predicate) {
+        Pageable pageable = getPageable(param);
+
+        return pipelineRepository.findAll(predicate, pageable).stream().collect(Collectors.toList());
+    }
+
     @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
     public Pipeline update(Pipeline pipeline) {
         validateOnUpdate(pipeline);
@@ -87,7 +94,15 @@ public class PipelineService extends CommonService {
 
 
     public long count() {
-        return pipelineRepository.count();
+        return count(null);
+    }
+
+    public long count(Predicate predicate) {
+        if (predicate == null) {
+            return pipelineRepository.count();
+        }
+
+        return pipelineRepository.count(predicate);
     }
 
 

@@ -32,11 +32,13 @@ root.render(
               <Route path="" element={<Sources />} />
               <Route path="new" element={<NewSource />} />
               <Route path=":id" element={<SourceDetails />} />
+              <Route path=":id/:tab" element={<SourceDetails />} />
             </Route>
             <Route path="destinations">
               <Route path="" element={<Destinations />} />
               <Route path="new" element={<NewDestination />} />
               <Route path=":id" element={<DestinationDetails />} />
+              <Route path=":id/:tab" element={<DestinationDetails />} />
             </Route>
             <Route path="pipelines" >
               <Route path="" element={<Pipelines />} />
@@ -47,6 +49,7 @@ root.render(
               <Route path="" element={<Transformations />} />
               <Route path="new" element={<NewTransformation />} />
               <Route path=":id" element={<TransformationDetails />} />
+              <Route path=":id/:tab" element={<TransformationDetails />} />
             </Route>
             <Route exact path="" element={<Navigate to="/home" replace />} />
           </Route>
