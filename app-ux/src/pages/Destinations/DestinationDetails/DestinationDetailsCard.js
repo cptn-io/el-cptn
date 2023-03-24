@@ -12,7 +12,7 @@ import axios from 'axios';
 import Editor from '@monaco-editor/react';
 
 const DestinationDetailsCard = (props) => {
-    const { data: { id, name, script, active }, onUpdate } = props;
+    const { data: { id, name, script, active }, onUpdate = () => { }, readOnly = false } = props;
 
     const editorRef = useRef(null);
     const { addNotification } = useNotifications();
@@ -93,7 +93,7 @@ const DestinationDetailsCard = (props) => {
                     }))} />
                     {renderErrors(error, 'name')}</Fragment> : <div className="p-1 text-lg">{name}</div>}
             </div>
-            <div className="form-control w-full">
+            {!readOnly && <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Script</span>
                 </label>
@@ -108,7 +108,7 @@ const DestinationDetailsCard = (props) => {
                     onMount={handleEditorDidMount}
                 />
                 {renderErrors(error, 'script')}
-            </div>
+            </div>}
             <div className="flex">
                 <div className="form-control w-6/12">
                     <label className="label">
@@ -124,12 +124,12 @@ const DestinationDetailsCard = (props) => {
                 </div>
             </div>
 
-            <div className="card-actions justify-end">
+            {!readOnly && <div className="card-actions justify-end">
                 {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Destination</button>}
                 {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
                     changes</button>}
-            </div>
+            </div>}
         </div>
     </div>
 }

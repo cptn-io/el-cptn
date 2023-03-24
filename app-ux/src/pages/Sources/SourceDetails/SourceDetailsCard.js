@@ -11,8 +11,8 @@ import get from 'lodash/get';
 import axios from 'axios';
 import ConfirmModal from '../../../components/ConfirmModal';
 
-const BasicInformation = (props) => {
-    const { data: { id, name, secured, active, primaryKey, secondaryKey }, onUpdate } = props;
+const SourceDetailsCard = (props) => {
+    const { data: { id, name, secured, active, primaryKey, secondaryKey }, onUpdate = () => { }, readOnly = false } = props;
     const [showPrimary, setShowPrimary] = useState(false);
     const [showSecondary, setShowSecondary] = useState(false);
     const { addNotification } = useNotifications();
@@ -164,13 +164,13 @@ const BasicInformation = (props) => {
                         : <div>Disabled</div>}
                 </div>
             </div>
-            <div className="card-actions justify-end">
+            {!readOnly && <div className="card-actions justify-end">
                 {!editMode && <button disabled={!secured || executing} className="btn btn-warning"
                     onClick={() => setShowConfirmation(true)}>Rotate keys</button>}
                 {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Source</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
                     changes</button>}
-            </div>
+            </div>}
         </div>
         {showConfirmation && <ConfirmModal title="Are you sure?"
             message="This destination will generate a new primary key and sets current primary key as secondary key. The current secondary key will no longer work once the keys are rotated. This destination cannot be reversed once confirmed."
@@ -178,4 +178,4 @@ const BasicInformation = (props) => {
     </div>
 }
 
-export default BasicInformation;
+export default SourceDetailsCard;

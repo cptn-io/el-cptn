@@ -36,7 +36,7 @@ const IntervalSelector = (props) => {
     const { interval, setInterval } = props;
 
     return <div className="btn-group">
-        {intervals.map(item => <button onClick={() => setInterval(item.value)} className={`btn btn-ghost btn-xs ${interval === item.value ? 'text-primary' : ''}`}>{item.label}</button>)}
+        {intervals.map(item => <button key={item.label} onClick={() => setInterval(item.value)} className={`btn btn-ghost btn-xs ${interval === item.value ? 'text-primary' : ''}`}>{item.label}</button>)}
     </div>
 }
 

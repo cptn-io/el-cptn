@@ -44,6 +44,7 @@ root.render(
               <Route path="" element={<Pipelines />} />
               <Route path="new" element={<NewPipeline />} />
               <Route path=":id" element={<PipelineDetails />} />
+              <Route path=":id/:tab" element={<PipelineDetails />} />
             </Route>
             <Route path="transformations" >
               <Route path="" element={<Transformations />} />
