@@ -21,6 +21,6 @@ public class EventService extends CommonService {
     }
 
     public List<StatusMetricDto> getEventMetrics() {
-        return eventRepository.getStatusCountsForCollectionRun(ZonedDateTime.now().minusHours(24));
+        return eventRepository.getStatusCountsForEvents(ZonedDateTime.now().minusHours(24));
     }
 }

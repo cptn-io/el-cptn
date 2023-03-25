@@ -10,7 +10,7 @@ const NewDestination = () => {
 
     const onSuccess = useCallback((data) => {
         navigate(`/destinations/${data.id}`);
-    }, [])
+    }, [navigate])
 
     const onCancel = useCallback(() => {
         navigate('/destinations');

@@ -83,7 +83,7 @@ const SourceDetailsCard = (props) => {
 
     return <div className="card bg-base-100 mb-4">
         <div className="card-body p-4">
-            <div className="text-lg font-bold">Source Details</div>
+            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Source Details</div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Source Name</span>
@@ -169,7 +169,7 @@ const SourceDetailsCard = (props) => {
                     onClick={() => setShowConfirmation(true)}>Rotate keys</button>}
                 {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Source</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                    changes</button>}
+                    Changes</button>}
             </div>}
         </div>
         {showConfirmation && <ConfirmModal title="Are you sure?"

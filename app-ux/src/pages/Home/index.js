@@ -5,9 +5,9 @@ import PageTitle from "../../components/Nav/PageTitle";
 import useNotifications from "../../hooks/useNotifications";
 import get from 'lodash/get';
 import { IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconTransform } from '@tabler/icons-react';
-import { processInboundMetrics } from "../../common/metricHelpers";
+import { processInboundMetrics, processOutboundMetrics } from "../../common/metricHelpers";
 import IntervalSelector from "../../components/IntervalSelector";
-import { SourceMetricsRenderer } from "../../components/Metrics";
+import { PipelineMetricsRenderer, SourceMetricsRenderer } from "../../components/Metrics";
 
 
 const Home = () => {
@@ -21,10 +21,12 @@ const Home = () => {
         setRefreshing(true);
         axios.get(`/api/dashboard/metrics?interval=${interval}`).then(response => {
             const inboundMetrics = processInboundMetrics(response.data);
+            const outboundMetrics = processOutboundMetrics(response.data);
 
             setData({
                 entities: response.data?.entities,
-                inboundMetrics
+                inboundMetrics,
+                outboundMetrics
             });
         }).catch(err => {
             addNotification({
@@ -77,10 +79,14 @@ const Home = () => {
             <IntervalSelector interval={interval} setInterval={setInterval} />
         </div>
         <div className="bg-base-200 p-3 rounded-box mb-4 shadow">
-            <div className="text-xl font-extrabold mb-4">Source metrics</div>
+            <div className="text-xl font-extrabold mb-4">Inbound data metrics</div>
             <SourceMetricsRenderer metrics={data.inboundMetrics} interval={interval} refreshing={refreshing} />
         </div>
 
+        <div className="bg-base-200 p-3 rounded-box mb-4 shadow">
+            <div className="text-xl font-extrabold mb-4">Outbound data metrics</div>
+            <PipelineMetricsRenderer metrics={data.outboundMetrics} interval={interval} refreshing={refreshing} />
+        </div>
 
 
     </Fragment>

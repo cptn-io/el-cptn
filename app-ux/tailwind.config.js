@@ -10,7 +10,10 @@ module.exports = {
         '1/2': '50%',
         '3/5': '60%',
         '3/4': '75%',
-      }
+      },
+      fontFamily: {
+        sans: ['Lato', 'sans-serif'],
+      },
     },
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")]

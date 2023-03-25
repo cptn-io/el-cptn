@@ -30,7 +30,7 @@ const TransformationList = (props) => {
                         </td>
                     </tr>
                 })}
-                {transformations.length == 0 && <tr><td colSpan={2}>No associated transformations</td></tr>}
+                {transformations.length === 0 && <tr><td colSpan={2}>No associated transformations</td></tr>}
             </tbody>
             {transformations.length > 0 && <tfoot>
                 <tr>

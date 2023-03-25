@@ -128,7 +128,7 @@ const TransformationDetailsCard = (props) => {
                 {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Transformation</button>}
                 {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                    changes</button>}
+                    Changes</button>}
             </div>
         </div>
     </div>

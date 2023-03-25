@@ -1,12 +1,10 @@
-import DestinationDetailsCard from "../../../Destinations/DestinationDetails/DestinationDetailsCard";
-import SourceDetailsCard from "../../../Sources/SourceDetails/SourceDetailsCard";
+import PipelineDetailsCard from "./PipelineDetailsCard";
 
 const PipelineOverview = (props) => {
     const { data } = props;
     return <div className="grid grid-flow-row-dense grid-cols-1 xl:grid-cols-8 gap-4 ">
         <div className="xl:col-span-6">
-            <SourceDetailsCard data={data.source} readOnly={true} />
-            <DestinationDetailsCard data={data.destination} readOnly={true} />
+            <PipelineDetailsCard data={data} />
         </div>
         <div className="hidden xl:col-span-2 xl:block m-2">
             <div className="card bg-base-100 shadow">

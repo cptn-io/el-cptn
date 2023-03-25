@@ -80,7 +80,7 @@ const DestinationDetailsCard = (props) => {
 
     return <div className="card bg-base-100 mb-4">
         <div className="card-body p-4">
-            <div className="text-lg font-bold">Destination Details</div>
+            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Destination Details</div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Destination Name</span>
@@ -128,7 +128,7 @@ const DestinationDetailsCard = (props) => {
                 {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Destination</button>}
                 {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                    changes</button>}
+                    Changes</button>}
             </div>}
         </div>
     </div>

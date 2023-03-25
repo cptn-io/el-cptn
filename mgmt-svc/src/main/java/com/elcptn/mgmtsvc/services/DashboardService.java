@@ -2,10 +2,7 @@ package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.mgmtsvc.dto.DashboardMetricsDto;
 import com.elcptn.mgmtsvc.dto.StatusMetricDto;
-import com.elcptn.mgmtsvc.repositories.DestinationRepository;
-import com.elcptn.mgmtsvc.repositories.EventRepository;
-import com.elcptn.mgmtsvc.repositories.PipelineRepository;
-import com.elcptn.mgmtsvc.repositories.SourceRepository;
+import com.elcptn.mgmtsvc.repositories.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +27,19 @@ public class DashboardService {
 
     private final EventRepository eventRepository;
 
+    private final OutboundEventRepository outboundEventRepository;
+
     @Cacheable(value = "dashboard", key = "\"home\" + #intervalVal")
     public DashboardMetricsDto getMetrics(Long intervalVal) {
         DashboardMetricsDto metricsDto = new DashboardMetricsDto();
 
         //inbound event metrics
-        List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForCollectionRun(ZonedDateTime.now().minusMinutes(intervalVal));
+        List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForEvents(ZonedDateTime.now().minusMinutes(intervalVal));
         metricsDto.setInbound(inboundEventMetrics);
 
+        List<StatusMetricDto> outboundEventMetrics =
+                outboundEventRepository.getStatusCountsForOutboundEvents(ZonedDateTime.now().minusMinutes(intervalVal));
+        metricsDto.setOutbound(outboundEventMetrics);
         //entity counts
         ObjectNode entityStats = mapper.createObjectNode();
         entityStats.put("pipelines", pipelineRepository.count());
@@ -52,7 +54,7 @@ public class DashboardService {
     public DashboardMetricsDto getSourceMetrics(UUID sourceId, Long intervalVal) {
         DashboardMetricsDto metricsDto = new DashboardMetricsDto();
 
-        List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForCollectionRun(sourceId,
+        List<StatusMetricDto> inboundEventMetrics = eventRepository.getStatusCountsForEvents(sourceId,
                 ZonedDateTime.now().minusMinutes(intervalVal));
         metricsDto.setInbound(inboundEventMetrics);
 

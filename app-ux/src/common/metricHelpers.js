@@ -13,3 +13,17 @@ export const processInboundMetrics = (data) => {
         inboundFailed
     }
 }
+
+export const processOutboundMetrics = (data) => {
+    const outboundTotal = data.outbound.reduce((sum, status) => sum + status.count, 0);
+    const outboundProcessed = find(data.outbound, { 'state': 'COMPLETED' })?.count || 0;
+    const outboundPercentComplete = outboundTotal > 0 ? Math.floor(outboundProcessed / outboundTotal * 100) : 100;
+    const outboundFailed = find(data.outbound, { 'state': 'FAILED' })?.count || 0;
+
+    return {
+        outboundTotal,
+        outboundProcessed,
+        outboundPercentComplete,
+        outboundFailed
+    }
+}
