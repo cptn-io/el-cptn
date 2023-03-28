@@ -1,10 +1,24 @@
-import { IconCheck, IconClipboard, IconEye, IconEyeOff, IconX } from "@tabler/icons-react";
+import { IconArrowRight, IconCheck, IconClipboard, IconEye, IconEyeOff, IconX } from "@tabler/icons-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import useNotifications from "../../../../hooks/useNotifications";
+import keys from 'lodash/keys';
+import fromPairs from 'lodash/fromPairs';
+import toPairs from 'lodash/toPairs';
+import differenceWith from 'lodash/differenceWith';
+import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
+import axios from 'axios';
+import { renderErrors } from "../../../../common/formHelpers";
 
 const PipelineDetailsCard = (props) => {
-    const { data } = props;
+    const { data, onUpdate } = props;
     const { addNotification } = useNotifications();
+
+    const [editMode, setEditMode] = useState(false);
+    const [error, setError] = useState({ message: null, details: [] });
+    const [changes, setChanges] = useState({});
+    const [executing, setExecuting] = useState(false);
 
     const [showPrimary, setShowPrimary] = useState(false);
     const [showSecondary, setShowSecondary] = useState(false);
@@ -17,6 +31,38 @@ const PipelineDetailsCard = (props) => {
         })
     }
 
+    const saveChanges = (e) => {
+        e.preventDefault();
+        const payload = fromPairs(differenceWith(toPairs(changes), toPairs(data), isEqual));
+        if (keys(payload).length === 0) {
+            setEditMode(false);
+            return;
+        }
+        setExecuting(true);
+        axios.put(`/api/pipeline/${data.id}`, payload).then(response => {
+            onUpdate(response.data);
+            setEditMode(false);
+            addNotification({
+                message: 'Pipeline has been updated',
+                type: 'success'
+            });
+        }).catch(err => {
+            addNotification({
+                message: get(err, 'response.data.message', 'An error occurred while updating Pipeline'),
+                type: 'error'
+            });
+            setError(err.response.data);
+        }).finally(() => {
+            setExecuting(false);
+        })
+    }
+
+    const cancelChanges = (e) => {
+        e.preventDefault();
+        setChanges({});
+        setEditMode(false);
+    }
+
     return <div className="card bg-base-100 mb-4">
         <div className="card-body p-4">
             <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Pipeline Details</div>
@@ -24,17 +70,38 @@ const PipelineDetailsCard = (props) => {
                 <label className="label">
                     <span className="label-text">Pipeline Name</span>
                 </label>
-                <div className="p-1 text-lg">{data.name}</div>
+                {editMode ? <><input type="text" placeholder="Provide a name for the Pipeline" defaultValue={data.name}
+                    className="input input-bordered w-full"
+                    onChange={e => setChanges(current => ({
+                        ...current,
+                        name: e.target.value
+                    }))} />
+                    {renderErrors(error, 'name')}</> : <div className="p-1 text-lg">{data.name}</div>}
             </div>
             <div className="flex">
                 <div className="form-control w-6/12">
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    <div className="p-1">{data.active ? <IconCheck size={24} /> : <IconX size={24} />}</div>
+                    {editMode ? <><input type="checkbox" className="toggle toggle-lg" defaultChecked={data.active}
+                        onChange={e => setChanges(current => ({
+                            ...current,
+                            active: e.target.checked
+                        }))} />
+                        {renderErrors(error, 'active')}</> :
+                        <div className="p-1">{data.active ? <IconCheck size={24} /> : <IconX size={24} />}</div>}
                 </div>
             </div>
-            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Data Source</div>
+            <div className="card-actions justify-end mb-3">
+                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Pipeline</button>}
+                {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
+                {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
+                    Changes</button>}
+            </div>
+            <div className="text-lg font-bold bg-base-200 p-2 rounded-md flex justify-between items-center">
+                <span>Data Source</span>
+                <Link className="btn btn-sm btn-ghost px-2" to={`/sources/${data.source.id}`}><IconArrowRight className="text-primary" size={24}></IconArrowRight></Link>
+            </div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Source</span>
@@ -92,7 +159,10 @@ const PipelineDetailsCard = (props) => {
                 </div>
             </div>
 
-            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Destination</div>
+            <div className="text-lg font-bold bg-base-200 p-2 rounded-md flex justify-between items-center">
+                <span>Data Destination</span>
+                <Link className="btn btn-sm btn-ghost px-2" to={`/destinations/${data.destination.id}`}><IconArrowRight className="text-primary" size={24}></IconArrowRight></Link>
+            </div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Destination Name</span>

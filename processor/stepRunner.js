@@ -5,8 +5,6 @@ const { findMissingRequiredModules, installModule } = require('./nodeModuleHelpe
 
 async function runStep(step, evt, ctx) {
     const stepScript = step.script;
-
-    console.log(step.config);
     try {
         const missingModules = findMissingRequiredModules(stepScript);
         missingModules.forEach(installModule);
@@ -41,7 +39,7 @@ async function runStep(step, evt, ctx) {
         const vmRun = vm.run(script, './script.js')
         return await vmRun(evt, ctx);
     } catch (err) {
-        console.log("Error running script in Sandbox", err.message, err);
+        console.error("Error running script in Sandbox", err.message, err);
         throw err;
     }
 }

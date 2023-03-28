@@ -1,5 +1,5 @@
 import { IconCheck, IconX } from '@tabler/icons-react';
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useEffect } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";
 import keys from 'lodash/keys';
@@ -10,9 +10,11 @@ import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 import axios from 'axios';
 import Editor from '@monaco-editor/react';
+import ConfigBuilder from '../../../components/ConfigBuilder';
+import filter from 'lodash/filter';
 
 const DestinationDetailsCard = (props) => {
-    const { data: { id, name, script, active }, onUpdate = () => { }, readOnly = false } = props;
+    const { data: { id, name, script, active, config }, onUpdate = () => { }, readOnly = false } = props;
 
     const editorRef = useRef(null);
     const { addNotification } = useNotifications();
@@ -20,6 +22,7 @@ const DestinationDetailsCard = (props) => {
     const [error, setError] = useState({ message: null, details: [] });
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
+    const [configChanges, setConfigChanges] = useState(config);
 
 
     const handleEditorWillMount = (monaco) => {
@@ -43,11 +46,16 @@ const DestinationDetailsCard = (props) => {
             script: value
         }))
     }
+    useEffect(() => {
+        setChanges(current => ({
+            ...current,
+            config: filter(configChanges, item => item.key)
+        }));
+    }, [configChanges]);
 
 
     const saveChanges = (e) => {
         e.preventDefault();
-
         const payload = fromPairs(differenceWith(toPairs(changes), toPairs(props.data), isEqual));
         if (keys(payload).length === 0) {
             setEditMode(false);
@@ -93,6 +101,14 @@ const DestinationDetailsCard = (props) => {
                     }))} />
                     {renderErrors(error, 'name')}</Fragment> : <div className="p-1 text-lg">{name}</div>}
             </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Configuration</span>
+                </label>
+                <ConfigBuilder config={configChanges} setConfig={setConfigChanges} readOnly={!editMode} />
+                {renderErrors(error, 'config')}
+            </div>
+
             {!readOnly && <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Script</span>

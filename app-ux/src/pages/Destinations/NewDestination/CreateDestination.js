@@ -5,6 +5,8 @@ import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
 import { renderErrors } from "../../../common/formHelpers";
 import Editor from '@monaco-editor/react'
+import ConfigBuilder from "../../../components/ConfigBuilder";
+import filter from 'lodash/filter';
 
 
 const scriptTemplate = `return (function (evt, ctx){
@@ -16,6 +18,7 @@ const CreateDestination = (props) => {
     const editorRef = useRef(null);
     const { addNotification } = useNotifications();
     const [name, setName] = useState('');
+    const [config, setConfig] = useState([{ key: "", value: "", secret: false }]);
     const [script, setScript] = useState(scriptTemplate);
     const [active, setActive] = useState(true);
     const [executing, setExecuting] = useState(false);
@@ -60,7 +63,8 @@ const CreateDestination = (props) => {
         const payload = {
             name,
             script,
-            active
+            active,
+            config: filter(config, item => item.key)
         };
         axios.post('/api/destination', payload).then(response => {
             resetAll();
@@ -90,6 +94,14 @@ const CreateDestination = (props) => {
                     </label>
                     <input type="text" placeholder="Provide a name for the Destination" value={name} className="input input-bordered w-full" onChange={e => setName(e.target.value)} />
                     {renderErrors(error, 'name')}
+                </div>
+
+                <div className="form-control w-full">
+                    <label className="label">
+                        <span className="label-text">Configuration</span>
+                    </label>
+                    <ConfigBuilder config={config} setConfig={setConfig} />
+                    {renderErrors(error, 'config')}
                 </div>
 
                 <div className="form-control w-full">

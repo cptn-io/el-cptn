@@ -15,7 +15,6 @@ class Destination extends ScriptedStep {
                 this.config[key] = value;
             });
         }
-        console.log(this.config);
     }
 }
 

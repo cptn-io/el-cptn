@@ -17,7 +17,6 @@ import java.util.UUID;
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class Destination extends ScriptedStep {
     @Serial
     private static final long serialVersionUID = 514405197195059184L;

@@ -60,7 +60,7 @@ const PipelineDetails = () => {
 
     return <div><PageTitle itemKey="pipelines" label={data.name} breadcrumbs={breadcrumbs} />
         <Tabs tabs={tabs} activeTab={tab} onTabChange={onTabChange} />
-        {(!tab || tab === 'overview') && <PipelineOverview data={data} />}
+        {(!tab || tab === 'overview') && <PipelineOverview data={data} onUpdate={setData} />}
         {tab === 'editor' &&
             <PipelineEditor id={id} draft={draft} data={data} setData={setData} setDraft={setDraft} discardChanges={discardChanges} />
         }

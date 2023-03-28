@@ -2,7 +2,6 @@ package com.elcptn.mgmtsvc.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +14,6 @@ import java.io.Serial;
 @Entity
 @Table(name = "event")
 @ToString(onlyExplicitlyIncluded = true)
-@EqualsAndHashCode(callSuper = true)
 public class Event extends BaseEntity {
 
     @Serial

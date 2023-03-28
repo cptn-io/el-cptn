@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.MappedSuperclass;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -15,7 +14,6 @@ import java.io.Serial;
 /* @author: kc, created on 3/17/23 */
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@EqualsAndHashCode(callSuper = true)
 public class ScriptedStep extends BaseEntity {
 
     @Serial

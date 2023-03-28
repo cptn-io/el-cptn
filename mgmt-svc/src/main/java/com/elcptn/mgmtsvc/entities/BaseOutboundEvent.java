@@ -4,14 +4,12 @@ package com.elcptn.mgmtsvc.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 @MappedSuperclass
-@EqualsAndHashCode(callSuper = true)
 public abstract class BaseOutboundEvent extends BaseEntity {
 
     @Getter
