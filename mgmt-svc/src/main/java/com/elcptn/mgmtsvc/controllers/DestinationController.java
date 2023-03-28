@@ -33,7 +33,6 @@ public class DestinationController {
 
     private final DestinationMapper mapper;
 
-
     @PostMapping("/api/destination")
     public ResponseEntity<DestinationDto> create(@Validated(OnCreate.class) @RequestBody DestinationDto destinationDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -67,11 +66,12 @@ public class DestinationController {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException("Invalid data", bindingResult.getFieldErrors());
         }
+
         Destination destination = getById(id);
 
         mapper.partialUpdate(destinationDto, destination);
 
-        return ResponseEntity.ok(convert(destinationService.update(destination)));
+        return ResponseEntity.ok(convert(destinationService.update(destination, destinationDto.getConfig() != null)));
     }
 
 

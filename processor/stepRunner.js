@@ -3,7 +3,10 @@ const { Volume } = require('memfs');
 const { findMissingRequiredModules, installModule } = require('./nodeModuleHelper');
 
 
-async function runStep(stepScript, evt, ctx) {
+async function runStep(step, evt, ctx) {
+    const stepScript = step.script;
+
+    console.log(step.config);
     try {
         const missingModules = findMissingRequiredModules(stepScript);
         missingModules.forEach(installModule);
@@ -26,7 +29,10 @@ async function runStep(stepScript, evt, ctx) {
             },
         },
         eval: false,
-        wasm: false
+        wasm: false,
+        env: {
+            config: step.config || {}
+        }
     });
     const script = `module.exports = function(evt, ctx) {            
         ${stepScript}

@@ -3,10 +3,7 @@ package com.elcptn.mgmtsvc.entities;
 import com.elcptn.mgmtsvc.helpers.StringHelper;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serial;
 import java.time.ZonedDateTime;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Source extends BaseEntity {
 
     @Serial

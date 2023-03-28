@@ -1,8 +1,9 @@
 package com.elcptn.mgmtsvc.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-/* @author: kc, created on 3/27/23 */
+@EqualsAndHashCode
 @Data
 public class ConfigItemDto {
 

@@ -5,10 +5,7 @@ import com.elcptn.mgmtsvc.listeners.ConfigConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -20,6 +17,7 @@ import java.util.UUID;
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Destination extends ScriptedStep {
     @Serial
     private static final long serialVersionUID = 514405197195059184L;
@@ -29,6 +27,7 @@ public class Destination extends ScriptedStep {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     @Convert(converter = ConfigConverter.class)
+    @EqualsAndHashCode.Include
     private List<ConfigItemDto> config;
 
     public Destination(UUID id) {

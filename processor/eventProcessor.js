@@ -28,7 +28,7 @@ async function getDestination(destinationId) {
         return new Destination(cached);
     }
 
-    const result = await pgPool.query('SELECT d.id, d.script, d.version, d.active FROM destination d WHERE d.id=$1', [destinationId]);
+    const result = await pgPool.query('SELECT d.id, d.script, d.version, d.active, d.config FROM destination d WHERE d.id=$1', [destinationId]);
     const row = result.rows?.[0];
     if (row) {
         await cache.set(key, row);
@@ -81,7 +81,7 @@ async function processEvent(event) {
                 continue;
             }
 
-            evt = await runStep(step.script, evt, ctx);
+            evt = await runStep(step, evt, ctx);
             if (!evt && typeof step !== Destination) {
                 //transformations must return processed event for continuing with next steps
                 break;

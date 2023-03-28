@@ -7,7 +7,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import java.util.List;
 /* @author: kc, created on 3/27/23 */
 @Component
 @Slf4j
+@Converter(autoApply = true)
 public class ConfigConverter implements AttributeConverter<List<ConfigItemDto>, JsonNode> {
     private final CryptoHelper cryptoHelper;
 
@@ -43,6 +46,11 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItemDto>, 
 
     @Override
     public List<ConfigItemDto> convertToEntityAttribute(JsonNode jsonNode) {
+
+        if (jsonNode == null) {
+            return Lists.newArrayList();
+        }
+
         try {
             ArrayNode configArray = (ArrayNode) jsonNode;
             for (int i = 0; i < configArray.size(); i++) {

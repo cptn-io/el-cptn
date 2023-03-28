@@ -3,7 +3,10 @@ package com.elcptn.mgmtsvc.services;
 import com.elcptn.mgmtsvc.entities.Destination;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.DestinationRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,13 +21,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DestinationService extends CommonService {
     private final DestinationRepository destinationRepository;
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     public Destination create(Destination destination) {
         return save(destination);
     }
 
     @CacheEvict(value = "destination-proc", key = "#destination.id")
-    public Destination update(Destination destination) {
+    public Destination update(Destination destination, boolean forceUpdate) {
+        if (forceUpdate) {
+            //force update if there are updates to config. JPA doesn't detect object changes within a list
+            Session session = (Session) entityManager.getDelegate();
+            session.evict(destination);
+        }
         return save(destination);
     }
 

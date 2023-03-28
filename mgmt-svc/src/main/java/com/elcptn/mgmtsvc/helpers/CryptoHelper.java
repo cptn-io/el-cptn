@@ -1,5 +1,6 @@
 package com.elcptn.mgmtsvc.helpers;
 
+import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,22 +18,23 @@ import java.util.Base64;
 public class CryptoHelper {
 
     private static final String ALGORITHM = "AES/GCM/NoPadding";
-    private static final int IV_TAG_LENGTH = 128;
+    private static final int TAG_LENGTH = 16;
     private static final int IV_LENGTH = 12;
     private final SecretKey secretKey;
 
-    public CryptoHelper(@Value("${cptn.db.secret}") String secret) {
-        secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "AES");
+    public CryptoHelper(@Value("${cptn.db.secret}") String hexSecret) {
+        byte[] secretBytes = HexUtils.fromHexString(hexSecret);
+        secretKey = new SecretKeySpec(secretBytes, "AES");
     }
 
     public String encrypt(String plainText) throws Exception {
         SecureRandom secureRandom = new SecureRandom();
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
 
         byte[] iv = new byte[IV_LENGTH];
         secureRandom.nextBytes(iv);
 
-        GCMParameterSpec parameterSpec = new GCMParameterSpec(IV_TAG_LENGTH, iv);
+        GCMParameterSpec parameterSpec = new GCMParameterSpec(TAG_LENGTH * 8, iv);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
 
         byte[] cipherBytes = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
@@ -48,10 +50,10 @@ public class CryptoHelper {
     public String decrypt(String cipherText) throws Exception {
         byte[] cipherBytesWithIV = Base64.getDecoder().decode(cipherText);
         Cipher cipher = Cipher.getInstance(ALGORITHM);
-        GCMParameterSpec parameterSpec = new GCMParameterSpec(IV_TAG_LENGTH, cipherBytesWithIV, 0, IV_LENGTH);
+        GCMParameterSpec parameterSpec = new GCMParameterSpec(TAG_LENGTH * 8, cipherBytesWithIV, 0, IV_LENGTH);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, parameterSpec);
 
-        byte[] plainTextBytes = cipher.doFinal(cipherBytesWithIV, 12, cipherBytesWithIV.length - 12);
+        byte[] plainTextBytes = cipher.doFinal(cipherBytesWithIV, IV_LENGTH, cipherBytesWithIV.length - IV_LENGTH);
         return new String(plainTextBytes);
     }
 }
