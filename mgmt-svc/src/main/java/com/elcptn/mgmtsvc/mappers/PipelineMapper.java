@@ -24,8 +24,10 @@ public interface PipelineMapper {
 
     @Mapping(ignore = true, target = "transformations")
     @Mapping(ignore = true, target = "transformationMap")
+    @Mapping(ignore = true, target = "destination.config")
     PipelineDto toDto(Pipeline pipeline);
 
+    @Mapping(ignore = true, target = "destination.config")
     PipelineDto toDtoWithTransformations(Pipeline pipeline);
 
     @Mapping(ignore = true, target = "createdAt")
@@ -34,6 +36,8 @@ public interface PipelineMapper {
     @Mapping(ignore = true, target = "updatedBy")
     @Mapping(ignore = true, target = "id")
     @Mapping(ignore = true, target = "transformations")
+    @Mapping(ignore = true, target = "source")
+    @Mapping(ignore = true, target = "destination")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Pipeline partialUpdate(PipelineDto pipelineDto, @MappingTarget Pipeline pipeline);
 

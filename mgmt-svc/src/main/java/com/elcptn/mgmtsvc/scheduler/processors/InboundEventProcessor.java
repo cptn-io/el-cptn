@@ -6,7 +6,6 @@ import com.elcptn.mgmtsvc.entities.State;
 import com.elcptn.mgmtsvc.repositories.EventRepository;
 import com.elcptn.mgmtsvc.repositories.OutboundWriteEventRepository;
 import com.elcptn.mgmtsvc.repositories.PipelineRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,6 @@ import java.util.UUID;
 @Slf4j
 @AllArgsConstructor
 public class InboundEventProcessor {
-
-    private final ObjectMapper mapper = new ObjectMapper();
     private final EventRepository eventRepository;
 
     private final PipelineRepository pipelineRepository;
