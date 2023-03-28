@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.config;
+package com.elcptn.mgmtsvc.helpers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
