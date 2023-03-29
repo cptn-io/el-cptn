@@ -9,8 +9,20 @@ import ConfigBuilder from "../../../components/ConfigBuilder";
 import filter from 'lodash/filter';
 
 
-const scriptTemplate = `function execute(evt, ctx) {
+const scriptTemplate = `module.exports = function (event, ctx, config) {
     //add your script here to send the event to your destination service
+}`;
+
+const batchScriptTemplate = `module.exports = {
+    setup: function(ctx, config) {
+        //setup connection
+    },
+    execute: function(event, ctx, config) {
+        //send to destination.
+    },
+    teardown: function(ctx, config) {
+        //teardown connection
+    }
 }`;
 
 const CreateDestination = (props) => {

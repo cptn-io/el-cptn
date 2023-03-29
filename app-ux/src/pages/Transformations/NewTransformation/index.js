@@ -8,8 +8,10 @@ import { renderErrors } from "../../../common/formHelpers";
 import Editor from '@monaco-editor/react'
 import { breadcrumbs } from "..";
 
-const scriptTemplate = `function transform(evt, ctx) {
-    //add your script here to send the event to your destination service
+const scriptTemplate = `module.exports = function (event, ctx) {
+    //add your script here to transform or enrich the event
+
+    //remember to return the transformed evt object for the pipeline to continue processing the event
     return evt;
 }`;
 

@@ -83,7 +83,7 @@ async function processEvent(event) {
             }
 
             evt = await runStep(vm, step, evt, ctx);
-            if (!evt && typeof step !== Destination) {
+            if (!evt && step instanceof Transformation) {
                 //transformations must return processed event for continuing with next steps
                 break;
             }
