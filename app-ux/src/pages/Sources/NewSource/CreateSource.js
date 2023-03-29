@@ -69,14 +69,14 @@ const CreateSource = (props) => {
                     <label className="label">
                         <span className="label-text">Secured</span>
                     </label>
-                    <input type="checkbox" className="toggle toggle-lg" checked={secured} onChange={(e) => setSecured(e.target.checked)} />
+                    <input type="checkbox" className={`toggle toggle-lg ${secured ? 'toggle-success' : ''}`} checked={secured} onChange={(e) => setSecured(e.target.checked)} />
                     {renderErrors(error, 'secured')}
                 </div>
                 <div className="form-control w-full">
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    <input type="checkbox" className="toggle toggle-lg" checked={active} onChange={(e) => setActive(e.target.checked)} />
+                    <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={active} onChange={(e) => setActive(e.target.checked)} />
                     {renderErrors(error, 'active')}
                 </div>
 

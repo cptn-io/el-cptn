@@ -101,25 +101,25 @@ const SourceDetailsCard = (props) => {
                     <label className="label">
                         <span className="label-text">Secured</span>
                     </label>
-                    {editMode ? <Fragment><input type="checkbox" className="toggle toggle-lg" defaultChecked={secured}
+                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${secured ? 'toggle-success' : ''}`} defaultChecked={secured}
                         onChange={e => setChanges(current => ({
                             ...current,
                             secured: e.target.checked
                         }))} />
                         {renderErrors(error, 'secured')}</Fragment> :
-                        <div className="p-1">{secured ? <IconCheck size={24} /> : <IconX size={24} />}</div>}
+                        <div className="p-1">{secured ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>}
                 </div>
                 <div className="form-control w-6/12">
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    {editMode ? <Fragment><input type="checkbox" className="toggle toggle-lg" defaultChecked={active}
+                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} defaultChecked={active}
                         onChange={e => setChanges(current => ({
                             ...current,
                             active: e.target.checked
                         }))} />
                         {renderErrors(error, 'active')}</Fragment> :
-                        <div className="p-1">{active ? <IconCheck size={24} /> : <IconX size={24} />}</div>}
+                        <div className="p-1">{active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>}
                 </div>
             </div>
             <div className="form-control w-full">

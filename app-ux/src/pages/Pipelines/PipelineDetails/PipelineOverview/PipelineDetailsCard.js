@@ -83,13 +83,13 @@ const PipelineDetailsCard = (props) => {
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    {editMode ? <><input type="checkbox" className="toggle toggle-lg" defaultChecked={data.active}
+                    {editMode ? <><input type="checkbox" className={`toggle toggle-lg ${changes.active || data.active ? 'toggle-success' : ''}`} defaultChecked={data.active}
                         onChange={e => setChanges(current => ({
                             ...current,
                             active: e.target.checked
                         }))} />
                         {renderErrors(error, 'active')}</> :
-                        <div className="p-1">{data.active ? <IconCheck size={24} /> : <IconX size={24} />}</div>}
+                        <div className="p-1">{data.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>}
                 </div>
             </div>
             <div className="card-actions justify-end mb-3">
@@ -155,7 +155,7 @@ const PipelineDetailsCard = (props) => {
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    <div className="p-1">{data.source.active ? <IconCheck size={24} /> : <IconX size={24} />}</div>
+                    <div className="p-1">{data.source.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>
                 </div>
             </div>
 
@@ -174,7 +174,7 @@ const PipelineDetailsCard = (props) => {
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    <div className="p-1">{data.destination.active ? <IconCheck size={24} /> : <IconX size={24} />}</div>
+                    <div className="p-1">{data.destination.active ? <IconCheck className="text-success" size={24} /> : <IconX size={24} />}</div>
                 </div>
             </div>
         </div>

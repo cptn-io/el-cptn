@@ -37,25 +37,6 @@ async function runStep(vm, step, evt, ctx) {
                 await vmRun.teardown(ctx, step.config);
             }
         }
-        // if(typeof step !== Destination) {
-        //     return await vmRun(evt, ctx, step.config);
-        // } else {
-        //     const wrappedObject = await vmRun(evt, ctx, step.config);
-        //     if (typeof wrappedObject === 'object') {
-        //         if(typeof wrappedObject.setup === 'function' ) {
-        //             vm.run('wrappedObject.setup()', './script.js');
-        //         }
-
-        //         if(typeof wrappedObject.execute === 'function' ) {
-        //             vm.run('wrappedObject.execute()', './script.js');
-        //         }
-        //     } else {
-        //         return wrappedObject;
-        //     }
-
-        // }
-
-
     } catch (err) {
         console.error("Error running script in Sandbox", err.message, err);
         throw err;

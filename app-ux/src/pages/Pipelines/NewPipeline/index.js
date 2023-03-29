@@ -141,7 +141,7 @@ const NewPipeline = (props) => {
                                 <label className="label">
                                     <span className="label-text">Active</span>
                                 </label>
-                                <input type="checkbox" className="toggle toggle-lg" checked={active} onChange={(e) => setActive(e.target.checked)} />
+                                <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={active} onChange={(e) => setActive(e.target.checked)} />
                                 {renderErrors(error, 'active')}
                             </div>
 

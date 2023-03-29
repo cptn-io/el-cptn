@@ -13,17 +13,17 @@ const scriptTemplate = `module.exports = function (event, ctx, config) {
     //add your script here to send the event to your destination service
 }`;
 
-const batchScriptTemplate = `module.exports = {
-    setup: function(ctx, config) {
-        //setup connection
-    },
-    execute: function(event, ctx, config) {
-        //send to destination.
-    },
-    teardown: function(ctx, config) {
-        //teardown connection
-    }
-}`;
+// const batchScriptTemplate = `module.exports = {
+//     setup: function(ctx, config) {
+//         //setup connection
+//     },
+//     execute: function(event, ctx, config) {
+//         //send to destination.
+//     },
+//     teardown: function(ctx, config) {
+//         //teardown connection
+//     }
+// }`;
 
 const CreateDestination = (props) => {
     const { onSuccess, onCancel, noShadow = false } = props;
@@ -140,7 +140,7 @@ const CreateDestination = (props) => {
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    <input type="checkbox" className="toggle toggle-lg" checked={active} onChange={(e) => setActive(e.target.checked)} />
+                    <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={active} onChange={(e) => setActive(e.target.checked)} />
                     {renderErrors(error, 'active')}
                 </div>
 

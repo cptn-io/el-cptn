@@ -1,4 +1,4 @@
-import { IconEye, IconEyeOff, IconTrash, IconX } from "@tabler/icons-react";
+import { IconEye, IconEyeOff, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import filter from 'lodash/filter';
 
@@ -13,7 +13,7 @@ const ConfigBuilder = (props) => {
             }
             return current;
         });
-    }, [config]);
+    }, [config, setConfig]);
 
     const changeConfig = (e, i) => {
         setConfig(current => {

@@ -9,7 +9,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 
 const renderColData = (val) => {
     if (typeof val === 'boolean') {
-        return <div className="flex justify-center items-center">{val ? <IconCheck size={24} /> : <IconX size={24} />}</div>;
+        return <div className="flex justify-center items-center">{val ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>;
     }
     return val;
 }

@@ -115,13 +115,13 @@ const TransformationDetailsCard = (props) => {
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    {editMode ? <Fragment><input type="checkbox" className="toggle toggle-lg" defaultChecked={active}
+                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} defaultChecked={active}
                         onChange={e => setChanges(current => ({
                             ...current,
                             active: e.target.checked
                         }))} />
                         {renderErrors(error, 'active')}</Fragment> :
-                        <div className="p-1">{active ? <IconCheck size={24} /> : <IconX size={24} />}</div>}
+                        <div className="p-1">{active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>}
                 </div>
             </div>
 

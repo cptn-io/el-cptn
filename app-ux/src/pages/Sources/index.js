@@ -53,8 +53,8 @@ const Sources = () => {
                     <tbody style={{ maxHeight: '600px' }}>
                         {data.map(source => <tr key={source.id}>
                             <td className="whitespace-pre-wrap break-words"><Link to={`/sources/${source.id}`}>{source.name}</Link></td>
-                            <td className="text-center"><div className="flex justify-center">{source.secured ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>
-                            <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck size={24} /> : <IconX size={24} />}</div></td>
+                            <td className="text-center"><div className="flex justify-center">{source.secured ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
+                            <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
                         </tr>)}
                     </tbody>
                 </table>
