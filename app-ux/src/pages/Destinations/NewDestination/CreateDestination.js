@@ -9,9 +9,9 @@ import ConfigBuilder from "../../../components/ConfigBuilder";
 import filter from 'lodash/filter';
 
 
-const scriptTemplate = `return (function (evt, ctx){
+const scriptTemplate = `function execute(evt, ctx) {
     //add your script here to send the event to your destination service
-})(evt, ctx);`;
+}`;
 
 const CreateDestination = (props) => {
     const { onSuccess, onCancel, noShadow = false } = props;
@@ -41,6 +41,7 @@ const CreateDestination = (props) => {
         monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
             target: monaco.languages.typescript.ScriptTarget.ES6,
             allowNonTsExtensions: true,
+            allowJs: true
         });
 
         monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);

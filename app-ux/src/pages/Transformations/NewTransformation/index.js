@@ -8,10 +8,10 @@ import { renderErrors } from "../../../common/formHelpers";
 import Editor from '@monaco-editor/react'
 import { breadcrumbs } from "..";
 
-const scriptTemplate = `return (function (evt, ctx){
+const scriptTemplate = `function transform(evt, ctx) {
     //add your script here to send the event to your destination service
     return evt;
-})(evt, ctx);`;
+}`;
 
 const NewTransformation = () => {
     const navigate = useNavigate();
@@ -40,6 +40,7 @@ const NewTransformation = () => {
         monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
             target: monaco.languages.typescript.ScriptTarget.ES6,
             allowNonTsExtensions: true,
+            allowJs: true
         });
 
         monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);

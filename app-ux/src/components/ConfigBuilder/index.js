@@ -37,14 +37,19 @@ const ConfigBuilder = (props) => {
 
     const deleteItem = (e, i) => {
         e.preventDefault();
-        setConfig(current => filter(current, (val, index) => index !== i));
-    }
+        setConfig(current => {
+            const data = filter(current, (val, index) => index !== i);
+            console.log(data);
+            return data;
+        });
+    };
+
 
     return <div className="foo">
         {config.map((item, i) => {
             return <div className="flex flex-wrap -mx-3 mb-3" key={i}>
                 <div className="w-1/2 md:w-2/5 px-3">
-                    <input readOnly={readOnly} defaultValue={item.key} name="key" onChange={(e) => changeConfig(e, i)} className="input input-bordered w-full" type="text" placeholder="Key" />
+                    <input readOnly={readOnly} value={item.key} name="key" onChange={(e) => changeConfig(e, i)} className="input input-bordered w-full" type="text" placeholder="Key" />
                 </div>
                 <div className="w-1/2 md:w-2/5 px-3">
                     <div className="input-group">

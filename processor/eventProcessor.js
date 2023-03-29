@@ -4,6 +4,7 @@ const Destination = require('./entities/Destination');
 const Pipeline = require('./entities/Pipeline');
 const { runStep } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
+const getVM = require('./vm');
 
 async function getTransformation(transformationId) {
     const key = `transformation-proc::${transformationId}`;
@@ -74,14 +75,14 @@ async function processEvent(event) {
         } else if (!pipeline.active) {
             throw "Pipeline is not active";
         }
-
+        const vm = getVM();
         const steps = await resolveSteps(pipeline);
         for (const step of steps) {
             if (!step.active) {
                 continue;
             }
 
-            evt = await runStep(step, evt, ctx);
+            evt = await runStep(vm, step, evt, ctx);
             if (!evt && typeof step !== Destination) {
                 //transformations must return processed event for continuing with next steps
                 break;

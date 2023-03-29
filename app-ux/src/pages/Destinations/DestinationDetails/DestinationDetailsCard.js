@@ -30,6 +30,7 @@ const DestinationDetailsCard = (props) => {
         monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
             target: monaco.languages.typescript.ScriptTarget.ES6,
             allowNonTsExtensions: true,
+            allowJs: true
         });
 
         monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);

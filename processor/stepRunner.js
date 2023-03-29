@@ -1,9 +1,8 @@
-const { NodeVM } = require('vm2');
-const { Volume } = require('memfs');
+
 const { findMissingRequiredModules, installModule } = require('./nodeModuleHelper');
 
 
-async function runStep(step, evt, ctx) {
+async function runStep(vm, step, evt, ctx) {
     const stepScript = step.script;
     try {
         const missingModules = findMissingRequiredModules(stepScript);
@@ -13,31 +12,10 @@ async function runStep(step, evt, ctx) {
         throw err;
     }
 
-    const readOnlyFS = Volume.fromJSON({}, '/');
-
-    const vm = new NodeVM({
-        console: 'inherit',
-        sandbox: { fetch },
-        require: {
-            external: true,
-            root: '.',
-            builtin: ['*'],
-            mock: {
-                fs: readOnlyFS,
-            },
-        },
-        eval: false,
-        wasm: false,
-        env: {
-            config: step.config || {}
-        }
-    });
-    const script = `module.exports = function(evt, ctx) {            
-        ${stepScript}
-    };`;
+    const script = `module.exports = ${stepScript}`;
     try {
         const vmRun = vm.run(script, './script.js')
-        return await vmRun(evt, ctx);
+        return await vmRun(evt, ctx, step.config);
     } catch (err) {
         console.error("Error running script in Sandbox", err.message, err);
         throw err;
