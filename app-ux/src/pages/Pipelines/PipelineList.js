@@ -26,6 +26,7 @@ const PipelineList = (props) => {
                             <th className={`${!isRelatedList ? 'bg-base-300' : 'bg-base-200'} text-left w-1/3`}>Name</th>
                             <th className={`${!isRelatedList ? 'bg-base-300' : 'bg-base-200'} text-left w-1/4`}>Source</th>
                             <th className={`${!isRelatedList ? 'bg-base-300' : 'bg-base-200'} text-left w-1/4`}>Destination</th>
+                            <th className={`${!isRelatedList ? 'bg-base-300' : 'bg-base-200'} text-center w-1/3`}>Batch Mode</th>
                             <th className={`${!isRelatedList ? 'bg-base-300' : 'bg-base-200'} text-center w-1/3`}>Active</th>
                         </tr>
                     </thead>
@@ -34,6 +35,7 @@ const PipelineList = (props) => {
                             <td className="whitespace-pre-wrap break-words"><Link to={`/pipelines/${pipeline.id}`}>{pipeline.name}</Link></td>
                             <td className="whitespace-pre-wrap break-words">{pipeline.source.name}</td>
                             <td className="whitespace-pre-wrap break-words">{pipeline.destination.name}</td>
+                            <td className="text-center"><div className="flex justify-center">{pipeline.batchProcess ? 'Yes' : 'No'}</div></td>
                             <td className="text-center"><div className="flex justify-center">{pipeline.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
                         </tr>)}
                     </tbody>
