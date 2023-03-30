@@ -9,21 +9,17 @@ import ConfigBuilder from "../../../components/ConfigBuilder";
 import filter from 'lodash/filter';
 
 
-const scriptTemplate = `module.exports = function (event, ctx, config) {
-    //add your script here to send the event to your destination service
+const scriptTemplate = `module.exports = {
+    setup: function(ctx, config) { /* optional */
+        //setup connection
+    },
+    execute: function(event, ctx, config) { /* required */
+        //send to destination.
+    },
+    teardown: function(ctx, config) { /* optional */
+        //teardown connection
+    }
 }`;
-
-// const batchScriptTemplate = `module.exports = {
-//     setup: function(ctx, config) {
-//         //setup connection
-//     },
-//     execute: function(event, ctx, config) {
-//         //send to destination.
-//     },
-//     teardown: function(ctx, config) {
-//         //teardown connection
-//     }
-// }`;
 
 const CreateDestination = (props) => {
     const { onSuccess, onCancel, noShadow = false } = props;

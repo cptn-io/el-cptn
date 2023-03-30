@@ -67,8 +67,14 @@ async function processScheduledEvents() {
             return;
         }
         const trigger = triggers.rows[0];
-        const result = await client.query('SELECT q.* FROM outbound_queue q WHERE q.pipeline_id = $1 and q.state = $2 ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $3', [trigger.pipeline_id, 'QUEUED', QUERY_BATCH_SIZE]);
-        if (result.rows.length > 0) {
+        const timeNow = new Date().toISOString();
+
+        while (true) {
+            const result = await client.query('SELECT q.* FROM outbound_queue q WHERE q.pipeline_id = $1 and q.state = $2 and q.created_at < $3 ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $4', [trigger.pipeline_id, 'QUEUED', timeNow, QUERY_BATCH_SIZE]);
+            if (result.rows.length === 0) {
+                break;
+            }
+
             const completed = [], failed = [];
             const events = result.rows.map(row => new Event(row));
             const statuses = await processEventBatch(trigger.pipeline_id, events);
@@ -79,7 +85,7 @@ async function processScheduledEvents() {
                     failed.push(id);
                 }
             });
-            console.log(statuses);
+
             if (completed.length > 0) {
                 await client.query('UPDATE outbound_queue SET state= $1 WHERE id = ANY($2::uuid[])', ['COMPLETED', completed]);
             }
@@ -87,7 +93,9 @@ async function processScheduledEvents() {
             if (failed.length > 0) {
                 await client.query('UPDATE outbound_queue SET state= $1 WHERE id  = ANY($2::uuid[])', ['FAILED', failed]);
             }
+
         }
+
         await client.query('UPDATE pipeline_trigger SET state= $1 WHERE id  = $2', ['COMPLETED', trigger.id]);
 
         await client.query('COMMIT');

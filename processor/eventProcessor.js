@@ -105,7 +105,7 @@ async function processEventBatch(pipelineId, events) {
                     }
                 }
 
-                if (evt) {
+                if (evt && destinationWrappedObject.execute) {
                     await destinationWrappedObject.execute(evt, ctx, destination.config);
                 }
 

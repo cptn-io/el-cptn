@@ -91,6 +91,19 @@ const PipelineDetailsCard = (props) => {
                         {renderErrors(error, 'active')}</> :
                         <div className="p-1">{data.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>}
                 </div>
+
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Scheduled Batch Processing</span>
+                    </label>
+                    {editMode ? <><input type="checkbox" className={`toggle toggle-lg ${changes.active || data.active ? 'toggle-success' : ''}`} defaultChecked={data.batchProcess}
+                        onChange={e => setChanges(current => ({
+                            ...current,
+                            batchProcess: e.target.checked
+                        }))} />
+                        {renderErrors(error, 'batchProcess')}</> :
+                        <div className="p-1 text-md">{data.batchProcess ? 'Enabled' : 'Disabled'}</div>}
+                </div>
             </div>
             <div className="card-actions justify-end mb-3">
                 {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Pipeline</button>}
