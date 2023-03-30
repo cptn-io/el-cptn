@@ -2,9 +2,7 @@
 const Destination = require('./entities/Destination');
 const { findMissingRequiredModules, installModule } = require('./nodeModuleHelper');
 
-
-async function runStep(vm, step, evt, ctx) {
-    const stepScript = step.script;
+async function installRequiredModules(stepScript) {
     try {
         const missingModules = findMissingRequiredModules(stepScript);
         missingModules.forEach(installModule);
@@ -12,7 +10,30 @@ async function runStep(vm, step, evt, ctx) {
         console.error("Unable to install missing modules", err.message);
         throw err;
     }
+}
 
+async function getDestinationWrappedObject(vm, step) {
+    if (!(step instanceof Destination)) {
+        return;
+    }
+
+    const stepScript = step.script;
+
+    await installRequiredModules(stepScript);
+
+    const script = `${stepScript}`;
+    try {
+        const wrappedObject = vm.run(script, './script.js');
+        return wrappedObject;
+    } catch (err) {
+        console.error("Error running destination setup script in Sandbox", err.message, err);
+        throw err;
+    }
+}
+
+async function runStep(vm, step, evt, ctx) {
+    const stepScript = step.script;
+    await installRequiredModules(stepScript);
     const script = `${stepScript}`;
     try {
         const vmRun = vm.run(script, './script.js');
@@ -21,20 +42,11 @@ async function runStep(vm, step, evt, ctx) {
             return await vmRun(evt, ctx, step.config);
         }
 
-
         if (typeof vmRun === 'function') {
             return await vmRun(evt, ctx, step.config);
         } else {
-            if (vmRun.setup && typeof vmRun.setup === 'function') {
-                await vmRun.setup(ctx, step.config);
-            }
-
             if (vmRun.execute && typeof vmRun.execute === 'function') {
                 await vmRun.execute(evt, ctx, step.config);
-            }
-
-            if (vmRun.teardown && typeof vmRun.teardown === 'function') {
-                await vmRun.teardown(ctx, step.config);
             }
         }
     } catch (err) {
@@ -44,5 +56,6 @@ async function runStep(vm, step, evt, ctx) {
 }
 
 module.exports = {
+    getDestinationWrappedObject,
     runStep
 }

@@ -20,6 +20,7 @@ public interface PipelineMapper {
             expression = "java(sourceDtoToSource(pipelineDto.getSource()))")
     @Mapping(target = "destination",
             expression = "java(destinationDtoToDestination(pipelineDto.getDestination()))")
+    @Mapping(source = "batchProcess", target = "batchProcess", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     Pipeline toEntity(PipelineDto pipelineDto);
 
     @Mapping(ignore = true, target = "transformations")

@@ -73,6 +73,11 @@ public class Pipeline extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private JsonNode route;
 
+    @Getter
+    @Setter
+    @Column(name = "batch_process")
+    private Boolean batchProcess = false;
+
     public void addTransformation(Transformation transformation) {
         transformations.add(transformation);
     }

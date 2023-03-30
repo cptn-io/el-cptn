@@ -2,7 +2,7 @@ const cache = require('./cache');
 const pgPool = require('./database');
 const Destination = require('./entities/Destination');
 const Pipeline = require('./entities/Pipeline');
-const { runStep } = require('./stepRunner');
+const { runStep, runDestinationSetup, runDestinationTeardown, getDestinationWrappedObject } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
 const getVM = require('./vm');
 
@@ -38,14 +38,14 @@ async function getDestination(destinationId) {
     return null;
 }
 
-async function getPipeline(event) {
-    const key = `pipeline-proc::${event.pipelineId}`;
+async function getPipeline(pipelineId) {
+    const key = `pipeline-proc::${pipelineId}`;
     const cached = await cache.get(key);
     if (cached) {
         return new Pipeline(cached);
     }
 
-    const result = await pgPool.query('SELECT p.id, p.route, p.source_id, p.destination_id, p.active FROM pipeline p WHERE p.id=$1', [event.pipelineId]);
+    const result = await pgPool.query('SELECT p.id, p.route, p.source_id, p.destination_id, p.active FROM pipeline p WHERE p.id=$1', [pipelineId]);
     const row = result.rows?.[0];
     if (row) {
         await cache.set(key, row);
@@ -61,40 +61,70 @@ async function resolveSteps(pipeline) {
     const stepsPromises = transformations.map(id => getTransformation(id));
     const steps = await Promise.all(stepsPromises);
     const destination = await getDestination(destinationId);
-    return [...steps, destination];
+    return { steps, destination };
 }
 
 async function processEvent(event) {
-    const { id, payload } = event;
-    let ctx = {}, evt = { ...payload };
+    const results = await processEventBatch(event.pipelineId, [event])
+    return results[0];
+}
+async function processEventBatch(pipelineId, events) {
+    const responses = [];
     try {
-        let message;
-        const pipeline = await getPipeline(event);
+        const pipeline = await getPipeline(pipelineId);
         if (!pipeline) {
             throw "Pipeline not found";
         } else if (!pipeline.active) {
             throw "Pipeline is not active";
         }
         const vm = getVM();
-        const steps = await resolveSteps(pipeline);
-        for (const step of steps) {
-            if (!step.active) {
-                continue;
-            }
+        const pipelineSteps = await resolveSteps(pipeline);
 
-            evt = await runStep(vm, step, evt, ctx);
-            if (!evt && step instanceof Transformation) {
-                //transformations must return processed event for continuing with next steps
-                break;
+        const destination = pipelineSteps.destination;
+        if (!destination || !destination.active) {
+            console.error("Invalid destination");
+        }
+        const destinationWrappedObject = await getDestinationWrappedObject(vm, destination);
+
+        if (destinationWrappedObject.setup) {
+            await destinationWrappedObject.setup(destination.config);
+        }
+
+        for (const event of events) {
+            const { id, payload } = event;
+            let ctx = {}, evt = { ...payload }, message;
+            try {
+                for (const step of pipelineSteps.steps) {
+                    if (!step.active) {
+                        continue;
+                    }
+                    evt = await runStep(vm, step, evt, ctx);
+                    if (!evt) {
+                        //transformations must return processed event for continuing with next steps
+                        break;
+                    }
+                }
+
+                if (evt) {
+                    await destinationWrappedObject.execute(evt, ctx, destination.config);
+                }
+
+                responses.push({ id, success: true, message });
+            } catch (error) {
+                console.error("Error while processing event", error);
+                responses.push({ id, success: false, message: error.message });
             }
         }
-        return { id, success: true, message }
+
+        if (destinationWrappedObject.teardown) {
+            await destinationWrappedObject.teardown(destination.config);
+        }
     } catch (error) {
         console.error("Error while processing event", error);
-        return { id, success: false, message: error.message }
     }
+    return responses;
 }
-
 module.exports = {
-    processEvent
+    processEvent,
+    processEventBatch
 }

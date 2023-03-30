@@ -25,7 +25,7 @@ public class SourceDto extends BaseDto {
     @Serial
     private static final long serialVersionUID = -508186201767170237L;
     @NotNull(message = "Name is required", groups = OnCreate.class)
-    @Size(min = 3, max = 128, message = "Length must be between 3 and 128 characters")
+    @Size(min = 3, max = 64, message = "Length must be between 3 and 64 characters")
     private String name;
 
     private Boolean secured;

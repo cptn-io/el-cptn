@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public abstract class ScriptedStepDto extends BaseDto {
 
     @NotNull(message = "Name is required", groups = OnCreate.class)
-    @Size(min = 3, max = 128, message = "Length must be between 3 and 128 characters")
+    @Size(min = 3, max = 64, message = "Length must be between 3 and 64 characters")
     private String name;
 
     @NotBlank(groups = OnCreate.class)

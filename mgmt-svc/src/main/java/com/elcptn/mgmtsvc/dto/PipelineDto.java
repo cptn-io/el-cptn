@@ -39,4 +39,6 @@ public class PipelineDto extends BaseDto {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private JsonNode transformationMap;
+
+    private Boolean batchProcess;
 }

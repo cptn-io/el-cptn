@@ -20,6 +20,7 @@ const NewPipeline = (props) => {
 
     const [name, setName] = useState('');
     const [active, setActive] = useState(true);
+    const [batchProcess, setBatchProcess] = useState(false);
     const [source, setSource] = useState(null);
     const [destination, setDestination] = useState(null);
 
@@ -58,7 +59,8 @@ const NewPipeline = (props) => {
             name,
             source,
             destination,
-            active
+            active,
+            batchProcess
         };
         axios.post('/api/pipeline', payload).then(response => {
             resetAll();
@@ -143,6 +145,14 @@ const NewPipeline = (props) => {
                                 </label>
                                 <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={active} onChange={(e) => setActive(e.target.checked)} />
                                 {renderErrors(error, 'active')}
+                            </div>
+
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text">Scheduled Batch Processing</span>
+                                </label>
+                                <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={batchProcess} onChange={(e) => setBatchProcess(e.target.checked)} />
+                                {renderErrors(error, 'batchProcess')}
                             </div>
 
                         </div>
