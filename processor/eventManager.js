@@ -3,7 +3,6 @@ const pgPool = require('./database')
 const workerpool = require('workerpool');
 const Event = require('./entities/Event');
 const workerExecPool = workerpool.pool(__dirname + '/eventWorker.js');
-const { setTimeout } = require("timers/promises");
 const { processEventBatch } = require('./eventProcessor');
 
 const QUERY_BATCH_SIZE = process.env.QUERY_BATCH_SIZE || 15;
@@ -19,8 +18,7 @@ async function processQueuedEvents() {
         const result = await client.query('SELECT q.* FROM outbound_queue q INNER JOIN pipeline p ON q.pipeline_id = p.id WHERE q.state = $1 AND p.batch_process = false ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $2', ['QUEUED', QUERY_BATCH_SIZE]);
         if (result.rows.length === 0) {
             //no records, add delay
-            await setTimeout(DELAY_IF_NOEVENTS);
-            //await new Promise(r => setTimeout(r, DELAY_IF_NOEVENTS));
+            await new Promise(resolve => setTimeout(resolve, DELAY_IF_NOEVENTS));
             return;
         }
         const workers = result.rows.map(async row => {
@@ -50,7 +48,7 @@ async function processQueuedEvents() {
     } catch (err) {
         console.error(err);
         await client.query('ROLLBACK');
-        await setTimeout(5000);
+        await new Promise(resolve => setTimeout(resolve, 5000));
     } finally {
         client.release();
     }
@@ -63,7 +61,7 @@ async function processScheduledEvents() {
         await client.query('BEGIN');
         const triggers = await client.query('SELECT t.id, t.pipeline_id FROM pipeline_trigger t where t.state=$1 ORDER BY t.created_at FOR UPDATE SKIP LOCKED LIMIT 1', ['QUEUED']);
         if (triggers.rows.length === 0) {
-            await setTimeout(DELAY_IF_NOEVENTS);
+            await new Promise(resolve => setTimeout(resolve, DELAY_IF_NOEVENTS));
             return;
         }
         const trigger = triggers.rows[0];
@@ -102,7 +100,7 @@ async function processScheduledEvents() {
     } catch (err) {
         console.error(err);
         await client.query('ROLLBACK');
-        await setTimeout(5000);
+        await new Promise(resolve => setTimeout(resolve, 5000));
     } finally {
         client.release();
     }

@@ -2,7 +2,7 @@ const cache = require('./cache');
 const pgPool = require('./database');
 const Destination = require('./entities/Destination');
 const Pipeline = require('./entities/Pipeline');
-const { runStep, runDestinationSetup, runDestinationTeardown, getDestinationWrappedObject } = require('./stepRunner');
+const { runStep, getDestinationWrappedObject } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
 const getVM = require('./vm');
 

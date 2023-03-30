@@ -21,9 +21,8 @@ async function getDestinationWrappedObject(vm, step) {
 
     await installRequiredModules(stepScript);
 
-    const script = `${stepScript}`;
     try {
-        const wrappedObject = vm.run(script, './script.js');
+        const wrappedObject = vm.run(stepScript, './script.js');
         return wrappedObject;
     } catch (err) {
         console.error("Error running destination setup script in Sandbox", err.message, err);
@@ -34,9 +33,9 @@ async function getDestinationWrappedObject(vm, step) {
 async function runStep(vm, step, evt, ctx) {
     const stepScript = step.script;
     await installRequiredModules(stepScript);
-    const script = `${stepScript}`;
+
     try {
-        const vmRun = vm.run(script, './script.js');
+        const vmRun = vm.run(stepScript, './script.js');
 
         if (!(step instanceof Destination)) {
             return await vmRun(evt, ctx, step.config);
