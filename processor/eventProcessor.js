@@ -45,7 +45,7 @@ async function getPipeline(pipelineId) {
         return new Pipeline(cached);
     }
 
-    const result = await pgPool.query('SELECT p.id, p.route, p.source_id, p.destination_id, p.active FROM pipeline p WHERE p.id=$1', [pipelineId]);
+    const result = await pgPool.query('SELECT p.id, p.source_id, p.destination_id, p.active, p.route FROM pipeline p WHERE p.id=$1', [pipelineId]);
     const row = result.rows?.[0];
     if (row) {
         await cache.set(key, row);
@@ -83,10 +83,11 @@ async function processEventBatch(pipelineId, events) {
         const destination = pipelineSteps.destination;
         if (!destination || !destination.active) {
             console.error("Invalid destination");
+            throw "Destination is inactive or invalid";
         }
         const destinationWrappedObject = await getDestinationWrappedObject(vm, destination);
 
-        if (destinationWrappedObject.setup) {
+        if (destinationWrappedObject.setup && typeof destinationWrappedObject.setup === 'function') {
             await destinationWrappedObject.setup(destination.config);
         }
 
@@ -105,7 +106,7 @@ async function processEventBatch(pipelineId, events) {
                     }
                 }
 
-                if (evt && destinationWrappedObject.execute) {
+                if (evt && destinationWrappedObject.execute && typeof destinationWrappedObject.execute === 'function') {
                     await destinationWrappedObject.execute(evt, ctx, destination.config);
                 }
 
@@ -116,11 +117,11 @@ async function processEventBatch(pipelineId, events) {
             }
         }
 
-        if (destinationWrappedObject.teardown) {
+        if (destinationWrappedObject.teardown && typeof destinationWrappedObject.teardown === 'function') {
             await destinationWrappedObject.teardown(destination.config);
         }
     } catch (error) {
-        console.error("Error while processing event", error);
+        console.error("Error while processing event", error, error.message);
     }
     return responses;
 }

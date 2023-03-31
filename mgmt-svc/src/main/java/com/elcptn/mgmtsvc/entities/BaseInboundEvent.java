@@ -4,17 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 
-/* @author: kc, created on 2/8/23 */
-@Entity
-@Table(name = "event")
-@ToString(onlyExplicitlyIncluded = true)
-public class Event extends BaseEntity {
+/* @author: kc, created on 3/30/23 */
+@MappedSuperclass
+public abstract class BaseInboundEvent extends BaseEntity {
 
     @Serial
     private static final long serialVersionUID = -7945377903306555486L;

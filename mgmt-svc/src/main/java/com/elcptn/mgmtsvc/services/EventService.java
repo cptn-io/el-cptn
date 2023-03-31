@@ -1,8 +1,9 @@
 package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.mgmtsvc.dto.StatusMetricDto;
-import com.elcptn.mgmtsvc.entities.Event;
+import com.elcptn.mgmtsvc.entities.InboundWriteEvent;
 import com.elcptn.mgmtsvc.repositories.EventRepository;
+import com.elcptn.mgmtsvc.repositories.InboundWriteEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventService extends CommonService {
 
+    private final InboundWriteEventRepository writeEventRepository;
+
     private final EventRepository eventRepository;
 
-    public Event create(Event event) {
-        return eventRepository.save(event);
+    public InboundWriteEvent create(InboundWriteEvent event) {
+        return writeEventRepository.save(event);
     }
 
     public List<StatusMetricDto> getEventMetrics() {

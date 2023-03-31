@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.controllers;
 
 import com.elcptn.mgmtsvc.dto.EventDto;
-import com.elcptn.mgmtsvc.entities.Event;
+import com.elcptn.mgmtsvc.entities.InboundWriteEvent;
 import com.elcptn.mgmtsvc.entities.Source;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.mappers.EventMapper;
@@ -37,7 +37,7 @@ public class EventController {
             throw new NotFoundException("Source not found with passed ID");
         }
 
-        Event event = new Event();
+        InboundWriteEvent event = new InboundWriteEvent();
         event.setPayload(jsonPayload);
         event.setSource(sourceOptional.get());
 
@@ -45,7 +45,7 @@ public class EventController {
         return ResponseEntity.ok(convert(eventService.create(event)));
     }
 
-    private EventDto convert(Event event) {
+    private EventDto convert(InboundWriteEvent event) {
         return eventMapper.toDto(event);
     }
 }

@@ -55,8 +55,6 @@ public class PipelineService extends CommonService {
         transformationMap.put("positions", positions);
         transformationMap.put("edgeMap", edges);
         transformationMap.put("route", mapper.createArrayNode());
-
-        pipeline.setRoute(mapper.createArrayNode());
         pipeline.setTransformationMap(transformationMap);
         return save(pipeline);
     }
@@ -151,7 +149,7 @@ public class PipelineService extends CommonService {
             }
             queue.add(nextNode);
         }
-
+        
         pipeline.setRoute(route);
 
         if (!isValid) {

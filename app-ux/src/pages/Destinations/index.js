@@ -41,27 +41,42 @@ const Destinations = () => {
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
-                <table className="table data-table table-zebra w-full">
-                    <thead>
-                        <tr>
-                            <th className="bg-base-300 text-left w-2/3">Name</th>
-                            <th className="bg-base-300 text-center">Active</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map(source => <tr key={source.id}>
-                            <td className="whitespace-pre-wrap break-words"><Link to={`/destinations/${source.id}`}>{source.name}</Link></td>
-                            <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
-                        </tr>)}
-                    </tbody>
-                </table>
+                {totalCount > 0 ?
+                    <table className="table data-table table-zebra w-full">
+                        <thead>
+                            <tr>
+                                <th className="bg-base-300 text-left w-2/3">Name</th>
+                                <th className="bg-base-300 text-center">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map(source => <tr key={source.id}>
+                                <td className="whitespace-pre-wrap break-words"><Link to={`/destinations/${source.id}`}>{source.name}</Link></td>
+                                <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
+                            </tr>)}
+                        </tbody>
+                    </table>
+                    : renderNoDestinations()}
             </div>
-            <Pagination totalCount={totalCount} />
+            {totalCount > 0 && <Pagination totalCount={totalCount} />}
         </div>
         }
     </Fragment>
 }
 
+const renderNoDestinations = () => {
+    return <div className="flex flex-col justify-center my-5">
+        <div className="flex justify-center mb-4 text-primary">
+            <img alt="Create new Destination" src="/undraw/thoughts.svg" className="max-w-3/5" />
+        </div>
+        <div className="flex justify-center mb-4 text-center">
+            There are no Destinations. Click the button below to start building a new Destination
+        </div>
+        <div className="flex justify-center">
+            <Link to="/destinations/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New Destination</Link>
+        </div>
+    </div>
+}
 
 export const breadcrumbs = [{ label: 'Destinations', url: '/destinations' }];
 

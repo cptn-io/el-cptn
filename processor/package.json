@@ -9,7 +9,7 @@
   "author": "KC",
   "license": "MIT",
   "dependencies": {
-    "https": "^1.0.0",
+    "async": "^3.2.4",
     "lodash": "^4.17.21",
     "memfs": "^3.4.13",
     "pg": "^8.10.0",

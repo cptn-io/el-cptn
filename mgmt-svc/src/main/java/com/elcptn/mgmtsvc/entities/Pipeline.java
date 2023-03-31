@@ -72,7 +72,7 @@ public class Pipeline extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private JsonNode route;
-
+    
     @Getter
     @Setter
     @Column(name = "batch_process")

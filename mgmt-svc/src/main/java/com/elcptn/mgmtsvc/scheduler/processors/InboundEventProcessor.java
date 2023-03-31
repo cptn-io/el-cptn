@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.scheduler.processors;
 
-import com.elcptn.mgmtsvc.entities.Event;
+import com.elcptn.mgmtsvc.entities.InboundEvent;
 import com.elcptn.mgmtsvc.entities.OutboundWriteEvent;
 import com.elcptn.mgmtsvc.entities.State;
 import com.elcptn.mgmtsvc.repositories.EventRepository;
@@ -23,7 +23,7 @@ public class InboundEventProcessor {
 
     private final OutboundWriteEventRepository outboundWriteEventRepository;
 
-    public void processEvent(Event event) {
+    public void processEvent(InboundEvent event) {
         try {
             dispatchEventToPipelines(event);
             updateEvent(event.getId(), State.COMPLETED);
@@ -33,7 +33,7 @@ public class InboundEventProcessor {
         }
     }
 
-    private void dispatchEventToPipelines(Event event) {
+    private void dispatchEventToPipelines(InboundEvent event) {
         pipelineRepository.findBySource(event.getSource().getId()).forEach(pipeline -> {
             OutboundWriteEvent outboundWriteEvent = new OutboundWriteEvent();
             outboundWriteEvent.setPipeline(pipeline);
