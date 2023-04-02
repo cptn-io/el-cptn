@@ -1,18 +1,20 @@
-package com.elcptn.mgmtsvc.repositories;
+package com.elcptn.common.repositories;
 
 import com.elcptn.common.entities.OutboundEvent;
-import com.elcptn.mgmtsvc.dto.StatusMetricDto;
+import com.elcptn.common.pojos.StatusMetric;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public interface OutboundEventRepository extends JpaRepository<OutboundEvent, UUID> {
 
-    @Query(value = "SELECT new com.elcptn.mgmtsvc.dto.StatusMetricDto(e.state, COUNT(e.id)) " +
+    @Query(value = "SELECT new com.elcptn.common.pojos.StatusMetric(e.state, COUNT(e.id)) " +
             "FROM OutboundEvent e WHERE e.createdAt >= :createdAfter GROUP BY e.state")
-    List<StatusMetricDto> getStatusCountsForOutboundEvents(@Param("createdAfter") ZonedDateTime createdAfter);
+    List<StatusMetric> getStatusCountsForOutboundEvents(@Param("createdAfter") ZonedDateTime createdAfter);
 }

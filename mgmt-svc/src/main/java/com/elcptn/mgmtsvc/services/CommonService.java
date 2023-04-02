@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.services;
 
-import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
+import com.elcptn.mgmtsvc.common.ListEntitiesParam;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

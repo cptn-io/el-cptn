@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.helpers;
+package com.elcptn.mgmtsvc.common;
 
 import com.google.common.primitives.Ints;
 import jakarta.servlet.http.HttpServletRequest;

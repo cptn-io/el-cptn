@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.scheduler;
 
 import com.elcptn.common.entities.InboundEvent;
-import com.elcptn.mgmtsvc.repositories.InboundEventRepository;
+import com.elcptn.common.repositories.InboundEventRepository;
 import com.elcptn.mgmtsvc.scheduler.processors.InboundEventProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.repositories;
+package com.elcptn.common.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

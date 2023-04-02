@@ -3,8 +3,9 @@ package com.elcptn.mgmtsvc.scheduler.processors;
 import com.elcptn.common.entities.InboundEvent;
 import com.elcptn.common.entities.OutboundWriteEvent;
 import com.elcptn.common.entities.State;
-import com.elcptn.mgmtsvc.repositories.OutboundWriteEventRepository;
-import com.elcptn.mgmtsvc.repositories.PipelineRepository;
+import com.elcptn.common.repositories.InboundEventRepository;
+import com.elcptn.common.repositories.OutboundWriteEventRepository;
+import com.elcptn.common.repositories.PipelineRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Slf4j
 @AllArgsConstructor
 public class InboundEventProcessor {
-    private final com.elcptn.mgmtsvc.repositories.InboundEventRepository eventRepository;
+    private final InboundEventRepository eventRepository;
 
     private final PipelineRepository pipelineRepository;
 

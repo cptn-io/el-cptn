@@ -1,9 +1,11 @@
 package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.common.entities.InboundWriteEvent;
+import com.elcptn.common.pojos.StatusMetric;
+import com.elcptn.common.repositories.InboundEventRepository;
+import com.elcptn.common.repositories.InboundWriteEventRepository;
 import com.elcptn.mgmtsvc.dto.StatusMetricDto;
-import com.elcptn.mgmtsvc.repositories.InboundEventRepository;
-import com.elcptn.mgmtsvc.repositories.InboundWriteEventRepository;
+import com.elcptn.mgmtsvc.mappers.StatusMetricMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +21,14 @@ public class InboundEventService extends CommonService {
 
     private final InboundEventRepository eventRepository;
 
+    private final StatusMetricMapper statusMetricMapper;
+
     public InboundWriteEvent create(InboundWriteEvent event) {
         return writeEventRepository.save(event);
     }
 
     public List<StatusMetricDto> getEventMetrics() {
-        return eventRepository.getStatusCountsForEvents(ZonedDateTime.now().minusHours(24));
+        List<StatusMetric> statusMetrics = eventRepository.getStatusCountsForEvents(ZonedDateTime.now().minusHours(24));
+        return statusMetricMapper.toDtoList(statusMetrics);
     }
 }

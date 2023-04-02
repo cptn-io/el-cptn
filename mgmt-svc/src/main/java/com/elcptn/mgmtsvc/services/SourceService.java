@@ -1,8 +1,8 @@
 package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.common.entities.Source;
-import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
-import com.elcptn.mgmtsvc.repositories.SourceRepository;
+import com.elcptn.common.repositories.SourceRepository;
+import com.elcptn.mgmtsvc.common.ListEntitiesParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;

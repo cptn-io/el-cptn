@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.concurrent.ForkJoinPool;
 
@@ -14,6 +15,7 @@ import java.util.concurrent.ForkJoinPool;
 @SpringBootApplication
 @ComponentScan("com.elcptn")
 @EntityScan(basePackages = {"com.elcptn.common.entities", "com.elcptn.mgmtsvc.entities"})
+@EnableJpaRepositories(basePackages = "com.elcptn.common.repositories")
 public class MgmtSvcApplication {
 
     public static void main(String[] args) {

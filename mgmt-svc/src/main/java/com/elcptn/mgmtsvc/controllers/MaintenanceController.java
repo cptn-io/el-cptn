@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.controllers;
 
-import com.elcptn.mgmtsvc.repositories.DBMaintenanceRepository;
+import com.elcptn.common.repositories.DBMaintenanceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

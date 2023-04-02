@@ -1,8 +1,8 @@
-package com.elcptn.mgmtsvc.repositories;
+package com.elcptn.common.repositories;
 
 import com.elcptn.common.entities.InboundEvent;
 import com.elcptn.common.entities.State;
-import com.elcptn.mgmtsvc.dto.StatusMetricDto;
+import com.elcptn.common.pojos.StatusMetric;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,13 +22,13 @@ public interface InboundEventRepository extends JpaRepository<InboundEvent, UUID
             " ORDER BY created_at FOR UPDATE SKIP LOCKED", nativeQuery = true)
     Stream<InboundEvent> fetchEventsForProcessing();
 
-    @Query(value = "SELECT new com.elcptn.mgmtsvc.dto.StatusMetricDto(e.state, COUNT(e.id)) " +
+    @Query(value = "SELECT new com.elcptn.common.pojos.StatusMetric(e.state, COUNT(e.id)) " +
             "FROM InboundEvent e WHERE e.createdAt >= :createdAfter GROUP BY e.state")
-    List<StatusMetricDto> getStatusCountsForEvents(@Param("createdAfter") ZonedDateTime createdAfter);
+    List<StatusMetric> getStatusCountsForEvents(@Param("createdAfter") ZonedDateTime createdAfter);
 
-    @Query(value = "SELECT new com.elcptn.mgmtsvc.dto.StatusMetricDto(e.state, COUNT(e.id)) " +
+    @Query(value = "SELECT new com.elcptn.common.pojos.StatusMetric(e.state, COUNT(e.id)) " +
             "FROM InboundEvent e WHERE e.source.id = :source AND e.createdAt >= :createdAfter GROUP BY e.state")
-    List<StatusMetricDto> getStatusCountsForEvents(@Param("source") UUID sourceId, @Param(
+    List<StatusMetric> getStatusCountsForEvents(@Param("source") UUID sourceId, @Param(
             "createdAfter") ZonedDateTime createdAfter);
 
     @Modifying
