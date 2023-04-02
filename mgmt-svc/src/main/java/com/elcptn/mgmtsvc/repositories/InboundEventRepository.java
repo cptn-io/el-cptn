@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public interface EventRepository extends JpaRepository<InboundEvent, UUID> {
+@Repository
+public interface InboundEventRepository extends JpaRepository<InboundEvent, UUID> {
 
     @Query(value = "SELECT * FROM inbound_queue WHERE state='QUEUED'" +
             " ORDER BY created_at FOR UPDATE SKIP LOCKED", nativeQuery = true)

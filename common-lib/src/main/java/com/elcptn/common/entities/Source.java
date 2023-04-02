@@ -1,6 +1,6 @@
-package com.elcptn.mgmtsvc.entities;
+package com.elcptn.common.entities;
 
-import com.elcptn.mgmtsvc.helpers.StringHelper;
+import com.elcptn.common.helpers.StringHelper;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -37,17 +37,14 @@ public class Source extends BaseEntity {
     private Boolean active = true;
 
     @Getter
-    @Setter
     @Column(length = 16)
     private String primaryKey;
 
     @Getter
-    @Setter
     @Column(length = 16)
     private String secondaryKey;
 
     @Getter
-    @Setter
     @Column(columnDefinition = "timestamp with time zone")
     private ZonedDateTime lastKeyRotationAt;
 

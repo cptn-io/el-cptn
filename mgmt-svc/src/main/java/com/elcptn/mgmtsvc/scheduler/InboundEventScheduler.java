@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.scheduler;
 
 import com.elcptn.mgmtsvc.entities.InboundEvent;
-import com.elcptn.mgmtsvc.repositories.EventRepository;
+import com.elcptn.mgmtsvc.repositories.InboundEventRepository;
 import com.elcptn.mgmtsvc.scheduler.processors.InboundEventProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class InboundEventScheduler {
 
-    private final EventRepository eventRepository;
+    private final InboundEventRepository eventRepository;
     private final InboundEventProcessor inboundEventProcessor;
 
     private final ForkJoinPool forkJoinPool;

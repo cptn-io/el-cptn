@@ -57,9 +57,14 @@ async function getPipeline(pipelineId) {
 async function resolveSteps(pipeline) {
     const transformations = pipeline.transformations;
     const destinationId = pipeline.destinationId;
+    let steps;
+    if (transformations) {
+        const stepsPromises = transformations.map(id => getTransformation(id));
+        steps = await Promise.all(stepsPromises);
+    } else {
+        steps = [];
+    }
 
-    const stepsPromises = transformations.map(id => getTransformation(id));
-    const steps = await Promise.all(stepsPromises);
     const destination = await getDestination(destinationId);
     return { steps, destination };
 }

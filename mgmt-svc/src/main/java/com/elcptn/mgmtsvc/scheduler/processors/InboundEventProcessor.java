@@ -3,7 +3,6 @@ package com.elcptn.mgmtsvc.scheduler.processors;
 import com.elcptn.mgmtsvc.entities.InboundEvent;
 import com.elcptn.mgmtsvc.entities.OutboundWriteEvent;
 import com.elcptn.mgmtsvc.entities.State;
-import com.elcptn.mgmtsvc.repositories.EventRepository;
 import com.elcptn.mgmtsvc.repositories.OutboundWriteEventRepository;
 import com.elcptn.mgmtsvc.repositories.PipelineRepository;
 import lombok.AllArgsConstructor;
@@ -17,7 +16,7 @@ import java.util.UUID;
 @Slf4j
 @AllArgsConstructor
 public class InboundEventProcessor {
-    private final EventRepository eventRepository;
+    private final com.elcptn.mgmtsvc.repositories.InboundEventRepository eventRepository;
 
     private final PipelineRepository pipelineRepository;
 

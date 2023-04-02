@@ -5,7 +5,7 @@ import com.elcptn.mgmtsvc.entities.InboundWriteEvent;
 import com.elcptn.mgmtsvc.entities.Source;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.mappers.EventMapper;
-import com.elcptn.mgmtsvc.services.EventService;
+import com.elcptn.mgmtsvc.services.InboundEventService;
 import com.elcptn.mgmtsvc.services.SourceService;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,10 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class EventController {
+public class InboundEventController {
 
     private final SourceService sourceService;
-    private final EventService eventService;
+    private final InboundEventService inboundEventService;
     private final EventMapper eventMapper;
 
     @PostMapping("/api/source/{sourceId}/event")
@@ -42,7 +42,7 @@ public class EventController {
         event.setSource(sourceOptional.get());
 
 
-        return ResponseEntity.ok(convert(eventService.create(event)));
+        return ResponseEntity.ok(convert(inboundEventService.create(event)));
     }
 
     private EventDto convert(InboundWriteEvent event) {
