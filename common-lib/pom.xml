@@ -2,15 +2,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.elcptn</groupId>
+        <artifactId>application</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.elcptn</groupId>
     <artifactId>common-lib</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>CPTN - common-lib</name>
+    <name>Common Library</name>
     <properties>
         <java.version>17</java.version>
         <lombok.version>1.18.26</lombok.version>
