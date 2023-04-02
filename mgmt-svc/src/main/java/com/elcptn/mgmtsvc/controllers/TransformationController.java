@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.controllers;
 
+import com.elcptn.common.entities.Transformation;
 import com.elcptn.mgmtsvc.dto.TransformationDto;
-import com.elcptn.mgmtsvc.entities.Transformation;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;

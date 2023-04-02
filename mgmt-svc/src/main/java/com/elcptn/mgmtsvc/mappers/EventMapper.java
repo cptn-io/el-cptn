@@ -1,7 +1,8 @@
 package com.elcptn.mgmtsvc.mappers;
 
+import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.common.entities.InboundWriteEvent;
 import com.elcptn.mgmtsvc.dto.EventDto;
-import com.elcptn.mgmtsvc.entities.Event;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -10,7 +11,8 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface EventMapper {
     @Mapping(source = "source.id", target = "sourceId")
-    EventDto toDto(Event event);
+    EventDto toDto(InboundEvent event);
 
-
+    @Mapping(source = "source.id", target = "sourceId")
+    EventDto toDto(InboundWriteEvent event);
 }

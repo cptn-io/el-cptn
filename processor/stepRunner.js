@@ -41,13 +41,13 @@ async function runStep(vm, step, evt, ctx) {
             return await vmRun(evt, ctx, step.config);
         }
 
-        if (typeof vmRun === 'function') {
-            return await vmRun(evt, ctx, step.config);
-        } else {
-            if (vmRun.execute && typeof vmRun.execute === 'function') {
-                await vmRun.execute(evt, ctx, step.config);
-            }
-        }
+        // if (typeof vmRun === 'function') {
+        //     return await vmRun(evt, ctx, step.config);
+        // } else {
+        //     if (vmRun.execute && typeof vmRun.execute === 'function') {
+        //         await vmRun.execute(evt, ctx, step.config);
+        //     }
+        // }
     } catch (err) {
         console.error("Error running script in Sandbox", err.message, err);
         throw err;

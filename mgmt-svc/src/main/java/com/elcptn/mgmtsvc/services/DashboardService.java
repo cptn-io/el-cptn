@@ -25,7 +25,7 @@ public class DashboardService {
 
     private final DestinationRepository destinationRepository;
 
-    private final EventRepository eventRepository;
+    private final InboundEventRepository eventRepository;
 
     private final OutboundEventRepository outboundEventRepository;
 

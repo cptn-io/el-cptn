@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.dto;
 
-import com.elcptn.mgmtsvc.entities.Destination;
+import com.elcptn.common.entities.Destination;
 import com.elcptn.mgmtsvc.validation.OnCreate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

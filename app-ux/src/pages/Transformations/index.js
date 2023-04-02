@@ -7,6 +7,7 @@ import get from "lodash/get";
 import useNotifications from "../../hooks/useNotifications";
 import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
+import { render } from "@testing-library/react";
 
 const Transformations = () => {
     const { addNotification } = useNotifications();
@@ -41,7 +42,7 @@ const Transformations = () => {
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
-                <table className="table data-table table-zebra w-full">
+                {totalCount > 0 ? <table className="table data-table table-zebra w-full">
                     <thead>
                         <tr>
                             <th className="bg-base-300 text-left w-2/3">Name</th>
@@ -54,12 +55,26 @@ const Transformations = () => {
                             <td className="text-center"><div className="flex justify-center">{transformation.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
                         </tr>)}
                     </tbody>
-                </table>
+                </table> : renderNoTransformations()}
             </div>
-            <Pagination totalCount={totalCount} />
+            {totalCount > 0 && <Pagination totalCount={totalCount} />}
         </div>
         }
     </Fragment>
+}
+
+const renderNoTransformations = () => {
+    return <div className="flex flex-col justify-center my-5">
+        <div className="flex justify-center mb-4 text-primary">
+            <img alt="Create new Transformation" src="/undraw/thoughts.svg" className="max-w-3/5" />
+        </div>
+        <div className="flex justify-center mb-4 text-center">
+            There are no Transformations. Click the button below to add a new Transformation
+        </div>
+        <div className="flex justify-center">
+            <Link to="/transformations/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New Transformation</Link>
+        </div>
+    </div>
 }
 
 

@@ -15,7 +15,7 @@ async function processQueuedEvents() {
     try {
         const completed = [], failed = [];
         await client.query('BEGIN');
-        const result = await client.query('SELECT q.* FROM outbound_queue q INNER JOIN pipeline p ON q.pipeline_id = p.id WHERE q.state = $1 AND p.batch_process = false ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $2', ['QUEUED', QUERY_BATCH_SIZE]);
+        const result = await client.query('SELECT q.* FROM outbound_queue q INNER JOIN pipeline p ON q.pipeline_id = p.id WHERE q.state = $1 AND p.batch_process = false AND p.active = true ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $2', ['QUEUED', QUERY_BATCH_SIZE]);
         if (result.rows.length === 0) {
             //no records, add delay
             await new Promise(resolve => setTimeout(resolve, DELAY_IF_NOEVENTS));
@@ -67,14 +67,16 @@ async function processScheduledEvents() {
         const trigger = triggers.rows[0];
         const timeNow = new Date().toISOString();
 
+        //we will process records in batches instead of processing as a stream.
         while (true) {
-            const result = await client.query('SELECT q.* FROM outbound_queue q WHERE q.pipeline_id = $1 and q.state = $2 and q.created_at < $3 ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $4', [trigger.pipeline_id, 'QUEUED', timeNow, QUERY_BATCH_SIZE]);
+            const result = await client.query('SELECT q.* FROM outbound_queue q INNER JOIN pipeline p ON q.pipeline_id = p.id WHERE q.pipeline_id = $1 and q.state = $2 AND p.active = true AND q.created_at < $3 ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $4', [trigger.pipeline_id, 'QUEUED', timeNow, QUERY_BATCH_SIZE]);
             if (result.rows.length === 0) {
                 break;
             }
 
             const completed = [], failed = [];
             const events = result.rows.map(row => new Event(row));
+            //process the current batch and get the results
             const statuses = await processEventBatch(trigger.pipeline_id, events);
             statuses.forEach(({ id, success, message }) => {
                 if (success) {

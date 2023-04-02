@@ -1,11 +1,11 @@
 package com.elcptn.mgmtsvc.mappers;
 
+import com.elcptn.common.entities.Destination;
+import com.elcptn.common.entities.Pipeline;
+import com.elcptn.common.entities.Source;
 import com.elcptn.mgmtsvc.dto.DestinationDto;
 import com.elcptn.mgmtsvc.dto.PipelineDto;
 import com.elcptn.mgmtsvc.dto.SourceDto;
-import com.elcptn.mgmtsvc.entities.Destination;
-import com.elcptn.mgmtsvc.entities.Pipeline;
-import com.elcptn.mgmtsvc.entities.Source;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)

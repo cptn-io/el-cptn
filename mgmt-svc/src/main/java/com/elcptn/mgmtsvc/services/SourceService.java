@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.services;
 
-import com.elcptn.mgmtsvc.entities.Source;
+import com.elcptn.common.entities.Source;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.SourceRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,4 +64,6 @@ public class SourceService extends CommonService {
     public void delete(Source source) {
         sourceRepository.delete(source);
     }
+
+
 }

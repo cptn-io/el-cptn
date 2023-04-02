@@ -11,8 +11,8 @@ import { breadcrumbs } from "..";
 const scriptTemplate = `module.exports = function (event, ctx) {
     //add your script here to transform or enrich the event
 
-    //remember to return the transformed evt object for the pipeline to continue processing the event
-    return evt;
+    //remember to return the transformed event object for the pipeline to continue processing the event
+    return event;
 }`;
 
 const NewTransformation = () => {

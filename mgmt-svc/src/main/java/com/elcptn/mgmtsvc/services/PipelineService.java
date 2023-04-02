@@ -1,10 +1,10 @@
 package com.elcptn.mgmtsvc.services;
 
+import com.elcptn.common.entities.Destination;
+import com.elcptn.common.entities.Pipeline;
+import com.elcptn.common.entities.Source;
+import com.elcptn.common.entities.Transformation;
 import com.elcptn.mgmtsvc.dto.TransformationDto;
-import com.elcptn.mgmtsvc.entities.Destination;
-import com.elcptn.mgmtsvc.entities.Pipeline;
-import com.elcptn.mgmtsvc.entities.Source;
-import com.elcptn.mgmtsvc.entities.Transformation;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
@@ -55,8 +55,6 @@ public class PipelineService extends CommonService {
         transformationMap.put("positions", positions);
         transformationMap.put("edgeMap", edges);
         transformationMap.put("route", mapper.createArrayNode());
-
-        pipeline.setRoute(mapper.createArrayNode());
         pipeline.setTransformationMap(transformationMap);
         return save(pipeline);
     }
@@ -73,7 +71,7 @@ public class PipelineService extends CommonService {
     public List<Pipeline> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
 
-        return pipelineRepository.findAll(predicate, pageable).stream().collect(Collectors.toList());
+        return pipelineRepository.findAll(pageable).stream().collect(Collectors.toList());
     }
 
     @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
@@ -102,7 +100,7 @@ public class PipelineService extends CommonService {
             return pipelineRepository.count();
         }
 
-        return pipelineRepository.count(predicate);
+        return pipelineRepository.count();
     }
 
 

@@ -1,9 +1,8 @@
 package com.elcptn.mgmtsvc.scheduler.processors;
 
-import com.elcptn.mgmtsvc.entities.Event;
-import com.elcptn.mgmtsvc.entities.OutboundWriteEvent;
-import com.elcptn.mgmtsvc.entities.State;
-import com.elcptn.mgmtsvc.repositories.EventRepository;
+import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.common.entities.OutboundWriteEvent;
+import com.elcptn.common.entities.State;
 import com.elcptn.mgmtsvc.repositories.OutboundWriteEventRepository;
 import com.elcptn.mgmtsvc.repositories.PipelineRepository;
 import lombok.AllArgsConstructor;
@@ -17,13 +16,13 @@ import java.util.UUID;
 @Slf4j
 @AllArgsConstructor
 public class InboundEventProcessor {
-    private final EventRepository eventRepository;
+    private final com.elcptn.mgmtsvc.repositories.InboundEventRepository eventRepository;
 
     private final PipelineRepository pipelineRepository;
 
     private final OutboundWriteEventRepository outboundWriteEventRepository;
 
-    public void processEvent(Event event) {
+    public void processEvent(InboundEvent event) {
         try {
             dispatchEventToPipelines(event);
             updateEvent(event.getId(), State.COMPLETED);
@@ -33,7 +32,7 @@ public class InboundEventProcessor {
         }
     }
 
-    private void dispatchEventToPipelines(Event event) {
+    private void dispatchEventToPipelines(InboundEvent event) {
         pipelineRepository.findBySource(event.getSource().getId()).forEach(pipeline -> {
             OutboundWriteEvent outboundWriteEvent = new OutboundWriteEvent();
             outboundWriteEvent.setPipeline(pipeline);

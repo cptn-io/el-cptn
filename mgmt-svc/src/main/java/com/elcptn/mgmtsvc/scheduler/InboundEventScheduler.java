@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.scheduler;
 
-import com.elcptn.mgmtsvc.entities.Event;
-import com.elcptn.mgmtsvc.repositories.EventRepository;
+import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.mgmtsvc.repositories.InboundEventRepository;
 import com.elcptn.mgmtsvc.scheduler.processors.InboundEventProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,9 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class InboundEventScheduler {
 
-    private final EventRepository eventRepository;
+    private final InboundEventRepository eventRepository;
     private final InboundEventProcessor inboundEventProcessor;
+
     private final ForkJoinPool forkJoinPool;
 
     @Scheduled(fixedDelayString = "${inbound.event.processor.interval:5000}")
@@ -31,7 +32,7 @@ public class InboundEventScheduler {
 
     @Transactional
     public void processRecords() {
-        try (Stream<Event> eventStream = eventRepository.fetchEventsForProcessing()) {
+        try (Stream<InboundEvent> eventStream = eventRepository.fetchEventsForProcessing()) {
             eventStream.forEach(event -> {
                 forkJoinPool.submit(() -> {
                     inboundEventProcessor.processEvent(event);

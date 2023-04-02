@@ -102,7 +102,7 @@ const PipelineDetailsCard = (props) => {
                             batchProcess: e.target.checked
                         }))} />
                         {renderErrors(error, 'batchProcess')}</> :
-                        <div className="p-1 text-md">{data.batchProcess ? 'Enabled' : 'Disabled'}</div>}
+                        <div className="p-1 text-md">{data.batchProcess ? 'Yes' : 'No'}</div>}
                 </div>
             </div>
             <div className="card-actions justify-end mb-3">
