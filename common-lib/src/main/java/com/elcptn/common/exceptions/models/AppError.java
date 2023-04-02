@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.exceptions.models;
+package com.elcptn.common.exceptions.models;
 
 import lombok.Data;
 import lombok.NonNull;

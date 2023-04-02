@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.dto;
 
 import com.elcptn.common.entities.Destination;
-import com.elcptn.mgmtsvc.validation.OnCreate;
+import com.elcptn.common.validation.OnCreate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

@@ -9,13 +9,13 @@ import java.io.Serial;
 import java.util.UUID;
 
 /**
- * A DTO for the {@link com.elcptn.mgmtsvc.entities.Event} entity
+ * A DTO for the {@link com.elcptn.common.entities.InboundEvent} entity
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"createdBy", "updatedBy"})
-public class EventDto extends BaseDto {
+public class InboundEventDto extends BaseDto {
 
     @Serial
     private static final long serialVersionUID = -5690341101789142001L;

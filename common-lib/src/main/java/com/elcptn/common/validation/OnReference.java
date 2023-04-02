@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.validation;
+package com.elcptn.common.validation;
 
 import jakarta.validation.groups.Default;
 

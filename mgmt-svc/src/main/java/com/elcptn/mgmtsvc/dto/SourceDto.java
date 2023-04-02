@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.dto;
 
-import com.elcptn.mgmtsvc.validation.OnCreate;
+import com.elcptn.common.validation.OnCreate;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 /* @author: kc, created on 2/7/23 */
 
 /**
- * A DTO for the {@link Source} entity
+ * A DTO for the {@link com.elcptn.common.entities.Source} entity
  */
 @Data
 @AllArgsConstructor

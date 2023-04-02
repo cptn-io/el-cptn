@@ -7,7 +7,6 @@ import get from "lodash/get";
 import useNotifications from "../../hooks/useNotifications";
 import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
-import { render } from "@testing-library/react";
 
 const Transformations = () => {
     const { addNotification } = useNotifications();

@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.exceptions;
+package com.elcptn.common.exceptions;
 
 import lombok.Getter;
 import org.springframework.validation.FieldError;

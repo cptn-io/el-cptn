@@ -2,9 +2,9 @@ package com.elcptn.mgmtsvc.controllers;
 
 import com.elcptn.common.entities.InboundWriteEvent;
 import com.elcptn.common.entities.Source;
-import com.elcptn.mgmtsvc.dto.EventDto;
-import com.elcptn.mgmtsvc.exceptions.NotFoundException;
-import com.elcptn.mgmtsvc.mappers.EventMapper;
+import com.elcptn.common.exceptions.NotFoundException;
+import com.elcptn.mgmtsvc.dto.InboundEventDto;
+import com.elcptn.mgmtsvc.mappers.InboundEventMapper;
 import com.elcptn.mgmtsvc.services.InboundEventService;
 import com.elcptn.mgmtsvc.services.SourceService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,11 +27,11 @@ public class InboundEventController {
 
     private final SourceService sourceService;
     private final InboundEventService inboundEventService;
-    private final EventMapper eventMapper;
+    private final InboundEventMapper inboundEventMapper;
 
     @PostMapping("/api/source/{sourceId}/event")
-    public ResponseEntity<EventDto> createEvent(@PathVariable UUID sourceId,
-                                                @RequestBody JsonNode jsonPayload) {
+    public ResponseEntity<InboundEventDto> createEvent(@PathVariable UUID sourceId,
+                                                       @RequestBody JsonNode jsonPayload) {
         Optional<Source> sourceOptional = sourceService.getById(sourceId);
         if (sourceOptional.isEmpty()) {
             throw new NotFoundException("Source not found with passed ID");
@@ -45,7 +45,7 @@ public class InboundEventController {
         return ResponseEntity.ok(convert(inboundEventService.create(event)));
     }
 
-    private EventDto convert(InboundWriteEvent event) {
-        return eventMapper.toDto(event);
+    private InboundEventDto convert(InboundWriteEvent event) {
+        return inboundEventMapper.toDto(event);
     }
 }

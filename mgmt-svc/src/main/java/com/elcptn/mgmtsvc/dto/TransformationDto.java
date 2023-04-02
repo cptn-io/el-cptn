@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 
 /**
- * A DTO for the {@link com.elcptn.mgmtsvc.entities.Transformation} entity
+ * A DTO for the {@link com.elcptn.common.entities.Transformation} entity
  */
 @Data
 @NoArgsConstructor
