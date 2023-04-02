@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.repositories;
 
-import com.elcptn.mgmtsvc.entities.InboundWriteEvent;
+import com.elcptn.common.entities.InboundWriteEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

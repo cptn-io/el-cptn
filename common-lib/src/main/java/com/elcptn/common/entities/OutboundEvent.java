@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.entities;
+package com.elcptn.common.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

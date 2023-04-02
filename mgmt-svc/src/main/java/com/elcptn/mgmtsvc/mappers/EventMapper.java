@@ -1,8 +1,8 @@
 package com.elcptn.mgmtsvc.mappers;
 
+import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.common.entities.InboundWriteEvent;
 import com.elcptn.mgmtsvc.dto.EventDto;
-import com.elcptn.mgmtsvc.entities.InboundEvent;
-import com.elcptn.mgmtsvc.entities.InboundWriteEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

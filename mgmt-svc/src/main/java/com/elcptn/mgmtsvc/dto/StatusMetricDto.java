@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.dto;
 
-import com.elcptn.mgmtsvc.entities.State;
+import com.elcptn.common.entities.State;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

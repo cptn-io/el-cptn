@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.mappers;
 
+import com.elcptn.common.entities.Destination;
 import com.elcptn.mgmtsvc.dto.DestinationDto;
-import com.elcptn.mgmtsvc.entities.Destination;
 import org.mapstruct.*;
 
 /* @author: kc, created on 2/16/23 */

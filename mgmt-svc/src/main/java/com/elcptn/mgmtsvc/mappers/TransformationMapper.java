@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.mappers;
 
+import com.elcptn.common.entities.Transformation;
 import com.elcptn.mgmtsvc.dto.TransformationDto;
-import com.elcptn.mgmtsvc.entities.Transformation;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
@@ -15,7 +15,7 @@ public interface TransformationMapper {
     Transformation toEntity(TransformationDto transformationDto);
 
     TransformationDto toDto(Transformation transformation);
-    
+
     @Mapping(ignore = true, target = "createdAt")
     @Mapping(ignore = true, target = "updatedAt")
     @Mapping(ignore = true, target = "createdBy")

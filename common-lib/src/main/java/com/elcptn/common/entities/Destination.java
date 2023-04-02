@@ -1,7 +1,7 @@
-package com.elcptn.mgmtsvc.entities;
+package com.elcptn.common.entities;
 
-import com.elcptn.mgmtsvc.dto.ConfigItemDto;
-import com.elcptn.mgmtsvc.listeners.ConfigConverter;
+import com.elcptn.common.listeners.ConfigConverter;
+import com.elcptn.common.pojos.ConfigItem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -27,7 +27,7 @@ public class Destination extends ScriptedStep {
     @Column(columnDefinition = "jsonb")
     @Convert(converter = ConfigConverter.class)
     @EqualsAndHashCode.Include
-    private List<ConfigItemDto> config;
+    private List<ConfigItem> config;
 
     public Destination(UUID id) {
         this.setId(id);

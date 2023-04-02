@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.repositories;
 
-import com.elcptn.mgmtsvc.entities.Source;
+import com.elcptn.common.entities.Source;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

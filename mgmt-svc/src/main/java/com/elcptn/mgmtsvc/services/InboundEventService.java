@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.services;
 
+import com.elcptn.common.entities.InboundWriteEvent;
 import com.elcptn.mgmtsvc.dto.StatusMetricDto;
-import com.elcptn.mgmtsvc.entities.InboundWriteEvent;
 import com.elcptn.mgmtsvc.repositories.InboundEventRepository;
 import com.elcptn.mgmtsvc.repositories.InboundWriteEventRepository;
 import lombok.RequiredArgsConstructor;

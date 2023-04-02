@@ -1,25 +1,25 @@
-package com.elcptn.mgmtsvc.listeners;
+package com.elcptn.common.listeners;
 
-import com.elcptn.mgmtsvc.dto.ConfigItemDto;
-import com.elcptn.mgmtsvc.helpers.CryptoHelper;
-import com.elcptn.mgmtsvc.helpers.JsonHelper;
+import com.elcptn.common.helpers.CryptoHelper;
+import com.elcptn.common.helpers.JsonHelper;
+import com.elcptn.common.pojos.ConfigItem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Lists;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /* @author: kc, created on 3/27/23 */
 @Component
 @Slf4j
 @Converter(autoApply = true)
-public class ConfigConverter implements AttributeConverter<List<ConfigItemDto>, JsonNode> {
+public class ConfigConverter implements AttributeConverter<List<ConfigItem>, JsonNode> {
     private final CryptoHelper cryptoHelper;
 
     public ConfigConverter(CryptoHelper cryptoHelper) {
@@ -27,7 +27,7 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItemDto>, 
     }
 
     @Override
-    public JsonNode convertToDatabaseColumn(List<ConfigItemDto> configItemDtos) {
+    public JsonNode convertToDatabaseColumn(List<ConfigItem> configItemDtos) {
         try {
             ArrayNode configArray = JsonHelper.getMapper().valueToTree(configItemDtos);
             for (int i = 0; i < configArray.size(); i++) {
@@ -45,10 +45,10 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItemDto>, 
     }
 
     @Override
-    public List<ConfigItemDto> convertToEntityAttribute(JsonNode jsonNode) {
+    public List<ConfigItem> convertToEntityAttribute(JsonNode jsonNode) {
 
         if (jsonNode == null) {
-            return Lists.newArrayList();
+            return new ArrayList<>();
         }
 
         try {
@@ -61,7 +61,7 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItemDto>, 
                 }
             }
 
-            return JsonHelper.getMapper().convertValue(configArray, new TypeReference<List<ConfigItemDto>>() {
+            return JsonHelper.getMapper().convertValue(configArray, new TypeReference<List<ConfigItem>>() {
             });
         } catch (Exception e) {
             log.error(e.getMessage(), e);

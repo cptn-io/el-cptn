@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.entities;
+package com.elcptn.common.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,8 +1,8 @@
 package com.elcptn.mgmtsvc.repositories;
 
+import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.common.entities.State;
 import com.elcptn.mgmtsvc.dto.StatusMetricDto;
-import com.elcptn.mgmtsvc.entities.InboundEvent;
-import com.elcptn.mgmtsvc.entities.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

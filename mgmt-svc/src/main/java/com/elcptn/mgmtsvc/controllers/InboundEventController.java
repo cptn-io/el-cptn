@@ -1,8 +1,8 @@
 package com.elcptn.mgmtsvc.controllers;
 
+import com.elcptn.common.entities.InboundWriteEvent;
+import com.elcptn.common.entities.Source;
 import com.elcptn.mgmtsvc.dto.EventDto;
-import com.elcptn.mgmtsvc.entities.InboundWriteEvent;
-import com.elcptn.mgmtsvc.entities.Source;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.mappers.EventMapper;
 import com.elcptn.mgmtsvc.services.InboundEventService;

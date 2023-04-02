@@ -2,8 +2,8 @@ package com.elcptn.mgmtsvc.controllers;
 
 /* @author: kc, created on 3/7/23 */
 
+import com.elcptn.common.entities.Pipeline;
 import com.elcptn.mgmtsvc.dto.PipelineDto;
-import com.elcptn.mgmtsvc.entities.*;
 import com.elcptn.mgmtsvc.exceptions.BadRequestException;
 import com.elcptn.mgmtsvc.exceptions.NotFoundException;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
@@ -68,26 +68,26 @@ public class PipelineController {
                                                              @PathVariable UUID id) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
 
-        BooleanExpression predicate;
-        QPipeline pipeline = QPipeline.pipeline;
-        switch (entity) {
-            case "destination":
+        BooleanExpression predicate = null;
+//        QPipeline pipeline = QPipeline.pipeline;
+//        switch (entity) {
+//            case "destination":
+//
+//                predicate = pipeline.destination.eq(new Destination(id));
+//                break;
+//            case "source":
+//                predicate = pipeline.source.eq(new Source(id));
+//                break;
+//            case "transformation":
+//                predicate = pipeline.transformations.contains(new Transformation(id));
+//                break;
+//            default:
+//                predicate = null;
+//        }
 
-                predicate = pipeline.destination.eq(new Destination(id));
-                break;
-            case "source":
-                predicate = pipeline.source.eq(new Source(id));
-                break;
-            case "transformation":
-                predicate = pipeline.transformations.contains(new Transformation(id));
-                break;
-            default:
-                predicate = null;
-        }
-
-        if (predicate == null) {
-            throw new BadRequestException("Not a valid request");
-        }
+//        if (predicate == null) {
+//            throw new BadRequestException("Not a valid request");
+//        }
 
 
         List<PipelineDto> sourceList = pipelineService.getAll(listParam, predicate).stream()

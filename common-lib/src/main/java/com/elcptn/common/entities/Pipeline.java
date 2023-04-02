@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.entities;
+package com.elcptn.common.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Sets;
@@ -72,7 +72,7 @@ public class Pipeline extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private JsonNode route;
-    
+
     @Getter
     @Setter
     @Column(name = "batch_process")

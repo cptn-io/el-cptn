@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.entities;
+package com.elcptn.common.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Inheritance;

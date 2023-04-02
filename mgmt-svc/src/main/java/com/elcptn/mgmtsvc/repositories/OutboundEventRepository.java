@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.repositories;
 
+import com.elcptn.common.entities.OutboundEvent;
 import com.elcptn.mgmtsvc.dto.StatusMetricDto;
-import com.elcptn.mgmtsvc.entities.OutboundEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

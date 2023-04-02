@@ -1,6 +1,5 @@
-package com.elcptn.mgmtsvc.helpers;
+package com.elcptn.common.helpers;
 
-import org.apache.tomcat.util.buf.HexUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.HexFormat;
 
 /* @author: kc, created on 3/27/23 */
 @Component
@@ -23,7 +23,7 @@ public class CryptoHelper {
     private final SecretKey secretKey;
 
     public CryptoHelper(@Value("${cptn.db.secret}") String hexSecret) {
-        byte[] secretBytes = HexUtils.fromHexString(hexSecret);
+        byte[] secretBytes = HexFormat.of().parseHex(hexSecret);
         secretKey = new SecretKeySpec(secretBytes, "AES");
     }
 

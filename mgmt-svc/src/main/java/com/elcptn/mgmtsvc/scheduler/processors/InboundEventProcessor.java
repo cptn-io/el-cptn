@@ -1,8 +1,8 @@
 package com.elcptn.mgmtsvc.scheduler.processors;
 
-import com.elcptn.mgmtsvc.entities.InboundEvent;
-import com.elcptn.mgmtsvc.entities.OutboundWriteEvent;
-import com.elcptn.mgmtsvc.entities.State;
+import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.common.entities.OutboundWriteEvent;
+import com.elcptn.common.entities.State;
 import com.elcptn.mgmtsvc.repositories.OutboundWriteEventRepository;
 import com.elcptn.mgmtsvc.repositories.PipelineRepository;
 import lombok.AllArgsConstructor;

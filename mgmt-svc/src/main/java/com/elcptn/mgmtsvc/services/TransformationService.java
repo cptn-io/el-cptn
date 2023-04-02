@@ -1,6 +1,6 @@
 package com.elcptn.mgmtsvc.services;
 
-import com.elcptn.mgmtsvc.entities.Transformation;
+import com.elcptn.common.entities.Transformation;
 import com.elcptn.mgmtsvc.helpers.ListEntitiesParam;
 import com.elcptn.mgmtsvc.repositories.TransformationRepository;
 import lombok.RequiredArgsConstructor;
