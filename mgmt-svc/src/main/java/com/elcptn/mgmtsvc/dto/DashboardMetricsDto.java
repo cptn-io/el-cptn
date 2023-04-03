@@ -14,11 +14,13 @@ public class DashboardMetricsDto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 7840966330976853191L;
+    
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<StatusMetricDto> inbound;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<StatusMetricDto> outbound;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private JsonNode entities;
 }

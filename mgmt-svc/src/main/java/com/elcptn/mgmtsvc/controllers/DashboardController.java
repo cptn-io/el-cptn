@@ -38,6 +38,15 @@ public class DashboardController {
         return ResponseEntity.ok(metricsDto);
     }
 
+    @GetMapping("/api/dashboard/pipeline/{id}/metrics")
+    public ResponseEntity<DashboardMetricsDto> getPipelineMetrics(@PathVariable UUID id, @RequestParam(required =
+            false, defaultValue = "1440") String interval) {
+        Long intervalVal = parseInterval(interval);
+
+        DashboardMetricsDto metricsDto = dashboardService.getPipelineMetrics(id, intervalVal);
+        return ResponseEntity.ok(metricsDto);
+    }
+
     private Long parseInterval(String interval) {
         Long intervalVal;
         try {

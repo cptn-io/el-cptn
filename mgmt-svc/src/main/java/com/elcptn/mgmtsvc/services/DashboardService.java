@@ -20,7 +20,7 @@ import java.util.UUID;
 public class DashboardService {
 
     private static final ObjectMapper mapper = new ObjectMapper();
-    
+
     private final PipelineRepository pipelineRepository;
 
     private final SourceRepository sourceRepository;
@@ -66,6 +66,17 @@ public class DashboardService {
         ObjectNode entityStats = mapper.createObjectNode();
         entityStats.put("pipelines", pipelineRepository.countBySource(sourceId));
         metricsDto.setEntities(entityStats);
+
+        return metricsDto;
+    }
+
+    @Cacheable(value = "dashboard", key = "\"pipeline\" + #destinationId + #intervalVal")
+    public DashboardMetricsDto getPipelineMetrics(UUID pipelineId, Long intervalVal) {
+        DashboardMetricsDto metricsDto = new DashboardMetricsDto();
+
+        List<StatusMetric> outboundEventMetrics = outboundEventRepository.getStatusCountsForOutboundEvents(pipelineId,
+                ZonedDateTime.now().minusMinutes(intervalVal));
+        metricsDto.setOutbound(statusMetricMapper.toDtoList(outboundEventMetrics));
 
         return metricsDto;
     }

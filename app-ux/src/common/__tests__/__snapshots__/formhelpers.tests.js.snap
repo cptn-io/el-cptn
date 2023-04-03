@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renderErrors should return valid error message 1`] = `
+Array [
+  <label
+    className="label"
+  >
+    <span
+      className="label-text-alt text-error"
+    >
+      testError
+    </span>
+  </label>,
+]
+`;

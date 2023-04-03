@@ -1,0 +1,480 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LeftNav should render 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="drawer-side "
+      >
+        <label
+          class="drawer-overlay"
+          for="page-drawer"
+        />
+        <aside
+          class="bg-base-200 w-80 hidden md:block"
+        >
+          <div
+            class="z-20 backdrop-blur sticky top-0 items-center gap-2 px-4 py-2 hidden lg:flex "
+          >
+            <a
+              aria-current="page"
+              aria-label="Homepage"
+              class="flex-0 btn btn-ghost px-2 undefined"
+              href="/home"
+            >
+              <div
+                class="font-title text-primary inline-flex text-3xl"
+              >
+                <span
+                  class="lowercase"
+                >
+                  Data
+                </span>
+                 
+                <span
+                  class="text-base-content lowercase"
+                >
+                  pipelines
+                </span>
+              </div>
+            </a>
+          </div>
+          <ul
+            class="menu flex flex-col p-0 px-4"
+          >
+            <li
+              class="flex gap-4"
+            >
+              <a
+                class="active"
+                href="/home"
+              >
+                <svg
+                  class="tabler-icon tabler-icon-home"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 12l-2 0l9 -9l9 9l-2 0"
+                  />
+                  <path
+                    d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"
+                  />
+                  <path
+                    d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"
+                  />
+                </svg>
+                Home
+              </a>
+            </li>
+            <li
+              class="flex gap-4"
+            >
+              <a
+                class=""
+                href="/pipelines"
+              >
+                <svg
+                  class="tabler-icon tabler-icon-cloud-computing"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.657 16c-2.572 0 -4.657 -2.007 -4.657 -4.483c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.913 0 3.464 1.56 3.464 3.486c0 1.927 -1.551 3.487 -3.465 3.487h-11.878"
+                  />
+                  <path
+                    d="M12 16v5"
+                  />
+                  <path
+                    d="M16 16v4a1 1 0 0 0 1 1h4"
+                  />
+                  <path
+                    d="M8 16v4a1 1 0 0 1 -1 1h-4"
+                  />
+                </svg>
+                Data Pipelines
+              </a>
+            </li>
+            <li
+              class="flex gap-4"
+            >
+              <a
+                class=""
+                href="/sources"
+              >
+                <svg
+                  class="tabler-icon tabler-icon-database-export"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"
+                  />
+                  <path
+                    d="M4 6v6c0 1.657 3.582 3 8 3a19.84 19.84 0 0 0 3.302 -.267m4.698 -2.733v-6"
+                  />
+                  <path
+                    d="M4 12v6c0 1.599 3.335 2.905 7.538 3m8.462 -7v-2m-6 7h7m-3 -3l3 3l-3 3"
+                  />
+                </svg>
+                Data Sources
+              </a>
+            </li>
+            <li
+              class="flex gap-4"
+            >
+              <a
+                class=""
+                href="/destinations"
+              >
+                <svg
+                  class="tabler-icon tabler-icon-database-import"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"
+                  />
+                  <path
+                    d="M4 6v8m5.009 .783c.924 .14 1.933 .217 2.991 .217c4.418 0 8 -1.343 8 -3v-6"
+                  />
+                  <path
+                    d="M11.252 20.987c.246 .009 .496 .013 .748 .013c4.418 0 8 -1.343 8 -3v-6m-18 7h7m-3 -3l3 3l-3 3"
+                  />
+                </svg>
+                Data Destinations
+              </a>
+            </li>
+            <li
+              class="flex gap-4"
+            >
+              <a
+                class=""
+                href="/transformations"
+              >
+                <svg
+                  class="tabler-icon tabler-icon-transform"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 6a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                  />
+                  <path
+                    d="M21 11v-3a2 2 0 0 0 -2 -2h-6l3 3m0 -6l-3 3"
+                  />
+                  <path
+                    d="M3 13v3a2 2 0 0 0 2 2h6l-3 -3m0 6l3 -3"
+                  />
+                  <path
+                    d="M15 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                  />
+                </svg>
+                Transformations
+              </a>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="drawer-side "
+    >
+      <label
+        class="drawer-overlay"
+        for="page-drawer"
+      />
+      <aside
+        class="bg-base-200 w-80 hidden md:block"
+      >
+        <div
+          class="z-20 backdrop-blur sticky top-0 items-center gap-2 px-4 py-2 hidden lg:flex "
+        >
+          <a
+            aria-current="page"
+            aria-label="Homepage"
+            class="flex-0 btn btn-ghost px-2 undefined"
+            href="/home"
+          >
+            <div
+              class="font-title text-primary inline-flex text-3xl"
+            >
+              <span
+                class="lowercase"
+              >
+                Data
+              </span>
+               
+              <span
+                class="text-base-content lowercase"
+              >
+                pipelines
+              </span>
+            </div>
+          </a>
+        </div>
+        <ul
+          class="menu flex flex-col p-0 px-4"
+        >
+          <li
+            class="flex gap-4"
+          >
+            <a
+              class="active"
+              href="/home"
+            >
+              <svg
+                class="tabler-icon tabler-icon-home"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12l-2 0l9 -9l9 9l-2 0"
+                />
+                <path
+                  d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"
+                />
+                <path
+                  d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"
+                />
+              </svg>
+              Home
+            </a>
+          </li>
+          <li
+            class="flex gap-4"
+          >
+            <a
+              class=""
+              href="/pipelines"
+            >
+              <svg
+                class="tabler-icon tabler-icon-cloud-computing"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.657 16c-2.572 0 -4.657 -2.007 -4.657 -4.483c0 -2.475 2.085 -4.482 4.657 -4.482c.393 -1.762 1.794 -3.2 3.675 -3.773c1.88 -.572 3.956 -.193 5.444 1c1.488 1.19 2.162 3.007 1.77 4.769h.99c1.913 0 3.464 1.56 3.464 3.486c0 1.927 -1.551 3.487 -3.465 3.487h-11.878"
+                />
+                <path
+                  d="M12 16v5"
+                />
+                <path
+                  d="M16 16v4a1 1 0 0 0 1 1h4"
+                />
+                <path
+                  d="M8 16v4a1 1 0 0 1 -1 1h-4"
+                />
+              </svg>
+              Data Pipelines
+            </a>
+          </li>
+          <li
+            class="flex gap-4"
+          >
+            <a
+              class=""
+              href="/sources"
+            >
+              <svg
+                class="tabler-icon tabler-icon-database-export"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"
+                />
+                <path
+                  d="M4 6v6c0 1.657 3.582 3 8 3a19.84 19.84 0 0 0 3.302 -.267m4.698 -2.733v-6"
+                />
+                <path
+                  d="M4 12v6c0 1.599 3.335 2.905 7.538 3m8.462 -7v-2m-6 7h7m-3 -3l3 3l-3 3"
+                />
+              </svg>
+              Data Sources
+            </a>
+          </li>
+          <li
+            class="flex gap-4"
+          >
+            <a
+              class=""
+              href="/destinations"
+            >
+              <svg
+                class="tabler-icon tabler-icon-database-import"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"
+                />
+                <path
+                  d="M4 6v8m5.009 .783c.924 .14 1.933 .217 2.991 .217c4.418 0 8 -1.343 8 -3v-6"
+                />
+                <path
+                  d="M11.252 20.987c.246 .009 .496 .013 .748 .013c4.418 0 8 -1.343 8 -3v-6m-18 7h7m-3 -3l3 3l-3 3"
+                />
+              </svg>
+              Data Destinations
+            </a>
+          </li>
+          <li
+            class="flex gap-4"
+          >
+            <a
+              class=""
+              href="/transformations"
+            >
+              <svg
+                class="tabler-icon tabler-icon-transform"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 6a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                />
+                <path
+                  d="M21 11v-3a2 2 0 0 0 -2 -2h-6l3 3m0 -6l-3 3"
+                />
+                <path
+                  d="M3 13v3a2 2 0 0 0 2 2h6l-3 -3m0 6l3 -3"
+                />
+                <path
+                  d="M15 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                />
+              </svg>
+              Transformations
+            </a>
+          </li>
+        </ul>
+      </aside>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

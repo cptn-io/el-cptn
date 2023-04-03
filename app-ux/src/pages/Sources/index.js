@@ -68,7 +68,7 @@ const Sources = () => {
 const renderNoSources = () => {
     return <div className="flex flex-col justify-center my-5">
         <div className="flex justify-center mb-4 text-primary">
-            <img alt="Create new Source" src="/undraw/thoughts.svg" className="max-w-3/5" />
+            <img alt="Create new Source" src="/undraw/road_sign.svg" className="w-3/6 max-w-3/5" />
         </div>
         <div className="flex justify-center mb-4 text-center">
             There are no Sources. Click the button below to add a new Data Source

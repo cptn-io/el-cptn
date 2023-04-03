@@ -17,4 +17,9 @@ public interface OutboundEventRepository extends JpaRepository<OutboundEvent, UU
     @Query(value = "SELECT new com.elcptn.common.pojos.StatusMetric(e.state, COUNT(e.id)) " +
             "FROM OutboundEvent e WHERE e.createdAt >= :createdAfter GROUP BY e.state")
     List<StatusMetric> getStatusCountsForOutboundEvents(@Param("createdAfter") ZonedDateTime createdAfter);
+
+    @Query(value = "SELECT new com.elcptn.common.pojos.StatusMetric(e.state, COUNT(e.id)) " +
+            "FROM OutboundEvent e WHERE e.pipeline.id = :pipeline AND e.createdAt >= :createdAfter GROUP BY e.state")
+    List<StatusMetric> getStatusCountsForOutboundEvents(@Param("pipeline") UUID pipelineId, @Param(
+            "createdAfter") ZonedDateTime createdAfter);
 }

@@ -10,6 +10,7 @@ import Loading from "../../../components/Loading";
 import Tabs from "../../../components/Tabs";
 import PipelineEditor from "./PipelineEditor";
 import PipelineOverview from "./PipelineOverview";
+import PipelineMetrics from "./PipelineMetrics";
 
 
 const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'editor', label: 'Editor' }, { 'key': 'events', label: 'Events' }];
@@ -59,6 +60,7 @@ const PipelineDetails = () => {
     }
 
     return <div><PageTitle itemKey="pipelines" label={data.name} breadcrumbs={breadcrumbs} />
+        <PipelineMetrics pipelineId={id} />
         <Tabs tabs={tabs} activeTab={tab} onTabChange={onTabChange} />
         {(!tab || tab === 'overview') && <PipelineOverview data={data} onUpdate={setData} />}
         {tab === 'editor' &&

@@ -2,7 +2,16 @@ import { renderErrors } from "../formHelpers";
 
 describe("renderErrors", () => {
 
+    it("should return valid error message", () => {
+        const error = {
+            fieldErrors: { testField: ["testError"] },
+        };
 
+        const field = "testField";
+        const result = renderErrors(error, field);
+
+        expect(result).toMatchSnapshot();
+    });
 
     it("should return null if no error", () => {
         const error = null;
