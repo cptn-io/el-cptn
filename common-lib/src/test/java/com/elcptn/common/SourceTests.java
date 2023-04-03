@@ -1,14 +1,11 @@
-package com.elcptn.mgmtsvc;
+package com.elcptn.common;
 
 import com.elcptn.common.entities.Source;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /* @author: kc, created on 2/7/23 */
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SourceTests {
 
     @Test
@@ -30,15 +27,26 @@ public class SourceTests {
 
         source.rotateKeys();
         assertNotNull(source.getPrimaryKey());
-//        assertEquals(prevPrimary, source.getSecondaryKey());
-//        assertNotEquals(prevPrimary, source.getPrimaryKey());
+        assertEquals(prevPrimary, source.getSecondaryKey());
+        assertNotEquals(prevPrimary, source.getPrimaryKey());
     }
 
     @Test
     void checkKeysTest() {
         Source source = new Source();
-//        assertFalse(source.hasAnyKeysSetup());
+        assertFalse(source.hasAnyKeysSetup());
         source.setupNewKeys();
-        //assertTrue(source.hasAnyKeysSetup());
+        assertTrue(source.hasAnyKeysSetup());
     }
+
+    @Test
+    void checkDefaultValuesTest() {
+        Source source = new Source();
+        assertTrue(source.getSecured());
+        assertTrue(source.getActive());
+        assertNull(source.getPrimaryKey());
+        assertNull(source.getSecondaryKey());
+        assertNull(source.getLastKeyRotationAt());
+    }
+
 }

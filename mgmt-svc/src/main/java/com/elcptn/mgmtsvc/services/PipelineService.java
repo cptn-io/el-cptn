@@ -7,7 +7,7 @@ import com.elcptn.common.entities.Transformation;
 import com.elcptn.common.exceptions.BadRequestException;
 import com.elcptn.common.exceptions.NotFoundException;
 import com.elcptn.common.repositories.PipelineRepository;
-import com.elcptn.mgmtsvc.common.ListEntitiesParam;
+import com.elcptn.common.web.ListEntitiesParam;
 import com.elcptn.mgmtsvc.dto.TransformationDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

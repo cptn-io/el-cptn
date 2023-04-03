@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.services;
+package com.elcptn.common.services;
 
 import com.elcptn.common.web.ListEntitiesParam;
 import org.springframework.data.domain.PageRequest;

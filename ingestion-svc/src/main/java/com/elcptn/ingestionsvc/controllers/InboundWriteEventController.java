@@ -1,12 +1,12 @@
-package com.elcptn.mgmtsvc.controllers;
+package com.elcptn.ingestionsvc.controllers;
 
 import com.elcptn.common.entities.InboundWriteEvent;
 import com.elcptn.common.entities.Source;
 import com.elcptn.common.exceptions.NotFoundException;
-import com.elcptn.mgmtsvc.dto.InboundEventDto;
-import com.elcptn.mgmtsvc.mappers.InboundEventMapper;
-import com.elcptn.mgmtsvc.services.InboundEventService;
-import com.elcptn.mgmtsvc.services.SourceService;
+import com.elcptn.ingestionsvc.dto.InboundWriteEventDto;
+import com.elcptn.ingestionsvc.mappers.InboundWriteEventMapper;
+import com.elcptn.ingestionsvc.services.InboundWriteEventService;
+import com.elcptn.ingestionsvc.services.SourceService;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +23,16 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class InboundEventController {
+public class InboundWriteEventController {
 
     private final SourceService sourceService;
-    private final InboundEventService inboundEventService;
-    private final InboundEventMapper inboundEventMapper;
+    private final InboundWriteEventService inboundEventService;
 
-    @PostMapping("/api/source/{sourceId}/event")
-    public ResponseEntity<InboundEventDto> createEvent(@PathVariable UUID sourceId,
-                                                       @RequestBody JsonNode jsonPayload) {
+    private final InboundWriteEventMapper inboundEventMapper;
+
+    @PostMapping("/event/source/{sourceId}")
+    public ResponseEntity<InboundWriteEventDto> createEvent(@PathVariable UUID sourceId,
+                                                            @RequestBody JsonNode jsonPayload) {
         Optional<Source> sourceOptional = sourceService.getById(sourceId);
         if (sourceOptional.isEmpty()) {
             throw new NotFoundException("Source not found with passed ID");
@@ -45,7 +46,7 @@ public class InboundEventController {
         return ResponseEntity.ok(convert(inboundEventService.create(event)));
     }
 
-    private InboundEventDto convert(InboundWriteEvent event) {
+    private InboundWriteEventDto convert(InboundWriteEvent event) {
         return inboundEventMapper.toDto(event);
     }
 }

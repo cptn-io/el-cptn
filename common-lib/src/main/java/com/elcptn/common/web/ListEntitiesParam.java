@@ -1,4 +1,4 @@
-package com.elcptn.mgmtsvc.common;
+package com.elcptn.common.web;
 
 import com.google.common.primitives.Ints;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,13 +21,17 @@ public class ListEntitiesParam {
                 .orElse("0"))).orElse(0);
         this.size = Optional.ofNullable(Ints.tryParse(Optional.ofNullable(request.getParameter("size"))
                 .orElse("15"))).orElse(15);
-        if (this.size > 100) {
+
+        if (this.page < 0) {
+            this.page = 0;
+        }
+
+        if (this.size <= 0 || this.size > 100) {
             this.size = 15;
         }
 
         String sortBy = Optional.ofNullable(request.getParameter("sortBy")).orElse("createdAt");
         this.sortBy = sortBy.split(",");
-
-        this.sortAsc = Boolean.valueOf(request.getParameter("asc"));
+        this.sortAsc = Boolean.parseBoolean(request.getParameter("asc"));
     }
 }

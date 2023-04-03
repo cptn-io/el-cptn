@@ -2,7 +2,7 @@ package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.common.entities.Transformation;
 import com.elcptn.common.repositories.TransformationRepository;
-import com.elcptn.mgmtsvc.common.ListEntitiesParam;
+import com.elcptn.common.web.ListEntitiesParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;

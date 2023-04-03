@@ -8,7 +8,7 @@ const ConfigBuilder = (props) => {
 
     useEffect(() => {
         setConfig(current => {
-            if (current.length === 0 || current[current.length - 1].key || current[current.length - 1].value) {
+            if (config.length === 0 || filter(config, (item) => !item.key || !item.value).length === 0) {
                 return [...current, { key: "", value: "", secret: false }]
             }
             return current;
@@ -38,14 +38,14 @@ const ConfigBuilder = (props) => {
     const deleteItem = (e, i) => {
         e.preventDefault();
         setConfig(current => {
-            const data = filter(current, (val, index) => index !== i);
-            console.log(data);
-            return data;
+            const updated = [...current];
+            updated.splice(i, 1);
+            return updated;
         });
     };
 
 
-    return <div className="foo">
+    return <div>
         {config.map((item, i) => {
             return <div className="flex flex-wrap -mx-3 mb-3" key={i}>
                 <div className="w-1/2 md:w-2/5 px-3">

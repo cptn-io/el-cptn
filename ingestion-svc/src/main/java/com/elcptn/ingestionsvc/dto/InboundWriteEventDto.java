@@ -1,5 +1,6 @@
-package com.elcptn.mgmtsvc.dto;
+package com.elcptn.ingestionsvc.dto;
 
+import com.elcptn.common.dto.BaseDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,9 +16,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"createdBy", "updatedBy"})
-public class InboundEventDto extends BaseDto {
+public class InboundWriteEventDto extends BaseDto {
 
     @Serial
-    private static final long serialVersionUID = -5690341101789142001L;
+    private static final long serialVersionUID = -2111486146330125455L;
+
     private UUID sourceId;
 }

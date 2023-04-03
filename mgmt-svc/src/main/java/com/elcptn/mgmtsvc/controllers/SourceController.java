@@ -5,7 +5,7 @@ import com.elcptn.common.exceptions.BadRequestException;
 import com.elcptn.common.exceptions.NotFoundException;
 import com.elcptn.common.validation.OnCreate;
 import com.elcptn.common.validation.OnUpdate;
-import com.elcptn.mgmtsvc.common.ListEntitiesParam;
+import com.elcptn.common.web.ListEntitiesParam;
 import com.elcptn.mgmtsvc.dto.SourceDto;
 import com.elcptn.mgmtsvc.mappers.SourceMapper;
 import com.elcptn.mgmtsvc.services.SourceService;

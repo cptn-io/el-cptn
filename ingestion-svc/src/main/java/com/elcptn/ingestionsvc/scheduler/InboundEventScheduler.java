@@ -1,8 +1,8 @@
-package com.elcptn.mgmtsvc.scheduler;
+package com.elcptn.ingestionsvc.scheduler;
 
 import com.elcptn.common.entities.InboundEvent;
 import com.elcptn.common.repositories.InboundEventRepository;
-import com.elcptn.mgmtsvc.scheduler.processors.InboundEventProcessor;
+import com.elcptn.ingestionsvc.scheduler.processors.InboundEventProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

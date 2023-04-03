@@ -20,5 +20,6 @@
 	<modules>
 		<module>common-lib</module>
 		<module>mgmt-svc</module>
-	</modules>
+        <module>ingestion-svc</module>
+    </modules>
 </project>
