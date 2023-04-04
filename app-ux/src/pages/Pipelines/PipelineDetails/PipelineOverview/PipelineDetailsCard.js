@@ -57,6 +57,23 @@ const PipelineDetailsCard = (props) => {
         })
     }
 
+    const runPipeline = (e) => {
+        e.preventDefault();
+        setExecuting(true);
+        axios.post(`/api/pipeline/${data.id}/run`).then(response => {
+            addNotification({
+                message: 'Pipeline has been scheduld for execution. Queued events will be processed shortly.',
+                type: 'success'
+            });
+        }).catch(err => {
+            addNotification({
+                message: get(err, 'response.data.message', 'An error occurred while triggering a Pipeline run'),
+                type: 'error'
+            });
+        }).finally(() => {
+            setExecuting(false);
+        });
+    };
     const cancelChanges = (e) => {
         e.preventDefault();
         setChanges({});
@@ -106,7 +123,8 @@ const PipelineDetailsCard = (props) => {
                 </div>
             </div>
             <div className="card-actions justify-end mb-3">
-                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Pipeline</button>}
+                {!editMode && <button disabled={!data.batchProcess} className="btn btn-accent" onClick={runPipeline}>Process Queued Events</button>}
+                {!editMode && <button className="btn  btn-primary" onClick={() => setEditMode(true)}>Edit Pipeline</button>}
                 {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
                     Changes</button>}

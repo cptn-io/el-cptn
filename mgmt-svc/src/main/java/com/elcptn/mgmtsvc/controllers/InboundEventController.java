@@ -1,6 +1,7 @@
 package com.elcptn.mgmtsvc.controllers;
 
 import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.common.entities.InboundWriteEvent;
 import com.elcptn.common.entities.QInboundEvent;
 import com.elcptn.common.entities.Source;
 import com.elcptn.common.exceptions.NotFoundException;
@@ -63,10 +64,10 @@ public class InboundEventController {
     }
 
     @PostMapping("/api/inbound_event/{id}/resend")
-    public ResponseEntity resendEvent(@PathVariable UUID id) {
+    public ResponseEntity<InboundEventDto> resendEvent(@PathVariable UUID id) {
         InboundEvent inboundEvent = getById(id);
-        InboundEvent newInboundEvent = inboundEventService.resendEvent(inboundEvent);
-        return ResponseEntity.ok().body(convert(newInboundEvent));
+        InboundWriteEvent inboundWriteEvent = inboundEventService.resendEvent(inboundEvent);
+        return ResponseEntity.ok().body(convert(inboundWriteEvent));
     }
 
 
@@ -79,7 +80,11 @@ public class InboundEventController {
         return inboundEventOptional.get();
     }
 
-    private InboundEventDto convert(com.elcptn.common.entities.InboundEvent inboundEvent) {
+    private InboundEventDto convert(InboundEvent inboundEvent) {
+        return mapper.toDto(inboundEvent);
+    }
+
+    private InboundEventDto convert(InboundWriteEvent inboundEvent) {
         return mapper.toDto(inboundEvent);
     }
 }

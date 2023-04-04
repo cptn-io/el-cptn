@@ -17,6 +17,7 @@ public abstract class BaseOutboundEvent extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private JsonNode payload;
+
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,4 +29,10 @@ public abstract class BaseOutboundEvent extends BaseEntity {
     @Getter
     @Column(length = 25)
     private State state = State.QUEUED;
+
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "inbound_event_id")
+    private InboundEvent inboundEvent;
 }

@@ -81,14 +81,9 @@ const Home = () => {
         <div className="bg-base-200 p-3 rounded-box mb-4 shadow">
             <div className="text-xl font-extrabold mb-4">Inbound data metrics</div>
             <SourceMetricsRenderer metrics={data.inboundMetrics} interval={interval} refreshing={refreshing} />
-        </div>
-
-        <div className="bg-base-200 p-3 rounded-box mb-4 shadow">
-            <div className="text-xl font-extrabold mb-4">Outbound data metrics</div>
+            <div className="text-xl font-extrabold mt-4 mb-4">Outbound data metrics</div>
             <PipelineMetricsRenderer metrics={data.outboundMetrics} interval={interval} refreshing={refreshing} />
         </div>
-
-
     </Fragment>
 }
 

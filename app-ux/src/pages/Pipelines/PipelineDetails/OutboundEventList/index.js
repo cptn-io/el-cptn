@@ -13,7 +13,7 @@ import { useSearchParams } from "react-router-dom";
 export const resolveState = (state) => {
     switch (state) {
         case 'COMPLETED':
-            return <><IconCircleCheckFilled size={24} className="text-success mr-1" />Sent to Pipelines</>
+            return <><IconCircleCheckFilled size={24} className="text-success mr-1" />Completed</>
         case 'PROCESSING':
             return <><IconCircleDashed size={24} className="text-warning mr-1" />Processing</>
         case 'FAILED':
@@ -24,7 +24,7 @@ export const resolveState = (state) => {
             return state;
     }
 };
-const InboundEventList = ({ sourceId }) => {
+const OutboundEventList = ({ pipelineId }) => {
     const { addNotification } = useNotifications();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,20 +40,20 @@ const InboundEventList = ({ sourceId }) => {
 
     const refreshList = useCallback(() => {
         setExecuting(true);
-        axios.get(`/api/source/${sourceId}/inbound_event?page=${page}`)
+        axios.get(`/api/pipeline/${pipelineId}/outbound_event?page=${page}`)
             .then(res => {
                 setTotalCount((res.headers['x-total-count'] || 0) * 1);
                 setData(res.data);
             }).catch(err => {
                 addNotification({
-                    message: get(err, 'response.data.message', 'An error occurred while fetching Inbound Events'),
+                    message: get(err, 'response.data.message', 'An error occurred while fetching Outbound Events'),
                     type: 'error'
                 });
             }).finally(() => {
                 setExecuting(false)
                 setLoading(false);
             });
-    }, [sourceId, page, addNotification]);
+    }, [pipelineId, page, addNotification]);
 
     useEffect(() => {
         refreshList();
@@ -65,7 +65,7 @@ const InboundEventList = ({ sourceId }) => {
 
     const refreshEvent = (eventId) => {
         setExecuting(true);
-        axios.get(`/api/inbound_event/${eventId}`)
+        axios.get(`/api/outbound_event/${eventId}`)
             .then(res => {
                 const updatedEvent = res.data;
                 //update the event object in the list
@@ -78,7 +78,7 @@ const InboundEventList = ({ sourceId }) => {
                 });
             }).catch(err => {
                 addNotification({
-                    message: get(err, 'response.data.message', 'An error occurred while fetching Inbound Event'),
+                    message: get(err, 'response.data.message', 'An error occurred while fetching Outbound Event'),
                     type: 'error'
                 });
             }).finally(() => {
@@ -86,25 +86,6 @@ const InboundEventList = ({ sourceId }) => {
             });
     }
 
-    const resendEvent = (eventId) => {
-        setExecuting(true);
-        axios.post(`/api/inbound_event/${eventId}/resend`)
-            .then(res => {
-                setTotalCount(current => current + 1);
-                setData(current => [res.data, ...current]);
-                addNotification({
-                    message: 'Event resent successfully.',
-                    type: 'success'
-                });
-            }).catch(err => {
-                addNotification({
-                    message: get(err, 'response.data.message', 'An error occurred while fetching Inbound Events'),
-                    type: 'error'
-                });
-            }).finally(() => {
-                setExecuting(false);
-            });
-    }
 
     if (loading) {
         return <Loading />
@@ -112,7 +93,7 @@ const InboundEventList = ({ sourceId }) => {
 
     return <div className="p-4">
         <div className="mb-4 text-lg font-bold flex justify-between items-center">
-            <span>Received Events ({totalCount})</span>
+            <span>Pipeline Events ({totalCount})</span>
             <span>
                 <button disabled={executing} className="btn btn-ghost gap-2" onClick={refreshList}>
                     <IconRefresh size={24} />Refresh
@@ -138,19 +119,18 @@ const InboundEventList = ({ sourceId }) => {
                             <div className="btn-group">
                                 <button onClick={() => showDetails(event)} className="btn btn-sm btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
                                 <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
-                                <button disabled={executing} onClick={() => resendEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Resend Event"><IconSend size={24} /></button>
                             </div>
                         </td>
                     </tr>)}
-                    {totalCount === 0 && <tr><td colSpan={4} className="text-center">No events found for this Source.</td></tr>}
+                    {totalCount === 0 && <tr><td colSpan={4} className="text-center">No events found associated with the Pipeline.</td></tr>}
                 </tbody>
             </table>
         </div>
         {totalCount > 0 && <Pagination totalCount={totalCount} />}
         {event && <Modal title="Event Details" onCancel={() => setEvent(null)}>
-            <EventDetails event={event} onCancel={() => setEvent(null)} onSendEvent={resendEvent} />
+            <EventDetails event={event} onCancel={() => setEvent(null)} onSendEvent={() => { }} />
         </Modal>}
     </div>
 }
 
-export default InboundEventList;
+export default OutboundEventList;

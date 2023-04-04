@@ -38,6 +38,7 @@ public class InboundEventProcessor {
             OutboundWriteEvent outboundWriteEvent = new OutboundWriteEvent();
             outboundWriteEvent.setPipeline(pipeline);
             outboundWriteEvent.setPayload(event.getPayload());
+            outboundWriteEvent.setInboundEvent(event);
             outboundWriteEventRepository.save(outboundWriteEvent);
         });
     }

@@ -14,6 +14,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.util.Set;
+import java.util.UUID;
 
 /* @author: kc, created on 3/7/23 */
 @Entity
@@ -77,6 +78,10 @@ public class Pipeline extends BaseEntity {
     @Setter
     @Column(name = "batch_process")
     private Boolean batchProcess = false;
+
+    public Pipeline(UUID id) {
+        this.setId(id);
+    }
 
     public void addTransformation(Transformation transformation) {
         transformations.add(transformation);

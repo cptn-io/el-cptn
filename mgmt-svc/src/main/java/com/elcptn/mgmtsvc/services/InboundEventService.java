@@ -1,10 +1,13 @@
 package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.common.entities.InboundEvent;
+import com.elcptn.common.entities.InboundWriteEvent;
 import com.elcptn.common.repositories.InboundEventRepository;
+import com.elcptn.common.repositories.InboundWriteEventRepository;
 import com.elcptn.common.services.CommonService;
 import com.elcptn.common.web.ListEntitiesParam;
 import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +18,13 @@ import java.util.stream.Collectors;
 
 /* @author: kc, created on 4/3/23 */
 @Service
+@RequiredArgsConstructor
 public class InboundEventService extends CommonService {
 
     private final InboundEventRepository inboundEventRepository;
 
-    public InboundEventService(InboundEventRepository inboundEventRepository) {
-        this.inboundEventRepository = inboundEventRepository;
-    }
+    private final InboundWriteEventRepository inboundWriteEventRepository;
+
 
     public List<InboundEvent> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
@@ -49,10 +52,10 @@ public class InboundEventService extends CommonService {
         return inboundEventRepository.count();
     }
 
-    public InboundEvent resendEvent(InboundEvent inboundEvent) {
-        InboundEvent event = new InboundEvent();
+    public InboundWriteEvent resendEvent(InboundEvent inboundEvent) {
+        InboundWriteEvent event = new InboundWriteEvent();
         event.setSource(inboundEvent.getSource());
         event.setPayload(inboundEvent.getPayload());
-        return inboundEventRepository.save(event);
+        return inboundWriteEventRepository.save(event);
     }
 }

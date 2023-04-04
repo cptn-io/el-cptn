@@ -4,6 +4,7 @@ import com.elcptn.common.entities.OutboundEvent;
 import com.elcptn.common.pojos.StatusMetric;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface OutboundEventRepository extends JpaRepository<OutboundEvent, UUID> {
+public interface OutboundEventRepository extends JpaRepository<OutboundEvent, UUID>, QuerydslPredicateExecutor<OutboundEvent> {
 
     @Query(value = "SELECT new com.elcptn.common.pojos.StatusMetric(e.state, COUNT(e.id)) " +
             "FROM OutboundEvent e WHERE e.createdAt >= :createdAfter GROUP BY e.state")
