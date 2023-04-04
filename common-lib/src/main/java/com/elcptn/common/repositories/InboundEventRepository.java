@@ -6,6 +6,7 @@ import com.elcptn.common.pojos.StatusMetric;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @Repository
-public interface InboundEventRepository extends JpaRepository<InboundEvent, UUID> {
+public interface InboundEventRepository extends JpaRepository<InboundEvent, UUID>, QuerydslPredicateExecutor<InboundEvent> {
 
     @Query(value = "SELECT * FROM inbound_queue WHERE state='QUEUED'" +
             " ORDER BY created_at FOR UPDATE SKIP LOCKED", nativeQuery = true)

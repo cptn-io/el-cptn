@@ -1,12 +1,11 @@
 package com.elcptn.mgmtsvc.services;
 
-import com.elcptn.common.entities.Destination;
-import com.elcptn.common.entities.Pipeline;
-import com.elcptn.common.entities.Source;
-import com.elcptn.common.entities.Transformation;
+import com.elcptn.common.entities.*;
 import com.elcptn.common.exceptions.BadRequestException;
 import com.elcptn.common.exceptions.NotFoundException;
 import com.elcptn.common.repositories.PipelineRepository;
+import com.elcptn.common.repositories.PipelineTriggerRepository;
+import com.elcptn.common.services.CommonService;
 import com.elcptn.common.web.ListEntitiesParam;
 import com.elcptn.mgmtsvc.dto.TransformationDto;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,6 +31,7 @@ import java.util.stream.Collectors;
 public class PipelineService extends CommonService {
 
     private static final ObjectMapper mapper = new ObjectMapper();
+
     private final PipelineRepository pipelineRepository;
 
     private final SourceService sourceService;
@@ -39,6 +39,8 @@ public class PipelineService extends CommonService {
     private final DestinationService destinationService;
 
     private final TransformationService transformationService;
+
+    private final PipelineTriggerRepository pipelineTriggerRepository;
 
     public Pipeline create(Pipeline pipeline) {
         validateOnCreate(pipeline);
@@ -101,6 +103,12 @@ public class PipelineService extends CommonService {
         }
 
         return pipelineRepository.count(predicate);
+    }
+
+    public void runPipeline(Pipeline pipeline) {
+        PipelineTrigger pipelineTrigger = new PipelineTrigger();
+        pipelineTrigger.setPipeline(pipeline);
+        pipelineTriggerRepository.save(pipelineTrigger);
     }
 
 

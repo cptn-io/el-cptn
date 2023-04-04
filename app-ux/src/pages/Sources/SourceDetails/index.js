@@ -10,8 +10,9 @@ import SourceDetailsCard from "./SourceDetailsCard";
 import SourceMetrics from "./SourceMetrics";
 import Tabs from "../../../components/Tabs";
 import SourcePipelines from "./SourcePipelines";
+import InboundEventList from "./InboundEventList";
 
-const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Events' }];
+const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Inbound Events' }];
 
 const SourceDetails = (props) => {
     const navigate = useNavigate();
@@ -64,6 +65,7 @@ const SourceDetails = (props) => {
             </div>
         }
         {tab === 'pipelines' && <SourcePipelines sourceId={id} />}
+        {tab === 'events' && <InboundEventList sourceId={id} />}
     </div>
 }
 

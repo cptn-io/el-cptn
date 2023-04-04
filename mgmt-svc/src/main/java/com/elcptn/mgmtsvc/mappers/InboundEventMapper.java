@@ -10,6 +10,5 @@ import org.mapstruct.ReportingPolicy;
 public interface InboundEventMapper {
 
     InboundEventDto toDto(InboundEvent event);
-
-    InboundEvent toEntity(InboundEventDto eventDto);
+    
 }

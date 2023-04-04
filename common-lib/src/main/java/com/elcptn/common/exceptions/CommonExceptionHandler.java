@@ -18,8 +18,7 @@ import java.util.*;
 @Slf4j
 public class CommonExceptionHandler {
 
-    public final ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {
-        log.debug(ex.getMessage(), ex);
+    public ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {
         AppError error = new AppError("There was an error processing your request");
         if (ex instanceof HttpMessageNotReadableException) {
             error.setMessage("Unable to process the payload sent");

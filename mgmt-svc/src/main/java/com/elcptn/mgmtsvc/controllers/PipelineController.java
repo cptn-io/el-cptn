@@ -123,6 +123,13 @@ public class PipelineController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/api/pipeline/{id}/run")
+    public ResponseEntity triggerPipelineRun(@PathVariable UUID id) {
+        Pipeline pipeline = getById(id);
+        pipelineService.runPipeline(pipeline);
+        return ResponseEntity.noContent().build();
+    }
+
     private Pipeline getById(UUID id) {
         Optional<Pipeline> pipelineOptional = pipelineService.getById(id);
         if (pipelineOptional.isEmpty()) {

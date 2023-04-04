@@ -43,12 +43,14 @@ public interface PipelineMapper {
     Pipeline partialUpdate(PipelineDto pipelineDto, @MappingTarget Pipeline pipeline);
 
 
+    @SuppressWarnings("unused")
     default Source sourceDtoToSource(SourceDto sourceDto) {
         Source source = new Source();
         source.setId(sourceDto.getId());
         return source;
     }
 
+    @SuppressWarnings("unused")
     default Destination destinationDtoToDestination(DestinationDto destinationDto) {
         Destination destination = new Destination();
         destination.setId(destinationDto.getId());

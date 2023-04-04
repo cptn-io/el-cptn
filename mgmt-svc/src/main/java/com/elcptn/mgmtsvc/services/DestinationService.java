@@ -2,6 +2,7 @@ package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.common.entities.Destination;
 import com.elcptn.common.repositories.DestinationRepository;
+import com.elcptn.common.services.CommonService;
 import com.elcptn.common.web.ListEntitiesParam;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

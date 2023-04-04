@@ -24,7 +24,6 @@ public interface DestinationMapper {
     @Mapping(ignore = true, target = "id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Destination partialUpdate(DestinationDto destinationDto, @MappingTarget Destination destination);
-
-
+    
     DestinationDto toDto(Destination source);
 }

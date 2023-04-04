@@ -12,4 +12,5 @@ public abstract class CommonService {
         return PageRequest.of(param.getPage(), param.getSize(),
                 Sort.by(param.isSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, param.getSortBy()));
     }
+    
 }

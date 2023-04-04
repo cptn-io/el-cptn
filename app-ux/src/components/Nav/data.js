@@ -9,19 +9,19 @@ const navItems = [
     },
     {
         key: "pipelines",
-        label: "Data Pipelines",
+        label: "Pipelines",
         url: "/pipelines",
         Icon: IconCloudComputing
     },
     {
         key: "sources",
-        label: "Data Sources",
+        label: "Sources",
         url: "/sources",
         Icon: IconDatabaseExport
     },
     {
         key: "destinations",
-        label: "Data Destinations",
+        label: "Destinations",
         url: "/destinations",
         Icon: IconDatabaseImport
     },
