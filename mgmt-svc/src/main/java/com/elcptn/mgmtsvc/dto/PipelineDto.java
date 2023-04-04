@@ -1,5 +1,6 @@
 package com.elcptn.mgmtsvc.dto;
 
+import com.elcptn.common.dto.BaseDto;
 import com.elcptn.common.validation.OnCreate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;

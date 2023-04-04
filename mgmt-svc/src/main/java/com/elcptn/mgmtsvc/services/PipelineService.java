@@ -71,7 +71,7 @@ public class PipelineService extends CommonService {
     public List<Pipeline> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
 
-        return pipelineRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return pipelineRepository.findAll(predicate, pageable).stream().collect(Collectors.toList());
     }
 
     @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
@@ -100,7 +100,7 @@ public class PipelineService extends CommonService {
             return pipelineRepository.count();
         }
 
-        return pipelineRepository.count();
+        return pipelineRepository.count(predicate);
     }
 
 

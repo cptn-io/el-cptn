@@ -125,9 +125,9 @@ const PipelineDetailsCard = (props) => {
                 <label className="label">
                     <span className="label-text">Event URL</span>
                 </label>
-                <div className="p-1 break-all">{`${window.location.origin}/api/source/${data.source.id}/event`}
+                <div className="p-1 break-all">{`${window.location.origin}/event/source/${data.source.id}`}
                     <button title="Copy to Clipboard" className="ml-2 btn btn-ghost btn-xs"
-                        onClick={() => copyToClipboard(`${window.location.origin}/api/source/${data.source.id}/event`, "URL has been copied to Clipboard")}>
+                        onClick={() => copyToClipboard(`${window.location.origin}/event/source/${data.source.id}`, "URL has been copied to Clipboard")}>
                         <IconClipboard size={16} /></button>
                 </div>
             </div>

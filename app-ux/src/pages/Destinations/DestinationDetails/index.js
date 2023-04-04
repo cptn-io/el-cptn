@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
 import DestinationDetailsCard from "./DestinationDetailsCard";
-import DestinationMetrics from "./DestinationMetrics";
 import Tabs from "../../../components/Tabs";
 import DestinationPipelines from "./DestinationPipelines";
 
@@ -44,7 +43,6 @@ const DestinationDetails = (props) => {
 
     return <div>
         <PageTitle itemKey="sources" label={data.name} breadcrumbs={breadcrumbs} />
-        <DestinationMetrics />
         <Tabs tabs={tabs} activeTab={tab} onTabChange={onTabChange} />
         {(!tab || tab === 'overview') &&
             <div className="grid grid-flow-row-dense grid-cols-1 xl:grid-cols-8 gap-4 ">

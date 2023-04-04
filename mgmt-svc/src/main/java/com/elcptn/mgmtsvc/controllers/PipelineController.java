@@ -2,7 +2,7 @@ package com.elcptn.mgmtsvc.controllers;
 
 /* @author: kc, created on 3/7/23 */
 
-import com.elcptn.common.entities.Pipeline;
+import com.elcptn.common.entities.*;
 import com.elcptn.common.exceptions.BadRequestException;
 import com.elcptn.common.exceptions.NotFoundException;
 import com.elcptn.common.validation.OnCreate;
@@ -69,25 +69,25 @@ public class PipelineController {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
 
         BooleanExpression predicate = null;
-//        QPipeline pipeline = QPipeline.pipeline;
-//        switch (entity) {
-//            case "destination":
-//
-//                predicate = pipeline.destination.eq(new Destination(id));
-//                break;
-//            case "source":
-//                predicate = pipeline.source.eq(new Source(id));
-//                break;
-//            case "transformation":
-//                predicate = pipeline.transformations.contains(new Transformation(id));
-//                break;
-//            default:
-//                predicate = null;
-//        }
+        QPipeline pipeline = QPipeline.pipeline;
+        switch (entity) {
+            case "destination":
 
-//        if (predicate == null) {
-//            throw new BadRequestException("Not a valid request");
-//        }
+                predicate = pipeline.destination().eq(new Destination(id));
+                break;
+            case "source":
+                predicate = pipeline.source().eq(new Source(id));
+                break;
+            case "transformation":
+                predicate = pipeline.transformations.contains(new Transformation(id));
+                break;
+            default:
+                predicate = null;
+        }
+
+        if (predicate == null) {
+            throw new BadRequestException("Not a valid request");
+        }
 
 
         List<PipelineDto> sourceList = pipelineService.getAll(listParam, predicate).stream()
