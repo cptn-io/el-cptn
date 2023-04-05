@@ -33,11 +33,14 @@ public class PipelineRunScheduler {
             Long queuedTriggers =
                     pipelineTriggerRepository.countByPipelineIdAndStateEquals(pipelineSchedule.getPipeline().getId(),
                             State.QUEUED);
-            if (queuedTriggers == 0) {
-                PipelineTrigger pipelineTrigger = new PipelineTrigger();
-                pipelineTrigger.setPipeline(pipelineSchedule.getPipeline());
-                pipelineTriggerRepository.save(pipelineTrigger);
+            if (queuedTriggers > 0) {
+                log.debug("Skipping pipeline {} as there are {} queued triggers", pipelineSchedule.getPipeline().getName(),
+                        queuedTriggers);
+                return;
             }
+            PipelineTrigger pipelineTrigger = new PipelineTrigger();
+            pipelineTrigger.setPipeline(pipelineSchedule.getPipeline());
+            pipelineTriggerRepository.save(pipelineTrigger);
         });
     }
 }
