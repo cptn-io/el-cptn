@@ -6,7 +6,7 @@ import org.mapstruct.*;
 
 /* @author: kc, created on 2/7/23 */
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface SourceMapper {
 
     @Mapping(ignore = true, target = "createdAt")

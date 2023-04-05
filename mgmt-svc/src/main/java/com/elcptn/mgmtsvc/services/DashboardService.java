@@ -31,6 +31,8 @@ public class DashboardService {
 
     private final OutboundEventRepository outboundEventRepository;
 
+    private final TransformationRepository transformationRepository;
+
     private final StatusMetricMapper statusMetricMapper;
 
     @Cacheable(value = "dashboard", key = "\"home\" + #intervalVal")
@@ -49,6 +51,7 @@ public class DashboardService {
         entityStats.put("pipelines", pipelineRepository.count());
         entityStats.put("sources", sourceRepository.count());
         entityStats.put("destinations", destinationRepository.count());
+        entityStats.put("transformations", transformationRepository.count());
         metricsDto.setEntities(entityStats);
 
         return metricsDto;

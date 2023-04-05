@@ -4,7 +4,7 @@ import Loading from "../../../../components/Loading";
 import useNotifications from "../../../../hooks/useNotifications";
 import get from 'lodash/get';
 import moment from "moment";
-import { IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconClockPause, IconFileDescription, IconRefresh, IconSend } from "@tabler/icons-react";
+import { IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconClockPause, IconFileDescription, IconPlane, IconRefresh, IconSend } from "@tabler/icons-react";
 import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
@@ -86,6 +86,29 @@ const OutboundEventList = ({ pipelineId }) => {
             });
     }
 
+    const requeueEvent = (eventId) => {
+        setExecuting(true);
+        axios.post(`/api/outbound_event/${eventId}/requeue`)
+            .then(res => {
+                const updatedEvent = res.data;
+                //update the event object in the list
+                setData(current => {
+                    const index = current.findIndex(e => e.id === updatedEvent.id);
+                    if (index > -1) {
+                        current[index] = updatedEvent;
+                    }
+                    return [...current];
+                });
+            }).catch(err => {
+                addNotification({
+                    message: get(err, 'response.data.message', 'An error occurred while requeuing Outbound Event'),
+                    type: 'error'
+                });
+            }).finally(() => {
+                setExecuting(false);
+            });
+    };
+
 
     if (loading) {
         return <Loading />
@@ -119,6 +142,7 @@ const OutboundEventList = ({ pipelineId }) => {
                             <div className="btn-group">
                                 <button onClick={() => showDetails(event)} className="btn btn-sm btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
                                 <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
+                                <button disabled={executing} onClick={() => requeueEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Requeue event"><IconSend size={24} /></button>
                             </div>
                         </td>
                     </tr>)}

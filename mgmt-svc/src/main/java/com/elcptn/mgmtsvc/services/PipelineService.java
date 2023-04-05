@@ -106,6 +106,14 @@ public class PipelineService extends CommonService {
     }
 
     public void runPipeline(Pipeline pipeline) {
+        Long queuedTriggers =
+                pipelineTriggerRepository.countByPipelineIdAndStateEquals(pipeline.getId(),
+                        State.QUEUED);
+
+        if (queuedTriggers > 0) {
+            throw new BadRequestException("Pipeline already has an existing run queued. Please wait for it to complete.");
+        }
+
         PipelineTrigger pipelineTrigger = new PipelineTrigger();
         pipelineTrigger.setPipeline(pipeline);
         pipelineTriggerRepository.save(pipelineTrigger);

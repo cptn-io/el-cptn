@@ -1,4 +1,4 @@
-package com.elcptn.ingestionsvc.scheduler.processors;
+package com.elcptn.ingestionsvc.processors;
 
 import com.elcptn.common.entities.InboundEvent;
 import com.elcptn.common.entities.OutboundWriteEvent;

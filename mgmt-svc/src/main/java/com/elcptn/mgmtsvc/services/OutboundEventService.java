@@ -47,4 +47,7 @@ public class OutboundEventService extends CommonService {
         return outboundEventRepository.count();
     }
 
+    public void save(OutboundEvent outboundEvent) {
+        outboundEventRepository.save(outboundEvent);
+    }
 }

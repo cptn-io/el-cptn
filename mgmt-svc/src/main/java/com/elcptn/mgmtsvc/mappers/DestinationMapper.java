@@ -5,7 +5,7 @@ import com.elcptn.mgmtsvc.dto.DestinationDto;
 import org.mapstruct.*;
 
 /* @author: kc, created on 2/16/23 */
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface DestinationMapper {
 
     @Mapping(ignore = true, target = "createdAt")
@@ -24,6 +24,6 @@ public interface DestinationMapper {
     @Mapping(ignore = true, target = "id")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Destination partialUpdate(DestinationDto destinationDto, @MappingTarget Destination destination);
-    
+
     DestinationDto toDto(Destination source);
 }

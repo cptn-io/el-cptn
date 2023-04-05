@@ -3,6 +3,7 @@ package com.elcptn.mgmtsvc.controllers;
 import com.elcptn.common.entities.OutboundEvent;
 import com.elcptn.common.entities.Pipeline;
 import com.elcptn.common.entities.QOutboundEvent;
+import com.elcptn.common.entities.State;
 import com.elcptn.common.exceptions.NotFoundException;
 import com.elcptn.common.web.ListEntitiesParam;
 import com.elcptn.mgmtsvc.dto.OutboundEventDto;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -59,6 +61,14 @@ public class OutboundEventController {
     @GetMapping("/api/outbound_event/{id}")
     public ResponseEntity<OutboundEventDto> get(@PathVariable UUID id) {
         OutboundEvent outboundEvent = getById(id);
+        return ResponseEntity.ok().body(convert(outboundEvent));
+    }
+
+    @PostMapping("/api/outbound_event/{id}/requeue")
+    public ResponseEntity<OutboundEventDto> requeue(@PathVariable UUID id) {
+        OutboundEvent outboundEvent = getById(id);
+        outboundEvent.setState(State.QUEUED);
+        outboundEventService.save(outboundEvent);
         return ResponseEntity.ok().body(convert(outboundEvent));
     }
 

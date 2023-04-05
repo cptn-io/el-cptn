@@ -27,7 +27,7 @@ const ItemSelectorModal = (props) => {
         const { id, name } = item;
         return <tr key={id}>
             {cols.map((col, i) => {
-                return <td key={col.name} className={`whitespace-pre-wrap break-words ${col.datacss}`}>{i === 0 ? <button onClick={() => onSelect({ id, name })} className="btn btn-link text-base-content btn-xs">{renderColData(item[col.name])}</button> : renderColData(item[col.name])}</td>
+                return <td key={col.name} className={`whitespace-pre-wrap break-words ${col.datacss}`}>{i === 0 ? <button onClick={() => onSelect({ id, name })} >{renderColData(item[col.name])}</button> : renderColData(item[col.name])}</td>
             })}
         </tr>
     }

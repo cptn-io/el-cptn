@@ -157,7 +157,7 @@ const NewPipeline = (props) => {
 
                         </div>
                         <div className="bg-base-200 px-4 py-3 text-right sm:px-6">
-                            <Link to="/sources" className="btn btn-ghost mr-2">Cancel</Link>
+                            <Link to="/pipelines" className="btn btn-ghost mr-2">Cancel</Link>
                             <button disabled={executing} type="submit" className="btn btn-primary">Submit</button>
                         </div>
                     </div>

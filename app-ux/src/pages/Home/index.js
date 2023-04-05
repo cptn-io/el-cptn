@@ -71,7 +71,7 @@ const Home = () => {
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconTransform size={64} /></div>
                     <div className="stat-title text-accent-content">Transformations</div>
-                    <div className="stat-value text-6xl">{0}</div>
+                    <div className="stat-value text-6xl">{data.entities.transformations}</div>
                 </div>
             </div>
         </div>
