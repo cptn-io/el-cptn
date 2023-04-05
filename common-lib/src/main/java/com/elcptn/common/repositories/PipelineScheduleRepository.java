@@ -11,7 +11,9 @@ import java.util.UUID;
 @Repository
 public interface PipelineScheduleRepository extends JpaRepository<PipelineSchedule, UUID> {
 
-    PipelineSchedule findByPipelineId(UUID pipelineId);
+    List<PipelineSchedule> findByPipelineId(UUID pipelineId);
+
+    Long countByPipelineId(UUID pipelineId);
 
     List<PipelineSchedule> findPipelineScheduleByActiveTrueAndNextRunAtLessThanEqual(ZonedDateTime now);
 }

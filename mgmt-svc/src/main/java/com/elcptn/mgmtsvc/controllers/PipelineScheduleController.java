@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,8 +61,10 @@ public class PipelineScheduleController {
     }
 
     @GetMapping("/api/pipeline_schedule/pipeline/{id}")
-    public ResponseEntity<PipelineScheduleDto> getScheduleByPipeline(@PathVariable UUID id) {
-        return ResponseEntity.ok(convert(pipelineScheduleService.getScheduleByPipeline(id)));
+    public ResponseEntity<List<PipelineScheduleDto>> getSchedulesByPipeline(@PathVariable UUID id) {
+        List<PipelineScheduleDto> pipelineSchedules =
+                pipelineScheduleService.getSchedulesByPipeline(id).stream().map(this::convert).toList();
+        return ResponseEntity.ok(pipelineSchedules);
     }
 
 

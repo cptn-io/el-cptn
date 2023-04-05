@@ -28,8 +28,8 @@ public class PipelineScheduleService extends CommonService {
         validate(pipelineSchedule);
 
         //check if a schedule exists for the pipeline
-        PipelineSchedule existingSchedule = pipelineScheduleRepository.findByPipelineId(pipelineSchedule.getPipeline().getId());
-        if (existingSchedule != null) {
+        Long scheduleCount = pipelineScheduleRepository.countByPipelineId(pipelineSchedule.getPipeline().getId());
+        if (scheduleCount > 0) {
             throw new BadRequestException("Schedule already exists for the pipeline");
         }
 
@@ -49,7 +49,7 @@ public class PipelineScheduleService extends CommonService {
         return pipelineScheduleRepository.findById(id);
     }
 
-    public PipelineSchedule getScheduleByPipeline(UUID id) {
+    public List<PipelineSchedule> getSchedulesByPipeline(UUID id) {
         return pipelineScheduleRepository.findByPipelineId(id);
     }
 

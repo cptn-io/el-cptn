@@ -30,6 +30,11 @@ public class PipelineRunScheduler {
             pipelineSchedule.computeNextRunAt();
             pipelineScheduleRepository.save(pipelineSchedule);
 
+            if (!pipelineSchedule.getPipeline().getBatchProcess()) {
+                log.debug("Skipping pipeline {} as it is not a batch process", pipelineSchedule.getPipeline().getName());
+                return;
+            }
+
             Long queuedTriggers =
                     pipelineTriggerRepository.countByPipelineIdAndStateEquals(pipelineSchedule.getPipeline().getId(),
                             State.QUEUED);
