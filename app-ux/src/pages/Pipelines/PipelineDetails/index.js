@@ -12,9 +12,10 @@ import PipelineEditor from "./PipelineEditor";
 import PipelineOverview from "./PipelineOverview";
 import PipelineMetrics from "./PipelineMetrics";
 import OutboundEventList from "./OutboundEventList";
+import PipelineSchedule from "./PipelineSchedule";
 
 
-const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'editor', label: 'Editor' }, { 'key': 'events', label: 'Outbound Events' }];
+const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'schedule', label: 'Schedule' }, { 'key': 'editor', label: 'Editor' }, { 'key': 'events', label: 'Outbound Events' }];
 
 
 const PipelineDetails = () => {
@@ -68,6 +69,7 @@ const PipelineDetails = () => {
             <PipelineEditor id={id} draft={draft} data={data} setData={setData} setDraft={setDraft} discardChanges={discardChanges} />
         }
         {tab === 'events' && <OutboundEventList pipelineId={id} />}
+        {tab === 'schedule' && <PipelineSchedule pipeline={data} />}
     </div>
 }
 

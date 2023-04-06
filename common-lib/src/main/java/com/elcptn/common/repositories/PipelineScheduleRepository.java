@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Repository
 public interface PipelineScheduleRepository extends JpaRepository<PipelineSchedule, UUID> {
@@ -15,5 +16,5 @@ public interface PipelineScheduleRepository extends JpaRepository<PipelineSchedu
 
     Long countByPipelineId(UUID pipelineId);
 
-    List<PipelineSchedule> findPipelineScheduleByActiveTrueAndNextRunAtLessThanEqual(ZonedDateTime now);
+    Stream<PipelineSchedule> findPipelineScheduleByActiveTrueAndNextRunAtLessThanEqual(ZonedDateTime now);
 }

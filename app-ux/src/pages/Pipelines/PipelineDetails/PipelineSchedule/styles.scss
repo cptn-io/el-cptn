@@ -1,0 +1,72 @@
+$prefix: '.cptn';
+
+.cron-section .c-host {
+    display: flex;
+    flex-direction: row;
+
+    .c-tabs {
+        flex-direction: column;
+        border: 0;
+        border-right: 1px solid #ccc;
+
+        .c-tab-item {
+            &:has(#{$prefix}-active) {
+                background-color: hsl(var(--b2));
+                border-radius: 0.5rem 0 0 0.5rem;
+            }
+        }
+
+        .c-tab {
+            text-align: left;
+            border: 0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+
+            &#{$prefix}-active {
+                color: hsl(var(--ac));
+            }
+        }
+    }
+
+    div[tab-name="MINUTES"] {
+
+        .c-every {
+            display: none;
+        }
+
+    }
+
+    .c-tab-content {
+        padding: 1rem;
+        width: 100%;
+
+        #{$prefix}-form-check-label,
+        .c-increment-option-label2,
+        .c-increment-monthday-option-label2,
+        .c-increment-weekday-option-label2,
+        #{$prefix}-mx-1 {
+            margin-left: 0.25rem;
+        }
+
+        .c-range-option-label2 {
+            margin-left: 0.25rem;
+            margin-right: 0.25rem;
+        }
+
+        #{$prefix}-row {
+            display: grid;
+            width: 100%;
+            align-content: space-between;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 0.25rem;
+        }
+
+        #{$prefix}-form-group {
+            margin-bottom: 1rem;
+
+            #{$prefix}-form-check {
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+}
