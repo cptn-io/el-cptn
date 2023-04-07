@@ -26,6 +26,7 @@ const Scheduler = (props) => {
     const [active, setActive] = useState(true);
     const [executing, setExecuting] = useState(false);
 
+
     useEffect(() => {
         axios.get(`/api/pipeline_schedule/pipeline/${pipelineId}`).then(response => {
             setSchedule(response.data[0]);
@@ -52,6 +53,11 @@ const Scheduler = (props) => {
         setSchedule(() => ({}));
     };
 
+    const discardChanges = () => {
+        setTimeZone(schedule.timeZone);
+        setCronExpression(schedule.cronExpression);
+        setActive(schedule.active);
+    };
     const saveSchedule = () => {
         const changes = {
             timeZone,
@@ -123,8 +129,8 @@ const Scheduler = (props) => {
                 <label className="label">
                     <span className="label-text">Run Schedule (Current Selection: {cronExpression})</span>
                 </label>
-                <div className="flex justify-between mx-2 my-4">
-                    <button disabled={true}>Popular Schedules:</button>
+                <div className="flex justify-between items-center mx-2 my-4">
+                    <div>Popular Schedules:</div>
                     <button className="btn btn-sm btn-outline btn-secondary" onClick={() => setCronExpression("*/15 * * * *")}>Every 15 mins</button>
                     <button className="btn btn-sm btn-outline btn-secondary" onClick={() => setCronExpression("*/30 * * * *")}>Every 30 mins</button>
                     <button className="btn btn-sm btn-outline btn-secondary" onClick={() => setCronExpression("0 * * * *")}>Every hour</button>
@@ -151,6 +157,7 @@ const Scheduler = (props) => {
                 <div className="mx-1">{moment(schedule.nextRunAt).format('LLLL')}</div>
             </div>
             <div className="ng-base-200 px-4 py-3 text-right sm:px-6">
+                <button type="button" disabled={executing} onClick={discardChanges} className="btn mr-2">Discard Changes</button>
                 <button type="button" disabled={executing} onClick={saveSchedule} className="btn btn-primary">Save Schedule</button>
             </div>
         </>}

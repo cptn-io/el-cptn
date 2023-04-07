@@ -10,13 +10,13 @@ import filter from 'lodash/filter';
 
 
 const scriptTemplate = `module.exports = {
-    setup: function(ctx, config) { /* optional */
+    setup: function(config) { /* optional */
         //setup connection
     },
     execute: function(event, ctx, config) { /* required */
         //send to destination.
     },
-    teardown: function(ctx, config) { /* optional */
+    teardown: function(config) { /* optional */
         //teardown connection
     }
 }`;
