@@ -1,0 +1,17 @@
+:2015 {
+	encode gzip
+
+    handle /api/* {
+		reverse_proxy localhost:8080
+	}
+
+    handle /event/* {
+		reverse_proxy localhost:8081
+	}
+
+	handle {
+		root * ./app-ux/build
+		try_files {path} /index.html
+		file_server
+	}
+}
