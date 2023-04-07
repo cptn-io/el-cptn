@@ -5,9 +5,9 @@ const Event = require('./entities/Event');
 const workerExecPool = workerpool.pool(__dirname + '/eventWorker.js');
 const { processEventBatch } = require('./eventProcessor');
 
-const QUERY_BATCH_SIZE = process.env.QUERY_BATCH_SIZE || 15;
+const QUERY_BATCH_SIZE = process.env.QUERY_BATCH_SIZE || 100;
 const DELAY_IF_NOEVENTS = process.env.DELAY_IF_NOEVENTS || 5000;
-const WORKER_TIMEOUT_MAX = process.env.WORKER_TIMEOUT_MAX || 15000;
+const WORKER_TIMEOUT_MAX = process.env.WORKER_TIMEOUT_MAX || -1;
 
 async function processQueuedEvents() {
     console.log('processing queued events');
@@ -22,12 +22,15 @@ async function processQueuedEvents() {
             return;
         }
         const workers = result.rows.map(async row => {
-            return workerExecPool.exec('processEvent', [new Event(row)]);
-            // return workerExecPool.exec('processEvent', [new Event(row)]).timeout(WORKER_TIMEOUT_MAX)
-            //     .catch(err => {
-            //         console.log(err);
-            //         return { id: row.id, success: false, message: err.message };
-            //     });
+            if (WORKER_TIMEOUT_MAX < 0) {
+                return workerExecPool.exec('processEvent', [new Event(row)]);
+            } else {
+                return workerExecPool.exec('processEvent', [new Event(row)]).timeout(WORKER_TIMEOUT_MAX)
+                    .catch(err => {
+                        console.log(err);
+                        return { id: row.id, success: false, message: err.message };
+                    });
+            }
         })
         const workerStatuses = await Promise.all(workers);
         workerStatuses.forEach(({ id, success, message }) => {
