@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import Loading from "../../../../components/Loading";
 import useNotifications from "../../../../hooks/useNotifications";
 import get from 'lodash/get';
-import moment from "moment";
+import moment from "moment-timezone";
 import { IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconClockPause, IconFileDescription, IconRefresh, IconSend } from "@tabler/icons-react";
 import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
