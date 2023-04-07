@@ -3,6 +3,8 @@ package com.elcptn.ingestionsvc.config;
 import com.google.common.collect.Maps;
 import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.CacheErrorHandler;
+import org.springframework.cache.interceptor.LoggingCacheErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -28,5 +30,10 @@ public class RedisCacheConfig implements CachingConfigurer {
         return new RedisCacheManager(RedisCacheWriter.lockingRedisCacheWriter(connectionFactory),
                 RedisCacheConfiguration.defaultCacheConfig(Thread.currentThread().getContextClassLoader()).entryTtl(Duration.ofMinutes(15)),
                 cacheNamesConfigurationMap);
+    }
+
+    @Override
+    public CacheErrorHandler errorHandler() {
+        return new LoggingCacheErrorHandler(true);
     }
 }
