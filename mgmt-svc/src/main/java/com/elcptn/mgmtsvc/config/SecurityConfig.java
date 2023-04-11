@@ -10,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /* @author: kc, created on 4/10/23 */
 @Configuration
@@ -30,16 +31,21 @@ public class SecurityConfig {
 
         http
                 .csrf((csrf) -> csrf
+                        .ignoringRequestMatchers("/api/csrf", "/logout")
                         .csrfTokenRepository(tokenRepository)
                         .csrfTokenRequestHandler(requestHandler)
                 )
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/csrf").permitAll()
+                        .requestMatchers("/api/csrf", "/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin().failureUrl("/signin?error").defaultSuccessUrl("/app", true)
                 .and()
-                .httpBasic();
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                .logoutSuccessUrl("/signin?logout")
+                .deleteCookies("JSESSIONID", "XSRF-TOKEN")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true).permitAll();
 
         return http.build();
     }

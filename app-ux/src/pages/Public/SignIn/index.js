@@ -1,8 +1,12 @@
+import { IconCircleCheck, IconCircleX } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const SignIn = () => {
     const [csrf, setCsrf] = useState('');
+    const [searchParams] = useSearchParams();
+
     useEffect(() => {
         axios.get("/api/csrf").then((response) => {
             setCsrf(response.data.token);
@@ -12,6 +16,16 @@ const SignIn = () => {
     }, [])
     return <div className="w-4/5 mx-auto bg-white rounded-lg overflow-hidden md:w-2/4 lg:w-1/4">
         <div className="p-4">
+            {searchParams.has("logout") &&
+                <div className="my-2 alert alert-success">
+                    <span><IconCircleCheck size={24} /> You have been logged out.</span>
+                </div>
+            }
+            {searchParams.has("error") &&
+                <div className="my-2 alert alert-error">
+                    <span><IconCircleX size={24} /> Login operation has failed</span>
+                </div>
+            }
             <div className="mb-4">
                 <h2 className="text-lg font-semibold uppercase">Sign In</h2>
             </div>

@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 /* @author: kc, created on 4/11/23 */
 @RestController
-public class CsrfController {
+public class SessionController {
 
     private CsrfTokenRepository csrfTokenRepository = new CookieCsrfTokenRepository();
-
-
+    
     @GetMapping("/api/csrf")
     public CsrfToken getCsrfToken(HttpServletRequest request, HttpServletResponse response) {
         CsrfToken csrfToken = csrfTokenRepository.generateToken(request);
         csrfTokenRepository.saveToken(csrfToken, request, response);
         return csrfToken;
     }
+
 }
 
