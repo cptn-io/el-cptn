@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/csrf", "/logout").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin().failureUrl("/signin?error").defaultSuccessUrl("/app", true)
+                .formLogin().loginPage("/signin").loginProcessingUrl("/login").failureUrl("/signin?error").defaultSuccessUrl("/app", true)
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .logoutSuccessUrl("/signin?logout")
