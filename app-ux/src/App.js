@@ -5,8 +5,18 @@ import { ThemeContextProvider } from "./context/ThemeContext"
 import { NotificationContextProvider } from "./context/NotificationContext"
 import NotificationList from "./components/NotificationList"
 import './App.scss';
+import { useEffect } from "react"
+import axios from "axios"
 
 export default function App() {
+  useEffect(() => {
+    axios.get("/api/csrf").then((response) => {
+      axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token;
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, [])
+
   return (
     <ThemeContextProvider>
       <NotificationContextProvider>

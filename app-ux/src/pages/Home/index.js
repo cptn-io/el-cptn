@@ -50,28 +50,28 @@ const Home = () => {
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconCloudComputing size={64} /></div>
                     <div className="stat-title text-primary-content">Data Pipelines</div>
-                    <div className="stat-value text-6xl">{data.entities.pipelines}</div>
+                    <div className="stat-value text-6xl">{data?.entities?.pipelines || 0}</div>
                 </div>
             </div>
             <div className="stats shadow bg-secondary text-secondary-content col-span-2 md:col-span-1 rounded-2xl">
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconDatabaseExport size={64} /></div>
                     <div className="stat-title text-secondary-content">Data Sources</div>
-                    <div className="stat-value text-6xl">{data.entities.sources}</div>
+                    <div className="stat-value text-6xl">{data?.entities?.sources || 0}</div>
                 </div>
             </div>
             <div className="stats shadow bg-info text-info-content col-span-2 md:col-span-1 rounded-2xl">
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconDatabaseImport size={64} /></div>
                     <div className="stat-title text-info-content">Data Destinations</div>
-                    <div className="stat-value text-6xl">{data.entities.destinations}</div>
+                    <div className="stat-value text-6xl">{data?.entities?.destinations || 0}</div>
                 </div>
             </div>
             <div className="stats shadow bg-accent text-accent-content  col-span-2 md:col-span-1 rounded-2xl">
                 <div className="stat text-center">
                     <div className="flex justify-center my-4"><IconTransform size={64} /></div>
                     <div className="stat-title text-accent-content">Transformations</div>
-                    <div className="stat-value text-6xl">{data.entities.transformations}</div>
+                    <div className="stat-value text-6xl">{data?.entities?.transformations || 0}</div>
                 </div>
             </div>
         </div>

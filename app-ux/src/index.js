@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ import NewPipeline from './pages/Pipelines/NewPipeline';
 import PipelineDetails from './pages/Pipelines/PipelineDetails';
 import NewTransformation from './pages/Transformations/NewTransformation';
 import TransformationDetails from './pages/Transformations/TransformationDetails';
+import SignIn from './pages/Public/SignIn';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -57,6 +58,16 @@ root.render(
           <Route path="/" element={<Public />}>
           </Route>
           <Route path="*" element={<Navigate to="/home" replace />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+    <BrowserRouter basename=''>
+      <Suspense fallback={<div><Loading /></div>}>
+        <Routes>
+          <Route path="/" element={<Public />}>
+            <Route path="signin" element={<SignIn />}> </Route>
+            <Route exact path="" element={<Navigate to="/signin" replace />} />
+          </Route>
         </Routes>
       </Suspense>
     </BrowserRouter>
