@@ -10,10 +10,19 @@ import axios from "axios"
 
 export default function App() {
   useEffect(() => {
+    axios.interceptors.response.use((response) => {
+      return response;
+    }, (error) => {
+      if (error.response.status === 401) {
+        window.location.href = "/signin";
+      }
+      return Promise.reject(error);
+    });
+
     axios.get("/api/csrf").then((response) => {
       axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token;
     }).catch((error) => {
-      console.log(error);
+      window.location.href = "/signin?error=csrf";
     });
   }, [])
 

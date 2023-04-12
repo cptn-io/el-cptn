@@ -28,6 +28,8 @@ public class RedisCacheConfig implements CachingConfigurer {
         Map<String, RedisCacheConfiguration> cacheNamesConfigurationMap = Maps.newHashMap();
         cacheNamesConfigurationMap.put("dashboard",
                 RedisCacheConfiguration.defaultCacheConfig(Thread.currentThread().getContextClassLoader()).entryTtl(Duration.ofMinutes(1)));
+        cacheNamesConfigurationMap.put("users",
+                RedisCacheConfiguration.defaultCacheConfig(Thread.currentThread().getContextClassLoader()).entryTtl(Duration.ofMinutes(5)));
 
         return new RedisCacheManager(RedisCacheWriter.lockingRedisCacheWriter(connectionFactory),
                 RedisCacheConfiguration.defaultCacheConfig(Thread.currentThread().getContextClassLoader()).entryTtl(Duration.ofMinutes(15)),

@@ -21,5 +21,10 @@ public class CsrfController {
         return csrfToken;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "redirect:/signin";
+    }
+
 }
 

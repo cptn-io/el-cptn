@@ -141,7 +141,7 @@ const NewTransformation = () => {
                     <h3 className="text-base font-semibold leading-6">Helpful Information</h3>
                     <p className="text-base-content mt-1">
                         <p>Transformations help with enriching and removing sensitive data from your event payload. Add any Javascript code with required npm JS modules to transform your payloads.</p>
-                        <p className="mt-3">Remember that Transformations must return updated event payload for the event data to move across all the Pipeline steps. Pipeline will stop processing an event if a Transformation does not return evt object.</p>
+                        <p className="mt-3">Remember that Transformations must return updated event payload for the event data to move across all the Pipeline steps. Pipeline will stop processing an event if a Transformation does not return the event object.</p>
                     </p>
                 </div>
             </div>

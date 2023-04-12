@@ -20,6 +20,7 @@ import PipelineDetails from './pages/Pipelines/PipelineDetails';
 import NewTransformation from './pages/Transformations/NewTransformation';
 import TransformationDetails from './pages/Transformations/TransformationDetails';
 import SignIn from './pages/Public/SignIn';
+import Users from './pages/Users';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -52,6 +53,9 @@ root.render(
               <Route path="new" element={<NewTransformation />} />
               <Route path=":id" element={<TransformationDetails />} />
               <Route path=":id/:tab" element={<TransformationDetails />} />
+            </Route>
+            <Route path="users" >
+              <Route path="" element={<Users />} />
             </Route>
             <Route exact path="" element={<Navigate to="/home" replace />} />
           </Route>

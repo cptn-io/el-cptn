@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 /* @author: kc, created on 2/7/23 */
 
 @Slf4j
-@ControllerAdvice(basePackages = "com.elcptn.mgmtsvc.controllers")
+@ControllerAdvice
 public class RestExceptionHandler extends CommonExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {

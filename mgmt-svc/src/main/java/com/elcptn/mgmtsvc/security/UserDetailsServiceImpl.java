@@ -1,6 +1,7 @@
 package com.elcptn.mgmtsvc.security;
 
 import com.elcptn.common.entities.User;
+import com.elcptn.common.exceptions.UnauthorizedException;
 import com.elcptn.mgmtsvc.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         if ("foo@example.com".equals(username)) {
+            //check for user record count
+            if (userService.count() > 0) {
+                throw new UnauthorizedException("foo@example.com is only intended for use during initial setup " +
+                        "process to create the first user record. Please use a different email address to login");
+            }
+
             return org.springframework.security.core.userdetails.User.withUsername("foo@example.com")
                     .disabled(false)
                     .accountLocked(false)

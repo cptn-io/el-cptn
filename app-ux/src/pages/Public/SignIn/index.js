@@ -6,24 +6,25 @@ import { useSearchParams } from "react-router-dom";
 const SignIn = () => {
     const [csrf, setCsrf] = useState('');
     const [searchParams] = useSearchParams();
+    const [error, setError] = useState(searchParams.has("error") ? 'Login failed. Please retry!' : '');
 
     useEffect(() => {
         axios.get("/api/csrf").then((response) => {
             setCsrf(response.data.token);
         }).catch((error) => {
-            console.log(error);
+            setError('An occurred while trying to get CSRF token.');
         });
     }, [])
-    return <div className="w-4/5 mx-auto bg-white rounded-lg overflow-hidden md:w-2/4 lg:w-1/4">
-        <div className="p-4">
+    return <div className="w-4/5 mx-auto bg-base-300 rounded-lg overflow-hidden md:w-2/4 lg:w-1/4">
+        <div className="p-5">
             {searchParams.has("logout") &&
                 <div className="my-2 alert alert-success">
-                    <span><IconCircleCheck size={24} /> You have been logged out.</span>
+                    <span><IconCircleCheck className="mr-2" size={24} />You are now logged out.</span>
                 </div>
             }
-            {searchParams.has("error") &&
+            {error &&
                 <div className="my-2 alert alert-error">
-                    <span><IconCircleX size={24} /> Login operation has failed</span>
+                    <span><IconCircleX className="mr-2" size={24} />{error}</span>
                 </div>
             }
             <div className="mb-4">
@@ -32,7 +33,7 @@ const SignIn = () => {
             <div>
                 <form method="POST" action="/login">
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700 font-bold mb-2">Email</label>
+                        <label htmlFor="username" className="block text-content font-bold mb-2">Email</label>
                         <input
                             type="email"
                             id="username"
@@ -43,7 +44,7 @@ const SignIn = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="password" className="block text-gray-700 font-bold mb-2">Password</label>
+                        <label htmlFor="password" className="block text-content font-bold mb-2">Password</label>
                         <input
                             type="password"
                             id="password"

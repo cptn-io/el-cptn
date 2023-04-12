@@ -4,7 +4,7 @@ import { ThemeContextProvider } from "./context/ThemeContext";
 
 const Public = () => {
     return <ThemeContextProvider>
-        <div className="public bg-primary grid place-items-center h-screen">
+        <div className="public grid place-items-center h-screen">
             <Outlet />
         </div>
 

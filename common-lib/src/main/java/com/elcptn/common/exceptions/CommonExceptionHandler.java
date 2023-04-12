@@ -34,6 +34,8 @@ public class CommonExceptionHandler {
                 return ResponseEntity.badRequest().body(error);
             } else if (ex instanceof NotFoundException) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            } else if (ex instanceof UnauthorizedException) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
             }
             return ResponseEntity.internalServerError().body(error);
         }

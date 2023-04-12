@@ -1,7 +1,9 @@
 package com.elcptn.common.helpers;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -15,7 +17,7 @@ import java.util.HexFormat;
 
 /* @author: kc, created on 3/27/23 */
 @Component
-public class CryptoHelper {
+public class CryptoHelper implements InitializingBean {
 
     private static final String ALGORITHM = "AES/GCM/NoPadding";
     private static final int TAG_LENGTH = 16;
@@ -23,8 +25,12 @@ public class CryptoHelper {
     private final SecretKey secretKey;
 
     public CryptoHelper(@Value("${cptn.db.secret}") String hexSecret) {
-        byte[] secretBytes = HexFormat.of().parseHex(hexSecret);
-        secretKey = new SecretKeySpec(secretBytes, "AES");
+        if (hexSecret != null) {
+            byte[] secretBytes = HexFormat.of().parseHex(hexSecret);
+            secretKey = new SecretKeySpec(secretBytes, "AES");
+        } else {
+            secretKey = null;
+        }
     }
 
     public String encrypt(String plainText) throws Exception {
@@ -55,5 +61,10 @@ public class CryptoHelper {
 
         byte[] plainTextBytes = cipher.doFinal(cipherBytesWithIV, IV_LENGTH, cipherBytesWithIV.length - IV_LENGTH);
         return new String(plainTextBytes);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(secretKey, "DB_CRYPTO_SECRET is null");
     }
 }
