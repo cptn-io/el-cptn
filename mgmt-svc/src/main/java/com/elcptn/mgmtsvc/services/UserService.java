@@ -25,10 +25,19 @@ public class UserService extends CommonService {
 
     private final UserRepository userRepository;
 
-    @Cacheable(value = "users", key = "#email")
     public User getUserByEmail(String email) {
         return userRepository.findFirstByEmail(email);
     }
+
+    @Cacheable(value = "users", key = "#id")
+    public User getUserById(UUID id) {
+        Optional<User> userOptional = getById(id);
+        if (userOptional.isEmpty()) {
+            return null;
+        }
+        return userOptional.get();
+    }
+
 
     public User create(User user) {
         user.setDisabled(false);
@@ -43,7 +52,7 @@ public class UserService extends CommonService {
         return userRepository.findAll(pageable).stream().collect(Collectors.toList());
     }
 
-    @CacheEvict(value = "users", key = "#user.email")
+    @CacheEvict(value = "users", key = "#user.id")
     public User update(User user) {
         validate(user);
         return userRepository.save(user);

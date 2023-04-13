@@ -1,4 +1,4 @@
-import { IconCheck, IconUserPlus, IconX } from "@tabler/icons-react";
+import { IconUserPlus } from "@tabler/icons-react";
 import PageTitle from "../../components/Nav/PageTitle";
 import { Link, useSearchParams } from "react-router-dom";
 import useNotifications from "../../hooks/useNotifications";
@@ -55,7 +55,7 @@ const Users = () => {
                     </thead>
                     <tbody>
                         {data.map(user => <tr key={user.id}>
-                            <td className="whitespace-pre-wrap break-words"><Link to={`/users/${user.id}`}>{user.email}</Link></td>
+                            <td className="whitespace-pre-wrap break-words"><Link className="link link-hover" to={`/users/${user.id}`}>{user.email}</Link></td>
                             <td className="whitespace-pre-wrap break-words">{user.firstName}</td>
                             <td className="whitespace-pre-wrap break-words">{user.lastName}</td>
                             <td className="whitespace-pre-wrap break-words">{user.lastLoginAt ? moment(user.lastLoginAt).format('lll') : 'Never'}</td>

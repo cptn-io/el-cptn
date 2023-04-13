@@ -2,11 +2,15 @@ package com.elcptn.mgmtsvc.config;
 
 import com.elcptn.mgmtsvc.security.CustomAuthenticationEntryPoint;
 import com.elcptn.mgmtsvc.security.JWTRequestFilter;
+import com.elcptn.mgmtsvc.security.UserPrincipal;
 import com.elcptn.mgmtsvc.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,9 +35,11 @@ public class SecurityConfig {
     public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout");
 
     private final JwtUtil jwtUtil;
+
     private final JWTRequestFilter jwtRequestFilter;
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -66,9 +72,20 @@ public class SecurityConfig {
                 .defaultAuthenticationEntryPointFor(customAuthenticationEntryPoint, new AntPathRequestMatcher("/api" +
                         "/**"));
         //form login config
-        http.formLogin().loginPage("/signin").loginProcessingUrl("/login").failureUrl("/signin?error")
+        http.formLogin().loginPage("/signin").loginProcessingUrl("/login")
                 .defaultSuccessUrl("/app", true)
-                .successHandler(successHandler());
+                .successHandler(successHandler())
+                .failureHandler((request, response, exception) -> {
+                    if (exception instanceof BadCredentialsException) {
+                        response.sendRedirect("/signin?error=bad_credentials");
+                    } else if (exception instanceof DisabledException) {
+                        response.sendRedirect("/signin?error=disabled");
+                    } else if (exception instanceof LockedException) {
+                        response.sendRedirect("/signin?error=locked");
+                    } else {
+                        response.sendRedirect("/signin?error=generic");
+                    }
+                });
         //form logout config
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .logoutSuccessUrl("/signin?logout")
@@ -86,10 +103,12 @@ public class SecurityConfig {
 
     private AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
-            String jwt = jwtUtil.generateToken(authentication.getName());
+            String jwt = jwtUtil.generateToken((UserPrincipal) authentication.getPrincipal());
             Cookie cookie = new Cookie(AUTH_COOKIE, jwt);
-            cookie.setMaxAge(6 * 60 * 60);
             cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setSecure(request.isSecure());
+            cookie.setAttribute("SameSite", "Strict");
             response.addCookie(cookie);
             response.sendRedirect("/app");
         };

@@ -2,12 +2,10 @@ package com.elcptn.mgmtsvc.security;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
-import java.util.Collection;
 
 /* @author: kc, created on 4/12/23 */
 public class UserPrincipal extends User {
@@ -18,14 +16,6 @@ public class UserPrincipal extends User {
     @Getter
     @Setter
     private String id;
-
-    public UserPrincipal(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
-    }
-
-    public UserPrincipal(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-    }
 
     public UserPrincipal(UserDetails user) {
         super(user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(), user.getAuthorities());

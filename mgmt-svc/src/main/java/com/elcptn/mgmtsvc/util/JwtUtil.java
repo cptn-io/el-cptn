@@ -1,5 +1,6 @@
 package com.elcptn.mgmtsvc.util;
 
+import com.elcptn.mgmtsvc.security.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -7,7 +8,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -24,7 +24,8 @@ public class JwtUtil implements InitializingBean {
     @Value("${cptn.security.jwt.secret}")
     private String secret;
 
-    public String generateToken(String username) {
+    public String generateToken(UserPrincipal userPrincipal) {
+
 
         Calendar iat = Calendar.getInstance();
         Calendar exp = Calendar.getInstance();
@@ -32,27 +33,27 @@ public class JwtUtil implements InitializingBean {
 
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder().setClaims(claims)
-                .setSubject(username)
+                .setSubject(userPrincipal.getId())
                 .setIssuedAt(iat.getTime())
                 .setExpiration(exp.getTime())
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserPrincipal userPrincipal) {
         Claims claims = parseToken(token);
 
-        if (claims.getExpiration().before(new Date()) || !claims.getSubject().equals(userDetails.getUsername())) {
+        if (claims.getExpiration().before(new Date()) || !userPrincipal.getId().equals(claims.getSubject())) {
             return false;
         }
 
         return true;
     }
 
-
-    public String extractUsername(String token) {
+    public String extractSubject(String token) {
         Claims claims = parseToken(token);
         return claims.getSubject();
     }
+
 
     private Claims parseToken(String token) {
 

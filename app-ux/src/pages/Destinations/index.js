@@ -51,7 +51,7 @@ const Destinations = () => {
                         </thead>
                         <tbody>
                             {data.map(source => <tr key={source.id}>
-                                <td className="whitespace-pre-wrap break-words"><Link to={`/destinations/${source.id}`}>{source.name}</Link></td>
+                                <td className="whitespace-pre-wrap break-words"><Link className="link link-hover" to={`/destinations/${source.id}`}>{source.name}</Link></td>
                                 <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
                             </tr>)}
                         </tbody>

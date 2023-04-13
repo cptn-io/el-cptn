@@ -33,7 +33,7 @@ const PipelineList = (props) => {
                     </thead>
                     <tbody>
                         {data.map(pipeline => <tr key={pipeline.id}>
-                            <td className="whitespace-pre-wrap break-words"><Link to={`/pipelines/${pipeline.id}`}>{pipeline.name}</Link></td>
+                            <td className="whitespace-pre-wrap break-words"><Link className="link link-hover" to={`/pipelines/${pipeline.id}`}>{pipeline.name}</Link></td>
                             <td className="whitespace-pre-wrap break-words">{pipeline.source.name}</td>
                             <td className="whitespace-pre-wrap break-words">{pipeline.destination.name}</td>
                             <td className="text-center"><div className="flex justify-center">{pipeline.batchProcess ? 'Yes' : 'No'}</div></td>

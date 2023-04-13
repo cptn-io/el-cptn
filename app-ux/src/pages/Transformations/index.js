@@ -50,7 +50,7 @@ const Transformations = () => {
                     </thead>
                     <tbody>
                         {data.map(transformation => <tr key={transformation.id}>
-                            <td className="whitespace-pre-wrap break-words"><Link to={`/transformations/${transformation.id}`}>{transformation.name}</Link></td>
+                            <td className="whitespace-pre-wrap break-words"><Link className="link link-hover" to={`/transformations/${transformation.id}`}>{transformation.name}</Link></td>
                             <td className="text-center"><div className="flex justify-center">{transformation.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
                         </tr>)}
                     </tbody>

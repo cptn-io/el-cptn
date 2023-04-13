@@ -5,10 +5,13 @@ import { ThemeContextProvider } from "./context/ThemeContext"
 import { NotificationContextProvider } from "./context/NotificationContext"
 import NotificationList from "./components/NotificationList"
 import './App.scss';
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
+import Loading from "./components/Loading"
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     axios.interceptors.response.use((response) => {
       return response;
@@ -23,8 +26,15 @@ export default function App() {
       axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token;
     }).catch((error) => {
       window.location.href = "/signin?error=csrf";
+    }).finally(() => {
+      setLoading(false);
     });
+
   }, [])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <ThemeContextProvider>
