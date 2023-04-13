@@ -1,6 +1,7 @@
 package com.elcptn.mgmtsvc.mappers;
 
 import com.elcptn.common.entities.Destination;
+import com.elcptn.common.projections.DestinationView;
 import com.elcptn.mgmtsvc.dto.DestinationDto;
 import org.mapstruct.*;
 
@@ -25,5 +26,7 @@ public interface DestinationMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Destination partialUpdate(DestinationDto destinationDto, @MappingTarget Destination destination);
 
-    DestinationDto toDto(Destination source);
+    DestinationDto toDto(Destination destination);
+
+    DestinationDto toDto(DestinationView destinationView);
 }

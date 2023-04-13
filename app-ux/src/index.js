@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Public from './Public';
 import Sources from './pages/Sources';
@@ -25,64 +24,66 @@ import NewUser from './pages/Users/NewUser';
 import UserDetails from './pages/Users/UserDetails';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const AppRoutes = () => {
+  return <BrowserRouter basename="/app">
+    <Suspense fallback={<div><Loading /></div>}>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="home" element={<Home />} />
+          <Route path="sources">
+            <Route path="" element={<Sources />} />
+            <Route path="new" element={<NewSource />} />
+            <Route path=":id" element={<SourceDetails />} />
+            <Route path=":id/:tab" element={<SourceDetails />} />
+          </Route>
+          <Route path="destinations">
+            <Route path="" element={<Destinations />} />
+            <Route path="new" element={<NewDestination />} />
+            <Route path=":id" element={<DestinationDetails />} />
+            <Route path=":id/:tab" element={<DestinationDetails />} />
+          </Route>
+          <Route path="pipelines" >
+            <Route path="" element={<Pipelines />} />
+            <Route path="new" element={<NewPipeline />} />
+            <Route path=":id" element={<PipelineDetails />} />
+            <Route path=":id/:tab" element={<PipelineDetails />} />
+          </Route>
+          <Route path="transformations" >
+            <Route path="" element={<Transformations />} />
+            <Route path="new" element={<NewTransformation />} />
+            <Route path=":id" element={<TransformationDetails />} />
+            <Route path=":id/:tab" element={<TransformationDetails />} />
+          </Route>
+          <Route path="users" >
+            <Route path="" element={<Users />} />
+            <Route path="new" element={<NewUser />} />
+            <Route path=":id" element={<UserDetails />} />
+          </Route>
+          <Route exact path="" element={<Navigate to="/home" replace />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/home" replace />} />
+      </Routes>
+    </Suspense>
+  </BrowserRouter>
+}
+
+const PublicRoutes = () => {
+  return <BrowserRouter basename=''>
+    <Suspense fallback={<div><Loading /></div>}>
+      <Routes>
+        <Route path="/" element={<Public />}>
+          <Route path="signin" element={<SignIn />}> </Route>
+          <Route exact path="" element={<Navigate to="/signin" replace />} />
+        </Route>
+      </Routes>
+    </Suspense>
+  </BrowserRouter>
+}
+
 root.render(
   <>
-    <BrowserRouter basename="/app">
-      <Suspense fallback={<div><Loading /></div>}>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="home" element={<Home />} />
-            <Route path="sources">
-              <Route path="" element={<Sources />} />
-              <Route path="new" element={<NewSource />} />
-              <Route path=":id" element={<SourceDetails />} />
-              <Route path=":id/:tab" element={<SourceDetails />} />
-            </Route>
-            <Route path="destinations">
-              <Route path="" element={<Destinations />} />
-              <Route path="new" element={<NewDestination />} />
-              <Route path=":id" element={<DestinationDetails />} />
-              <Route path=":id/:tab" element={<DestinationDetails />} />
-            </Route>
-            <Route path="pipelines" >
-              <Route path="" element={<Pipelines />} />
-              <Route path="new" element={<NewPipeline />} />
-              <Route path=":id" element={<PipelineDetails />} />
-              <Route path=":id/:tab" element={<PipelineDetails />} />
-            </Route>
-            <Route path="transformations" >
-              <Route path="" element={<Transformations />} />
-              <Route path="new" element={<NewTransformation />} />
-              <Route path=":id" element={<TransformationDetails />} />
-              <Route path=":id/:tab" element={<TransformationDetails />} />
-            </Route>
-            <Route path="users" >
-              <Route path="" element={<Users />} />
-              <Route path="new" element={<NewUser />} />
-              <Route path=":id" element={<UserDetails />} />
-            </Route>
-            <Route exact path="" element={<Navigate to="/home" replace />} />
-          </Route>
-          <Route path="/" element={<Public />}>
-          </Route>
-          <Route path="*" element={<Navigate to="/home" replace />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-    <BrowserRouter basename=''>
-      <Suspense fallback={<div><Loading /></div>}>
-        <Routes>
-          <Route path="/" element={<Public />}>
-            <Route path="signin" element={<SignIn />}> </Route>
-            <Route exact path="" element={<Navigate to="/signin" replace />} />
-          </Route>
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <AppRoutes />
+    <PublicRoutes />
   </>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

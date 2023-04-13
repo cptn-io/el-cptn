@@ -2,6 +2,7 @@ package com.elcptn.mgmtsvc.dto;
 
 import com.elcptn.common.entities.Destination;
 import com.elcptn.common.validation.OnCreate;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -22,5 +23,6 @@ public class DestinationDto extends ScriptedStepDto {
 
     @Valid
     @NotNull(groups = OnCreate.class)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ConfigItemDto> config;
 }

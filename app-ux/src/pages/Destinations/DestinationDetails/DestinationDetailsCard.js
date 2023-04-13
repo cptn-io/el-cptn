@@ -58,6 +58,9 @@ const DestinationDetailsCard = (props) => {
     const saveChanges = (e) => {
         e.preventDefault();
         const payload = fromPairs(differenceWith(toPairs(changes), toPairs(props.data), isEqual));
+        if (changes.config) {
+            payload.config = changes.config;
+        }
         if (keys(payload).length === 0) {
             setEditMode(false);
             return;

@@ -48,7 +48,7 @@ public class DestinationController {
     public ResponseEntity<List<DestinationDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
         List<DestinationDto> destinationDtoList = destinationService.getAll(listParam).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(mapper::toDto).collect(Collectors.toList());
         long count = destinationService.count();
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(destinationDtoList);
     }

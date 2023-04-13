@@ -20,11 +20,11 @@ const Home = () => {
     useEffect(() => {
         setRefreshing(true);
         axios.get(`/api/dashboard/metrics?interval=${interval}`).then(response => {
-            const inboundMetrics = processInboundMetrics(response.data);
-            const outboundMetrics = processOutboundMetrics(response.data);
+            const inboundMetrics = processInboundMetrics(response?.data);
+            const outboundMetrics = processOutboundMetrics(response?.data);
 
             setData({
-                entities: response.data?.entities,
+                entities: response?.data?.entities,
                 inboundMetrics,
                 outboundMetrics
             });
@@ -80,9 +80,9 @@ const Home = () => {
         </div>
         <div className="bg-base-200 p-3 rounded-box mb-4 shadow">
             <div className="text-xl font-extrabold mb-4">Inbound events</div>
-            <SourceMetricsRenderer metrics={data.inboundMetrics} interval={interval} refreshing={refreshing} />
+            <SourceMetricsRenderer metrics={data?.inboundMetrics} interval={interval} refreshing={refreshing} />
             <div className="text-xl font-extrabold mt-4 mb-4">Outbound events</div>
-            <PipelineMetricsRenderer metrics={data.outboundMetrics} interval={interval} refreshing={refreshing} />
+            <PipelineMetricsRenderer metrics={data?.outboundMetrics} interval={interval} refreshing={refreshing} />
         </div>
     </Fragment>
 }

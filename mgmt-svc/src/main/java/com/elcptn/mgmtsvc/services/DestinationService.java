@@ -1,6 +1,7 @@
 package com.elcptn.mgmtsvc.services;
 
 import com.elcptn.common.entities.Destination;
+import com.elcptn.common.projections.DestinationView;
 import com.elcptn.common.repositories.DestinationRepository;
 import com.elcptn.common.services.CommonService;
 import com.elcptn.common.web.ListEntitiesParam;
@@ -48,9 +49,9 @@ public class DestinationService extends CommonService {
         return destinationRepository.save(destination);
     }
 
-    public List<Destination> getAll(ListEntitiesParam param) {
+    public List<DestinationView> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return destinationRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return destinationRepository.findAllProjectedBy(pageable).stream().collect(Collectors.toList());
     }
 
     public long count() {
