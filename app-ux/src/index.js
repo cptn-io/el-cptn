@@ -21,10 +21,12 @@ import NewTransformation from './pages/Transformations/NewTransformation';
 import TransformationDetails from './pages/Transformations/TransformationDetails';
 import SignIn from './pages/Public/SignIn';
 import Users from './pages/Users';
+import NewUser from './pages/Users/NewUser';
+import UserDetails from './pages/Users/UserDetails';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <BrowserRouter basename="/app">
       <Suspense fallback={<div><Loading /></div>}>
         <Routes>
@@ -56,6 +58,8 @@ root.render(
             </Route>
             <Route path="users" >
               <Route path="" element={<Users />} />
+              <Route path="new" element={<NewUser />} />
+              <Route path=":id" element={<UserDetails />} />
             </Route>
             <Route exact path="" element={<Navigate to="/home" replace />} />
           </Route>
@@ -75,7 +79,7 @@ root.render(
         </Routes>
       </Suspense>
     </BrowserRouter>
-  </React.StrictMode>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function

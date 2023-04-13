@@ -29,12 +29,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                         "process to create the first user record. Please use a different email address to login");
             }
 
-            return org.springframework.security.core.userdetails.User.withUsername("foo@example.com")
+
+            UserPrincipal principal = (UserPrincipal) org.springframework.security.core.userdetails.User.withUsername("foo" +
+                            "@example" +
+                            ".com")
                     .disabled(false)
                     .accountLocked(false)
                     .password(passwordEncoder.encode("bar"))
                     .roles("USER")
                     .build();
+            principal.setId("-1");
+            return principal;
         }
 
         User user = userService.getUserByEmail(username);
@@ -44,11 +49,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
 
-        return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                .disabled(user.isDisabled())
-                .accountLocked(user.isLockedOut())
-                .password(user.getHashedPassword())
-                .roles("USER")
-                .build();
+        UserDetails userDetails =
+                org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
+                        .disabled(user.isDisabled())
+                        .accountLocked(user.isLockedOut())
+                        .password(user.getHashedPassword())
+                        .roles("USER")
+                        .build();
+        
+        userDetails = UserPrincipal.userDetails(userDetails)
+                .id(user.getId().toString()).build();
+        return userDetails;
     }
 }

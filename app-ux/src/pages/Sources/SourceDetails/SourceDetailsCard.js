@@ -77,6 +77,12 @@ const SourceDetailsCard = (props) => {
     }, [id, addNotification, onUpdate]);
 
 
+    const cancelChanges = (e) => {
+        e.preventDefault();
+        setChanges({});
+        setEditMode(false);
+    }
+
     const cancelDialog = useCallback(() => {
         setShowConfirmation(false)
     }, [])
@@ -113,7 +119,7 @@ const SourceDetailsCard = (props) => {
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} defaultChecked={active}
+                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${(changes.active || active) ? 'toggle-success' : ''}`} defaultChecked={active}
                         onChange={e => setChanges(current => ({
                             ...current,
                             active: e.target.checked
@@ -168,6 +174,7 @@ const SourceDetailsCard = (props) => {
                 {!editMode && <button disabled={!secured || executing} className="btn btn-warning"
                     onClick={() => setShowConfirmation(true)}>Rotate keys</button>}
                 {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Source</button>}
+                {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
                 {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
                     Changes</button>}
             </div>}

@@ -115,7 +115,7 @@ const TransformationDetailsCard = (props) => {
                     <label className="label">
                         <span className="label-text">Active</span>
                     </label>
-                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} defaultChecked={active}
+                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${(changes.active || active) ? 'toggle-success' : ''}`} defaultChecked={active}
                         onChange={e => setChanges(current => ({
                             ...current,
                             active: e.target.checked

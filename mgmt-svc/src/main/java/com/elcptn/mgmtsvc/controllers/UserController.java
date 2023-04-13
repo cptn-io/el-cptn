@@ -8,11 +8,13 @@ import com.elcptn.common.validation.OnUpdate;
 import com.elcptn.common.web.ListEntitiesParam;
 import com.elcptn.mgmtsvc.dto.UserDto;
 import com.elcptn.mgmtsvc.mappers.UserMapper;
+import com.elcptn.mgmtsvc.security.UserPrincipal;
 import com.elcptn.mgmtsvc.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +90,15 @@ public class UserController {
         User user = getById(id);
         user.setDisabled(true);
         return ResponseEntity.ok(convert(userService.update(user)));
+    }
+
+
+    @GetMapping("/myprofile")
+    public ResponseEntity myProfile() {
+        UserPrincipal
+                principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return ResponseEntity.status(302).header("Location", "/app/users/" + principal.getId()).build();
     }
 
     private User getById(UUID id) {

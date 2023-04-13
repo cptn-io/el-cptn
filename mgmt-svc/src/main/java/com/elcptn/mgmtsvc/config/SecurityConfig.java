@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
@@ -36,11 +37,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        CookieCsrfTokenRepository tokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        CookieCsrfTokenRepository tokenRepository = new CookieCsrfTokenRepository();
         XorCsrfTokenRequestAttributeHandler delegate = new XorCsrfTokenRequestAttributeHandler();
         delegate.setCsrfRequestAttributeName("_csrf");
         CsrfTokenRequestHandler requestHandler = delegate::handle;
 
+        //csrf config
         http.csrf((csrf) -> csrf
                 .ignoringRequestMatchers(request -> {
                     //ignore csrf for public pages or non-browser clients
@@ -48,31 +50,30 @@ public class SecurityConfig {
                 })
                 .csrfTokenRepository(tokenRepository)
                 .csrfTokenRequestHandler(requestHandler)
+                .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
+        );
+        //session management
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests(authz -> authz
+                .requestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI())).permitAll()
+                .anyRequest().authenticated()
         );
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-
-        http.authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/csrf", "/logout").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .exceptionHandling()
-                .defaultAuthenticationEntryPointFor(customAuthenticationEntryPoint, new AntPathRequestMatcher("/api/**"))
-                .and()
-                .formLogin().loginPage("/signin").loginProcessingUrl("/login").failureUrl("/signin?error")
+        //auth exception handling
+        http.exceptionHandling()
+                .defaultAuthenticationEntryPointFor(customAuthenticationEntryPoint, new AntPathRequestMatcher("/api" +
+                        "/**"));
+        //form login config
+        http.formLogin().loginPage("/signin").loginProcessingUrl("/login").failureUrl("/signin?error")
                 .defaultSuccessUrl("/app", true)
-                .successHandler(successHandler())
-                .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                .successHandler(successHandler());
+        //form logout config
+        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .logoutSuccessUrl("/signin?logout")
                 .deleteCookies("JSESSIONID", "XSRF-TOKEN", AUTH_COOKIE)
                 .clearAuthentication(true)
-                .invalidateHttpSession(true).permitAll()
-                .and()
-                .httpBasic().authenticationEntryPoint(customAuthenticationEntryPoint);
-
-        http.addFilterBefore(
+                .invalidateHttpSession(true).permitAll();
+        //http basic auth config
+        http.httpBasic().authenticationEntryPoint(customAuthenticationEntryPoint).and().addFilterBefore(
                 jwtRequestFilter,
                 UsernamePasswordAuthenticationFilter.class
         );

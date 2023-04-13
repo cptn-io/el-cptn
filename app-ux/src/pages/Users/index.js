@@ -50,7 +50,7 @@ const Users = () => {
                             <th className={`bg-base-300 text-left w-1/4`}>Last Name</th>
                             <th className={`bg-base-300 text-left w-1/4`}>Last Login</th>
                             <th className={`bg-base-300 text-center w-1/3`}>Locked Out</th>
-                            <th className={`bg-base-300 text-center w-1/3`}>Active</th>
+                            <th className={`bg-base-300 text-center w-1/3`}>Disabled</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,7 +60,7 @@ const Users = () => {
                             <td className="whitespace-pre-wrap break-words">{user.lastName}</td>
                             <td className="whitespace-pre-wrap break-words">{user.lastLoginAt ? moment(user.lastLoginAt).format('LLL') : 'Never'}</td>
                             <td className="text-center"><div className="flex justify-center">{user.lockedOut ? 'Yes' : 'No'}</div></td>
-                            <td className="text-center"><div className="flex justify-center">{!user.disabled ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
+                            <td className="text-center"><div className="flex justify-center">{user.disabled ? 'Yes' : 'No'}</div></td>
                         </tr>)}
                     </tbody>
                 </table> : renderNoUsers()}
@@ -85,5 +85,7 @@ const renderNoUsers = () => {
         </div>
     </div>
 }
+
+export const breadcrumbs = [{ label: 'Users', url: '/users' }];
 
 export default Users;
