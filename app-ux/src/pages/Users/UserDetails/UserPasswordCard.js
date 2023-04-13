@@ -60,7 +60,7 @@ const UserPasswordCard = (props) => {
                 <label className="label">
                     <span className="label-text">Password</span>
                 </label>
-                {editMode ? <Fragment><input autoComplete="new-password" type="password" placeholder="Updated new password" defaultValue={''}
+                {editMode ? <Fragment><input autoComplete="new-password" type="password" placeholder="New password" defaultValue={''}
                     className="input input-bordered w-full"
                     onChange={e => setChanges(current => ({
                         ...current,

@@ -53,7 +53,10 @@ public class SecurityConfig {
                 .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
         );
         //session management
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests(authz -> authz
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        //setup authentication
+        http.authorizeHttpRequests(authz -> authz
                 .requestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI())).permitAll()
                 .anyRequest().authenticated()
         );

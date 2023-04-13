@@ -45,12 +45,12 @@ const Users = () => {
                 {totalCount > 0 ? <table className="table data-table table-zebra w-full">
                     <thead>
                         <tr>
-                            <th className={`bg-base-300 text-left w-1/3`}>Email</th>
-                            <th className={`bg-base-300 text-left w-1/4`}>First Name</th>
-                            <th className={`bg-base-300 text-left w-1/4`}>Last Name</th>
-                            <th className={`bg-base-300 text-left w-1/4`}>Last Login</th>
-                            <th className={`bg-base-300 text-center w-1/3`}>Locked Out</th>
-                            <th className={`bg-base-300 text-center w-1/3`}>Disabled</th>
+                            <th className={`bg-base-300 text-left w-3/12`}>Email</th>
+                            <th className={`bg-base-300 text-left w-3/12`}>First Name</th>
+                            <th className={`bg-base-300 text-left w-3/12`}>Last Name</th>
+                            <th className={`bg-base-300 text-left w-3/12`}>Last Login</th>
+                            <th className={`bg-base-300 text-center w-2/12`}>Locked Out</th>
+                            <th className={`bg-base-300 text-center w-2/12`}>Disabled</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,7 +58,7 @@ const Users = () => {
                             <td className="whitespace-pre-wrap break-words"><Link to={`/users/${user.id}`}>{user.email}</Link></td>
                             <td className="whitespace-pre-wrap break-words">{user.firstName}</td>
                             <td className="whitespace-pre-wrap break-words">{user.lastName}</td>
-                            <td className="whitespace-pre-wrap break-words">{user.lastLoginAt ? moment(user.lastLoginAt).format('LLL') : 'Never'}</td>
+                            <td className="whitespace-pre-wrap break-words">{user.lastLoginAt ? moment(user.lastLoginAt).format('lll') : 'Never'}</td>
                             <td className="text-center"><div className="flex justify-center">{user.lockedOut ? 'Yes' : 'No'}</div></td>
                             <td className="text-center"><div className="flex justify-center">{user.disabled ? 'Yes' : 'No'}</div></td>
                         </tr>)}
