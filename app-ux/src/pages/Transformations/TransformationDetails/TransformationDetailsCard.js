@@ -10,16 +10,19 @@ import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 import axios from 'axios';
 import Editor from '@monaco-editor/react';
+import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../../../components/ConfirmModal';
 
 const TransformationDetailsCard = (props) => {
     const { data: { id, name, script, active }, onUpdate } = props;
-
+    const navigate = useNavigate();
     const editorRef = useRef(null);
     const { addNotification } = useNotifications();
     const [editMode, setEditMode] = useState(false);
     const [error, setError] = useState({ message: null, details: [] });
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
 
     const handleEditorWillMount = (monaco) => {
@@ -70,6 +73,27 @@ const TransformationDetailsCard = (props) => {
             setError(err.response.data);
         }).finally(() => {
             setExecuting(false);
+        })
+    }
+
+    const deleteTransformer = (e) => {
+        e.preventDefault();
+        setExecuting(true);
+        axios.delete(`/api/transformation/${id}`).then(response => {
+            addNotification({
+                message: 'Transformation has been deleted',
+                type: 'success'
+            });
+            navigate('/transformations');
+        }).catch(err => {
+            addNotification({
+                message: get(err, 'response.data.message', 'An error occurred while deleting Transformation'),
+                type: 'error'
+            });
+            setError(err.response.data);
+        }).finally(() => {
+            setExecuting(false);
+            setShowDeleteConfirmation(false);
         })
     }
 
@@ -125,12 +149,17 @@ const TransformationDetailsCard = (props) => {
                 </div>
             </div>
 
-            <div className="card-actions justify-end">
-                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Transformation</button>}
-                {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
-                {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                    Changes</button>}
+            <div className="card-actions mt-2 justify-between">
+                <div>{editMode && <button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button>}</div>
+                <div className="flex justify-end">
+                    {!editMode && <button className="btn" type="button" onClick={() => setEditMode(true)}>Edit Transformation</button>}
+                    {editMode && <button className="btn mr-2" type="button" onClick={cancelChanges}>Cancel</button>}
+                    {editMode && <button className="btn btn-primary" type="button" disabled={executing} onClick={saveChanges}>Save
+                        Changes</button>}
+                </div>
+
             </div>
+            {showDeleteConfirmation && <ConfirmModal title="Delete Transformation" message="Are you sure you want to delete this Transformation?" onConfirm={deleteTransformer} onCancel={() => setShowDeleteConfirmation(false)} />}
         </div>
     </div>
 }

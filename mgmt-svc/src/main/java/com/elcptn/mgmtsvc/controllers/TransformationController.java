@@ -12,6 +12,7 @@ import com.elcptn.mgmtsvc.services.TransformationService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -80,7 +81,11 @@ public class TransformationController {
     @DeleteMapping("/api/transformation/{id}")
     public ResponseEntity delete(@PathVariable UUID id) {
         Transformation transformation = getById(id);
-        transformationService.delete(transformation);
+        try {
+            transformationService.delete(transformation);
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException("Unable to delete transformation as it is being used by other entities");
+        }
         return ResponseEntity.noContent().build();
     }
 

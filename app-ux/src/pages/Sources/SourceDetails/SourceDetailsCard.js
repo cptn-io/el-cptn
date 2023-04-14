@@ -10,9 +10,11 @@ import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 import axios from 'axios';
 import ConfirmModal from '../../../components/ConfirmModal';
+import { useNavigate } from 'react-router-dom';
 
 const SourceDetailsCard = (props) => {
     const { data: { id, name, secured, active, primaryKey, secondaryKey }, onUpdate = () => { }, readOnly = false } = props;
+    const navigate = useNavigate();
     const [showPrimary, setShowPrimary] = useState(false);
     const [showSecondary, setShowSecondary] = useState(false);
     const { addNotification } = useNotifications();
@@ -21,6 +23,7 @@ const SourceDetailsCard = (props) => {
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
     const copyToClipboard = (key, message) => {
         navigator.clipboard.writeText(key)
@@ -76,6 +79,27 @@ const SourceDetailsCard = (props) => {
         });
     }, [id, addNotification, onUpdate]);
 
+
+    const deleteSource = (e) => {
+        e.preventDefault();
+        setExecuting(true);
+        axios.delete(`/api/source/${id}`).then(response => {
+            addNotification({
+                message: 'Source has been deleted',
+                type: 'success'
+            });
+            navigate('/sources');
+        }).catch(err => {
+            addNotification({
+                message: get(err, 'response.data.message', 'An error occurred while deleting Source'),
+                type: 'error'
+            });
+            setError(err.response.data);
+        }).finally(() => {
+            setExecuting(false);
+            setShowDeleteConfirmation(false);
+        })
+    }
 
     const cancelChanges = (e) => {
         e.preventDefault();
@@ -170,18 +194,23 @@ const SourceDetailsCard = (props) => {
                         : <div>Disabled</div>}
                 </div>
             </div>
-            {!readOnly && <div className="card-actions justify-end">
-                {!editMode && <button disabled={!secured || executing} className="btn btn-warning"
-                    onClick={() => setShowConfirmation(true)}>Rotate keys</button>}
-                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Source</button>}
-                {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
-                {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                    Changes</button>}
+            {!readOnly && <div className="card-actions mt-2 justify-between">
+                <div>{editMode && <button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button>}</div>
+                <div className="flex justify-end">
+                    {!editMode && <button disabled={!secured || executing} className="btn btn-warning mr-2"
+                        onClick={() => setShowConfirmation(true)}>Rotate keys</button>}
+                    {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Source</button>}
+                    {editMode && <button className="btn mr-2" onClick={cancelChanges}>Cancel</button>}
+                    {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
+                        Changes</button>}
+                </div>
             </div>}
         </div>
         {showConfirmation && <ConfirmModal title="Are you sure?"
             message="This destination will generate a new primary key and sets current primary key as secondary key. The current secondary key will no longer work once the keys are rotated. This destination cannot be reversed once confirmed."
             onConfirm={rotateKeys} onCancel={cancelDialog} />}
+
+        {showDeleteConfirmation && <ConfirmModal title="Delete Source" message="Are you sure you want to delete this Source? All associated events related to this Source will be deleted." onConfirm={deleteSource} onCancel={() => setShowDeleteConfirmation(false)} />}
     </div>
 }
 

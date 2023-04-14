@@ -12,6 +12,7 @@ import com.elcptn.mgmtsvc.services.SourceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -85,7 +86,11 @@ public class SourceController {
     @DeleteMapping("/api/source/{id}")
     public ResponseEntity delete(@PathVariable UUID id) {
         Source source = getById(id);
-        sourceService.delete(source);
+        try {
+            sourceService.delete(source);
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException("Unable to delete Source as it is being used by other entities");
+        }
         return ResponseEntity.noContent().build();
     }
 

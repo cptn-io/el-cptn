@@ -12,10 +12,12 @@ import axios from 'axios';
 import Editor from '@monaco-editor/react';
 import ConfigBuilder from '../../../components/ConfigBuilder';
 import filter from 'lodash/filter';
+import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../../../components/ConfirmModal';
 
 const DestinationDetailsCard = (props) => {
     const { data: { id, name, script, active, config }, onUpdate = () => { }, readOnly = false } = props;
-
+    const navigate = useNavigate();
     const editorRef = useRef(null);
     const { addNotification } = useNotifications();
     const [editMode, setEditMode] = useState(false);
@@ -23,6 +25,8 @@ const DestinationDetailsCard = (props) => {
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
     const [configChanges, setConfigChanges] = useState(config);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
 
 
     const handleEditorWillMount = (monaco) => {
@@ -81,6 +85,27 @@ const DestinationDetailsCard = (props) => {
             setError(err.response.data);
         }).finally(() => {
             setExecuting(false);
+        })
+    }
+
+    const deleteDestination = (e) => {
+        e.preventDefault();
+        setExecuting(true);
+        axios.delete(`/api/destination/${id}`).then(response => {
+            addNotification({
+                message: 'Destination has been deleted',
+                type: 'success'
+            });
+            navigate('/destinations');
+        }).catch(err => {
+            addNotification({
+                message: get(err, 'response.data.message', 'An error occurred while deleting Destination'),
+                type: 'error'
+            });
+            setError(err.response.data);
+        }).finally(() => {
+            setExecuting(false);
+            setShowDeleteConfirmation(false);
         })
     }
 
@@ -144,12 +169,16 @@ const DestinationDetailsCard = (props) => {
                 </div>
             </div>
 
-            {!readOnly && <div className="card-actions justify-end">
-                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Destination</button>}
-                {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
-                {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                    Changes</button>}
+            {!readOnly && <div className="card-actions mt-2 justify-between">
+                <div>{editMode && <button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button>}</div>
+                <div className="flex justify-end">
+                    {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Destination</button>}
+                    {editMode && <button className="btn mr-2" onClick={cancelChanges}>Cancel</button>}
+                    {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
+                        Changes</button>}
+                </div>
             </div>}
+            {showDeleteConfirmation && <ConfirmModal title="Delete Destination" message="Are you sure you want to delete this Destination?" onConfirm={deleteDestination} onCancel={() => setShowDeleteConfirmation(false)} />}
         </div>
     </div>
 }

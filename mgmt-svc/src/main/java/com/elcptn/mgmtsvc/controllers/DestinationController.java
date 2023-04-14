@@ -12,6 +12,7 @@ import com.elcptn.mgmtsvc.services.DestinationService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -78,7 +79,11 @@ public class DestinationController {
     @DeleteMapping("/api/destination/{id}")
     public ResponseEntity delete(@PathVariable UUID id) {
         Destination destination = getById(id);
-        destinationService.delete(destination);
+        try {
+            destinationService.delete(destination);
+        } catch (DataIntegrityViolationException e) {
+            throw new BadRequestException("Unable to delete destination as it is being used by other entities");
+        }
         return ResponseEntity.noContent().build();
     }
 
