@@ -11,12 +11,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public String[] PUBLIC_PAGES = new String[]{"/event/**"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/event/**").permitAll());
+        http.csrf(csrf -> csrf.ignoringRequestMatchers(PUBLIC_PAGES)).authorizeHttpRequests(authz -> authz
+                .requestMatchers(PUBLIC_PAGES).permitAll());
 
         return http.build();
     }
