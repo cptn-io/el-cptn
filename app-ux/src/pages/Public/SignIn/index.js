@@ -21,6 +21,7 @@ const SignIn = () => {
     const [error, setError] = useState(searchParams.has("error") ? searchParams.get("error") : null);
     const [logout] = useState(searchParams.has("logout") ? searchParams.get("logout") : null);
 
+
     useEffect(() => {
         axios.get("/api/csrf").then((response) => {
             setCsrf(response.data.token);
@@ -28,6 +29,10 @@ const SignIn = () => {
             setError('csrf');
         });
     }, [])
+
+    const setToken = (e) => {
+        setCsrf(document.cookie.match(/XSRF-TOKEN=(.*)/)?.[1]);
+    }
     return <div className="w-4/5 mx-auto bg-base-300 rounded-lg overflow-hidden md:w-2/4 lg:w-1/4">
         <div className="p-5">
             {logout &&
@@ -44,7 +49,7 @@ const SignIn = () => {
                 <h2 className="text-lg font-semibold uppercase">Sign In</h2>
             </div>
             <div>
-                <form method="POST" action="/login">
+                <form method="POST" onSubmit={setToken} action="/login">
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-content font-bold mb-2">Email</label>
                         <input

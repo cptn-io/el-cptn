@@ -36,7 +36,6 @@ export default function App() {
   const idleTimer = useIdleTimer({ timers: workerTimers, crossTab: true, syncTimers: 2 * 60 * 1000, onIdle, onPrompt, promptBeforeIdle: PROMPT_DURATION, timeout: TIMEOUT_INTERVAL, debounce: 500 })
 
   const stayLoggedIn = useCallback(() => {
-    console.log('stayLoggedIn');
     idleTimer.reset();
     setShowIdleModal(false);
   }, [idleTimer]);
@@ -51,8 +50,11 @@ export default function App() {
       return Promise.reject(error);
     });
 
+    axios.defaults.xsrfCookieName = "XSRF-TOKEN"
+    axios.defaults.xsrfHeaderName = "X-XSRF-TOKEN"
+
     axios.get("/api/csrf").then((response) => {
-      axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token;
+      //axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token;
     }).catch((error) => {
       window.location.href = "/signin?error=csrf";
     }).finally(() => {

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CsrfController {
 
-    private CsrfTokenRepository csrfTokenRepository = new CookieCsrfTokenRepository();
+    private CsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
 
     @GetMapping("/api/csrf")
     public CsrfToken getCsrfToken(HttpServletRequest request, HttpServletResponse response) {
