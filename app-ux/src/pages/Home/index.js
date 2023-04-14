@@ -8,6 +8,7 @@ import { IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconTransfo
 import { processInboundMetrics, processOutboundMetrics } from "../../common/metricHelpers";
 import IntervalSelector from "../../components/IntervalSelector";
 import { PipelineMetricsRenderer, SourceMetricsRenderer } from "../../components/Metrics";
+import { Link } from "react-router-dom";
 
 
 const Home = () => {
@@ -47,32 +48,32 @@ const Home = () => {
         <PageTitle itemKey="home" />
         <div className="grid grid-cols-4 gap-2 mb-4">
             <div className="stats shadow bg-primary text-primary-content col-span-2 md:col-span-1 rounded-2xl">
-                <div className="stat text-center">
+                <Link to="/pipelines"><div className="stat text-center">
                     <div className="flex justify-center my-4"><IconCloudComputing size={64} /></div>
-                    <div className="stat-title text-primary-content">Data Pipelines</div>
+                    <div className="stat-title text-primary-content text-xl">Pipelines</div>
                     <div className="stat-value text-6xl">{data?.entities?.pipelines || 0}</div>
-                </div>
+                </div></Link>
             </div>
             <div className="stats shadow bg-secondary text-secondary-content col-span-2 md:col-span-1 rounded-2xl">
-                <div className="stat text-center">
+                <Link to="/sources"><div className="stat text-center">
                     <div className="flex justify-center my-4"><IconDatabaseExport size={64} /></div>
-                    <div className="stat-title text-secondary-content">Data Sources</div>
+                    <div className="stat-title text-secondary-content text-xl">Sources</div>
                     <div className="stat-value text-6xl">{data?.entities?.sources || 0}</div>
-                </div>
+                </div></Link>
             </div>
             <div className="stats shadow bg-info text-info-content col-span-2 md:col-span-1 rounded-2xl">
-                <div className="stat text-center">
+                <Link to="/destinations"><div className="stat text-center">
                     <div className="flex justify-center my-4"><IconDatabaseImport size={64} /></div>
-                    <div className="stat-title text-info-content">Data Destinations</div>
+                    <div className="stat-title text-info-content text-xl">Destinations</div>
                     <div className="stat-value text-6xl">{data?.entities?.destinations || 0}</div>
-                </div>
+                </div></Link>
             </div>
             <div className="stats shadow bg-accent text-accent-content  col-span-2 md:col-span-1 rounded-2xl">
-                <div className="stat text-center">
+                <Link to="/transformations"><div className="stat text-center">
                     <div className="flex justify-center my-4"><IconTransform size={64} /></div>
-                    <div className="stat-title text-accent-content">Transformations</div>
+                    <div className="stat-title text-accent-content text-xl">Transformations</div>
                     <div className="stat-value text-6xl">{data?.entities?.transformations || 0}</div>
-                </div>
+                </div></Link>
             </div>
         </div>
         <div className="flex flex-row-reverse">
