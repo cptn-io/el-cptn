@@ -1,6 +1,7 @@
 import find from 'lodash/find';
 
 export const processInboundMetrics = (data) => {
+    debugger;
     const inboundTotal = data?.inbound?.reduce((sum, status) => sum + status.count, 0) || 0;
     const inboundCompleted = find(data?.inbound, { 'state': 'COMPLETED' })?.count || 0;
     const inboundFailed = find(data?.inbound, { 'state': 'FAILED' })?.count || 0;

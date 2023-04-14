@@ -1,4 +1,3 @@
-import { IconCheck, IconX } from '@tabler/icons-react';
 import { Fragment, useState } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";

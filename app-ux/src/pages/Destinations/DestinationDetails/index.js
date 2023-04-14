@@ -10,7 +10,7 @@ import DestinationDetailsCard from "./DestinationDetailsCard";
 import Tabs from "../../../components/Tabs";
 import DestinationPipelines from "./DestinationPipelines";
 
-const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Events' }];
+const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }];
 
 const DestinationDetails = (props) => {
     const navigate = useNavigate();

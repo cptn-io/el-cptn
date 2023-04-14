@@ -5,12 +5,41 @@ import { ThemeContextProvider } from "./context/ThemeContext"
 import { NotificationContextProvider } from "./context/NotificationContext"
 import NotificationList from "./components/NotificationList"
 import './App.scss';
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
-import Loading from "./components/Loading"
+import Loading from "./components/Loading";
+import { useIdleTimer, workerTimers } from 'react-idle-timer';
+import LogoutModal from "./components/LogoutModal"
+
+const PROMPT_DURATION = 2 * 60 * 1000; //2 min prompt
+const TIMEOUT_INTERVAL = 15 * 60 * 1000; //15 min timeout
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [showIdleModal, setShowIdleModal] = useState(false);
+
+  const logout = useCallback(() => {
+    window.location.href = "/logout?reason=idle";
+  }, []);
+
+
+  const onIdle = useCallback(() => {
+    logout();
+  }, [logout]);
+
+  const onPrompt = useCallback(() => {
+    setShowIdleModal(true);
+  }, []);
+
+
+
+  const idleTimer = useIdleTimer({ timers: workerTimers, crossTab: true, syncTimers: 2 * 60 * 1000, onIdle, onPrompt, promptBeforeIdle: PROMPT_DURATION, timeout: TIMEOUT_INTERVAL, debounce: 500 })
+
+  const stayLoggedIn = useCallback(() => {
+    console.log('stayLoggedIn');
+    idleTimer.reset();
+    setShowIdleModal(false);
+  }, [idleTimer]);
 
   useEffect(() => {
     axios.interceptors.response.use((response) => {
@@ -50,6 +79,7 @@ export default function App() {
           </div>
           <LeftNav />
         </div>
+        {showIdleModal && <LogoutModal onStayLoggedIn={stayLoggedIn} onLogout={logout} getRemainingTime={idleTimer.getRemainingTime} />}
         <div id="modal">
         </div>
       </NotificationContextProvider>

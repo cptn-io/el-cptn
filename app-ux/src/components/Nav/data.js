@@ -1,4 +1,4 @@
-import { IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconHome, IconTransform, IconUser, IconUsers } from '@tabler/icons-react';
+import { IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconHome, IconTransform, IconUsers } from '@tabler/icons-react';
 
 const navItems = [
     {

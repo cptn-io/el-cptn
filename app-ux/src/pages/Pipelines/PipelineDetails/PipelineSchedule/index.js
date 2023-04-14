@@ -11,7 +11,7 @@ const PipelineSchedule = (props) => {
             <div className="card bg-base-100 mb-4">
                 <div className="card-body p-4">
                     <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Schedule</div>
-                    {!pipeline.batchProcess && <div className="m-2">This Pipeline does not require a schedule as it doesn't process events in Scheduled Batches</div>}
+                    {!pipeline.batchProcess && <div className="m-2">This pipeline runs without a schedule since it does not process events in scheduled batches.</div>}
                     {pipeline.batchProcess && <Scheduler pipelineId={pipeline.id} />}
                 </div>
 
@@ -22,9 +22,9 @@ const PipelineSchedule = (props) => {
                 <div className="card-body">
                     <h2 className="card-title text-error">Important!</h2>
                     <div>
-                        <p className="mt-4">Quaued events related to a Pipeline are stored in the database. Events are automatically deleted on schedule based on the table rotation settings configured for Outbound queues.</p>
-                        <p className="mt-4">Ensure your Pipeline Schedule is configured to align with the table rotation settings. Otherwise, you may have events deleted before they are processed.</p>
-                        <p className="mt-4">We recommend a run schedule interval of at least 5 minutes. If you do not have an associated schedule or if the schedule is inactive, events can only be processed on-demand.</p>
+                        <p className="mt-4">Events related to a pipeline are queued and stored in the database, with automatic deletion based on the table rotation settings configured for outbound queues.</p>
+                        <p className="mt-4">Make sure to align your pipeline schedule with the table rotation settings to prevent events from being deleted before processing.</p>
+                        <p className="mt-4">To ensure optimal performance, we suggest setting the run schedule interval to a minimum of 5 minutes. Without an active associated schedule, events will only be processed on-demand.</p>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "axios";
 import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
@@ -71,13 +71,8 @@ const CreateUser = (props) => {
 
     const resolveNames = useCallback(() => {
         const name = extractNameFromEmail(email);
-        if (!lastName) {
-            setLastName(name.lastName);
-        }
-
-        if (!firstName) {
-            setFirstName(name.firstName);
-        }
+        setLastName(current => current || name.lastName);
+        setFirstName(current => current || name.firstName);
     }, [email])
 
     return <form onSubmit={submit}>

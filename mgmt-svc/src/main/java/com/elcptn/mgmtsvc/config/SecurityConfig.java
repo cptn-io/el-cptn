@@ -23,6 +23,7 @@ import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.util.Optional;
 import java.util.Set;
 
 /* @author: kc, created on 4/10/23 */
@@ -88,7 +89,10 @@ public class SecurityConfig {
                 });
         //form logout config
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                .logoutSuccessUrl("/signin?logout")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    String reason = Optional.ofNullable(request.getParameter("reason")).orElse("user");
+                    response.sendRedirect("/signin?logout=" + reason);
+                })
                 .deleteCookies("JSESSIONID", "XSRF-TOKEN", AUTH_COOKIE)
                 .clearAuthentication(true)
                 .invalidateHttpSession(true).permitAll();

@@ -19,6 +19,7 @@ const SignIn = () => {
     const [csrf, setCsrf] = useState('');
     const [searchParams] = useSearchParams();
     const [error, setError] = useState(searchParams.has("error") ? searchParams.get("error") : null);
+    const [logout] = useState(searchParams.has("logout") ? searchParams.get("logout") : null);
 
     useEffect(() => {
         axios.get("/api/csrf").then((response) => {
@@ -29,9 +30,9 @@ const SignIn = () => {
     }, [])
     return <div className="w-4/5 mx-auto bg-base-300 rounded-lg overflow-hidden md:w-2/4 lg:w-1/4">
         <div className="p-5">
-            {searchParams.has("logout") &&
+            {logout &&
                 <div className="my-2 alert alert-success">
-                    <span><IconCircleCheck className="mr-2" size={24} />You are now logged out.</span>
+                    <span><IconCircleCheck className="mr-2" size={24} />{logout === 'idle' ? 'You have been logged out for inactivity.' : 'You are now logged out.'}</span>
                 </div>
             }
             {error &&
