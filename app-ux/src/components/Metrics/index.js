@@ -24,7 +24,7 @@ export const SourceMetricsRenderer = (props) => {
         </div>
         <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
             <div className="stat-figure text-primary hidden xl:block">
-                {!refreshing && <div className="radial-progress text-primary" style={{ "--value": (metrics.inboundPercentComplete || 0), "--size": "4.2rem" }}>{metrics.inboundPercentComplete || 0}%</div>}
+                {!refreshing && <div className="radial-progress text-sky-600" style={{ "--value": (metrics.inboundPercentComplete || 0), "--size": "4.2rem" }}>{metrics.inboundPercentComplete || 0}%</div>}
             </div>
             <div className="stat-title ">% Processed</div>
             <div className="stat-value text-base-content">{refreshing ? <Refreshing /> : `${metrics.inboundPercentComplete || 0}%`}</div>
@@ -63,7 +63,7 @@ export const PipelineMetricsRenderer = (props) => {
         </div>
         <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
             <div className="stat-figure text-primary hidden xl:block">
-                {!refreshing && <div className="radial-progress text-primary" style={{ "--value": (metrics.outboundPercentComplete || 0), "--size": "4.2rem" }}>{metrics.outboundPercentComplete || 0}%</div>}
+                {!refreshing && <div className="radial-progress text-sky-600" style={{ "--value": (metrics.outboundPercentComplete || 0), "--size": "4.2rem" }}>{metrics.outboundPercentComplete || 0}%</div>}
             </div>
             <div className="stat-title ">% Processed</div>
             <div className="stat-value text-base-content">{refreshing ? <Refreshing /> : `${metrics.outboundPercentComplete || 0}%`}</div>

@@ -2,6 +2,7 @@ import { IconCircleCheck, IconCircleX } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import Logo from "../../../components/Nav/Logo";
 
 
 const getErrorMessage = (error) => {

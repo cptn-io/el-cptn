@@ -16,4 +16,6 @@ public class OutboundEventDto extends BaseDto {
     private JsonNode payload;
 
     private State state = State.QUEUED;
+
+    private String exception;
 }

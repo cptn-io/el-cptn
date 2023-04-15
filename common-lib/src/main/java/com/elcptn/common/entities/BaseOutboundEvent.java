@@ -35,4 +35,9 @@ public abstract class BaseOutboundEvent extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inbound_event_id")
     private InboundEvent inboundEvent;
+
+    @Getter
+    @Setter
+    @Column(length = 2000)
+    private String exception;
 }

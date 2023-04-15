@@ -25,6 +25,14 @@ const EventDetails = ({ event, onCancel, onSendEvent }) => {
                     value={JSON.stringify(event.payload, null, 2)}
                 /></div>
             </div>
+            {event.state === 'FAILED' && event.exception && <div className="w-full">
+                <label className="label">
+                    <span className="label-text">Error message</span>
+                </label>
+                <div className="mx-1 text-error">
+                    {event.exception}
+                </div>
+            </div>}
         </div>
         <div className="bg-base-200 px-4 py-3 justify-between sm:px-6 flex">
             <button className="btn" onClick={() => onSendEvent(event.id)}>Resend Event</button>

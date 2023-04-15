@@ -14,11 +14,13 @@ async function processQueuedEvents() {
     const client = await pgPool.connect()
     try {
         const completed = [], failed = [];
+        const errorMessages = {};
         await client.query('BEGIN');
         const result = await client.query('SELECT q.* FROM outbound_queue q INNER JOIN pipeline p ON q.pipeline_id = p.id WHERE q.state = $1 AND p.batch_process = false AND p.active = true ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $2', ['QUEUED', QUERY_BATCH_SIZE]);
         if (result.rows.length === 0) {
             //no records, add delay
             await new Promise(resolve => setTimeout(resolve, DELAY_IF_NOEVENTS));
+            await client.query('COMMIT');
             return;
         }
         const workers = result.rows.map(async row => {
@@ -38,15 +40,17 @@ async function processQueuedEvents() {
                 completed.push(id);
             } else {
                 failed.push(id);
+                errorMessages[id] = message || 'Unknown error';
             }
         });
         if (completed.length > 0) {
             await client.query('UPDATE outbound_queue SET state= $1 WHERE id = ANY($2::uuid[])', ['COMPLETED', completed]);
         }
 
-        if (failed.length > 0) {
-            await client.query('UPDATE outbound_queue SET state= $1 WHERE id  = ANY($2::uuid[])', ['FAILED', failed]);
-        }
+        failed.forEach(id => {
+            client.query('UPDATE outbound_queue SET state= $1, exception = $2 WHERE id = $3', ['FAILED', errorMessages[id], id]);
+        });
+
         await client.query('COMMIT');
     } catch (err) {
         console.error(err);
@@ -65,6 +69,7 @@ async function processScheduledEvents() {
         const triggers = await client.query('SELECT t.id, t.pipeline_id FROM pipeline_trigger t where t.state=$1 ORDER BY t.created_at FOR UPDATE SKIP LOCKED LIMIT 1', ['QUEUED']);
         if (triggers.rows.length === 0) {
             await new Promise(resolve => setTimeout(resolve, DELAY_IF_NOEVENTS));
+            await client.query('COMMIT');
             return;
         }
         const trigger = triggers.rows[0];
@@ -78,6 +83,7 @@ async function processScheduledEvents() {
             }
 
             const completed = [], failed = [];
+            const errorMessages = {};
             const events = result.rows.map(row => new Event(row));
             //process the current batch and get the results
             const statuses = await processEventBatch(trigger.pipeline_id, events);
@@ -86,6 +92,7 @@ async function processScheduledEvents() {
                     completed.push(id);
                 } else {
                     failed.push(id);
+                    errorMessages[id] = message || 'Unknown error';
                 }
             });
 
@@ -93,9 +100,9 @@ async function processScheduledEvents() {
                 await client.query('UPDATE outbound_queue SET state= $1 WHERE id = ANY($2::uuid[])', ['COMPLETED', completed]);
             }
 
-            if (failed.length > 0) {
-                await client.query('UPDATE outbound_queue SET state= $1 WHERE id  = ANY($2::uuid[])', ['FAILED', failed]);
-            }
+            failed.forEach(id => {
+                client.query('UPDATE outbound_queue SET state= $1, exception = $2 WHERE id = $3', ['FAILED', errorMessages[id], id]);
+            });
 
         }
 

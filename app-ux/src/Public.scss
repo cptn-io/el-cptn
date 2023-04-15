@@ -3,6 +3,6 @@
     margin: 0 auto;
 
     .public {
-        height: 100vh;
+        height: calc(100vh - 64px);
     }
 }
