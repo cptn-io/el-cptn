@@ -9,12 +9,15 @@ const QUERY_BATCH_SIZE = process.env.QUERY_BATCH_SIZE || 100;
 const DELAY_IF_NOEVENTS = process.env.DELAY_IF_NOEVENTS || 5000;
 const WORKER_TIMEOUT_MAX = process.env.WORKER_TIMEOUT_MAX || -1;
 
+
+//TODO refactor to better share code between batch and adhoc processing
 async function processQueuedEvents() {
     console.log('processing queued events');
     const client = await pgPool.connect()
     try {
         const completed = [], failed = [];
         const errorMessages = {};
+        const logMessages = {};
         await client.query('BEGIN');
         const result = await client.query('SELECT q.* FROM outbound_queue q INNER JOIN pipeline p ON q.pipeline_id = p.id WHERE q.state = $1 AND p.batch_process = false AND p.active = true ORDER BY q.created_at FOR UPDATE SKIP LOCKED LIMIT $2', ['QUEUED', QUERY_BATCH_SIZE]);
         if (result.rows.length === 0) {
@@ -35,20 +38,22 @@ async function processQueuedEvents() {
             }
         })
         const workerStatuses = await Promise.all(workers);
-        workerStatuses.forEach(({ id, success, message }) => {
+        workerStatuses.forEach(({ id, success, message, consoleLogs }) => {
             if (success) {
                 completed.push(id);
             } else {
                 failed.push(id);
                 errorMessages[id] = message || 'Unknown error';
             }
+            logMessages[id] = consoleLogs;
         });
-        if (completed.length > 0) {
-            await client.query('UPDATE outbound_queue SET state= $1 WHERE id = ANY($2::uuid[])', ['COMPLETED', completed]);
-        }
+
+        completed.forEach(id => {
+            client.query('UPDATE outbound_queue SET state= $1, console_log=$2 WHERE id = $3', ['COMPLETED', logMessages[id], id]);
+        });
 
         failed.forEach(id => {
-            client.query('UPDATE outbound_queue SET state= $1, exception = $2 WHERE id = $3', ['FAILED', errorMessages[id], id]);
+            client.query('UPDATE outbound_queue SET state= $1, exception = $2, console_log=$3 WHERE id = $4', ['FAILED', errorMessages[id], logMessages[id], id]);
         });
 
         await client.query('COMMIT');
@@ -84,24 +89,26 @@ async function processScheduledEvents() {
 
             const completed = [], failed = [];
             const errorMessages = {};
+            const logMessages = {};
             const events = result.rows.map(row => new Event(row));
             //process the current batch and get the results
             const statuses = await processEventBatch(trigger.pipeline_id, events);
-            statuses.forEach(({ id, success, message }) => {
+            statuses.forEach(({ id, success, message, consoleLogs }) => {
                 if (success) {
                     completed.push(id);
                 } else {
                     failed.push(id);
                     errorMessages[id] = message || 'Unknown error';
                 }
+                logMessages[id] = consoleLogs;
             });
 
-            if (completed.length > 0) {
-                await client.query('UPDATE outbound_queue SET state= $1 WHERE id = ANY($2::uuid[])', ['COMPLETED', completed]);
-            }
+            completed.forEach(id => {
+                client.query('UPDATE outbound_queue SET state= $1, console_log=$2 WHERE id = $3', ['COMPLETED', logMessages[id], id]);
+            });
 
             failed.forEach(id => {
-                client.query('UPDATE outbound_queue SET state= $1, exception = $2 WHERE id = $3', ['FAILED', errorMessages[id], id]);
+                client.query('UPDATE outbound_queue SET state= $1, exception = $2, console_log=$3 WHERE id = $4', ['FAILED', errorMessages[id], logMessages[id], id]);
             });
 
         }

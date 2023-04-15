@@ -40,4 +40,9 @@ public abstract class BaseOutboundEvent extends BaseEntity {
     @Setter
     @Column(length = 2000)
     private String exception;
+
+    @Getter
+    @Setter
+    @Column(length = 4000)
+    private String consoleLog;
 }

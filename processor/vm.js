@@ -5,7 +5,7 @@ function getVM() {
     const readOnlyFS = Volume.fromJSON({}, '/');
 
     const vm = new NodeVM({
-        console: 'inherit',
+        console: 'redirect',
         sandbox: { fetch },
         require: {
             external: true,

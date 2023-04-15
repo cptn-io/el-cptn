@@ -18,4 +18,6 @@ public class OutboundEventDto extends BaseDto {
     private State state = State.QUEUED;
 
     private String exception;
+
+    private String consoleLog;
 }

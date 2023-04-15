@@ -82,7 +82,47 @@ async function processEventBatch(pipelineId, events) {
         } else if (!pipeline.active) {
             throw "Pipeline is not active";
         }
+        let logs = [];
+
         const vm = getVM();
+
+        //TODO refactor this
+        //start setup console log redirection
+        vm.on('console.log', (...args) => {
+            try {
+                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
+                logs.push(`LOG: ${logAsString}`);
+            } catch (error) {
+                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
+            }
+        });
+        vm.on('console.error', (...args) => {
+            try {
+                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
+                logs.push(`ERROR: ${logAsString}`);
+            } catch (error) {
+                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
+            }
+        });
+        vm.on('console.warn', (...args) => {
+            try {
+                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
+                logs.push(`WARN: ${logAsString}`);
+            } catch (error) {
+                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
+            }
+        });
+        vm.on('console.info', (...args) => {
+            try {
+                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
+                logs.push(`INFO: ${logAsString}`);
+            } catch (error) {
+                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
+            }
+        });
+
+        //end setup console log redirection
+
         const pipelineSteps = await resolveSteps(pipeline);
 
         const destination = pipelineSteps.destination;
@@ -98,7 +138,7 @@ async function processEventBatch(pipelineId, events) {
 
         for (const event of events) {
             const { id, payload } = event;
-            let ctx = {}, evt = { ...payload }, message;
+            let ctx = {}, evt = { ...payload }, message, consoleLogs;
             try {
                 for (const step of pipelineSteps.steps) {
                     if (!step.active) {
@@ -114,11 +154,17 @@ async function processEventBatch(pipelineId, events) {
                 if (evt && destinationWrappedObject.execute && typeof destinationWrappedObject.execute === 'function') {
                     await destinationWrappedObject.execute(evt, ctx, destination.config);
                 }
-
-                responses.push({ id, success: true, message });
+                consoleLogs = logs.join('\n');
+                responses.push({ id, success: true, message, consoleLogs });
             } catch (error) {
-                console.error("Error while processing event", error);
-                responses.push({ id, success: false, message: error.message });
+                if (typeof error === 'string') {
+                    error = new Error(error);
+                }
+                //console.error("Error while processing event", error);
+                consoleLogs = logs.join('\n').substring(0, 4000);
+                responses.push({ id, success: false, message: error.message, consoleLogs });
+            } finally {
+                logs = [];
             }
         }
 

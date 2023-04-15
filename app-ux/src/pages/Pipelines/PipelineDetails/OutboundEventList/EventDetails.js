@@ -19,10 +19,22 @@ const EventDetails = ({ event, onCancel, onSendEvent }) => {
                 </label>
                 <div className="mx-1"><Editor
                     theme="vs-dark"
-                    height="300px"
+                    height="220px"
                     options={{ 'fontSize': 15, quickSuggestions: false, scrollBeyondLastLine: false, readOnly: true, minimap: { enabled: false } }}
                     defaultLanguage="json"
                     value={JSON.stringify(event.payload, null, 2)}
+                /></div>
+            </div>
+            <div className="w-full">
+                <label className="label">
+                    <span className="label-text">Logs</span>
+                </label>
+                <div className="mx-1"><Editor
+                    theme="vs-dark"
+                    height="150px"
+                    options={{ 'fontSize': 15, quickSuggestions: false, scrollBeyondLastLine: false, readOnly: true, minimap: { enabled: false } }}
+                    defaultLanguage="text"
+                    value={event.consoleLog}
                 /></div>
             </div>
             {event.state === 'FAILED' && event.exception && <div className="w-full">
