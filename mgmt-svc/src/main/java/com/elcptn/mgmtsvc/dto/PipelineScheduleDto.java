@@ -7,11 +7,13 @@ import com.elcptn.mgmtsvc.validators.TimeZone;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.ZonedDateTime;
 
 /* @author: kc, created on 4/4/23 */
 @Data
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class PipelineScheduleDto extends BaseDto {
 
     @NotNull(message = "Cron Expression is required", groups = OnCreate.class)

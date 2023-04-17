@@ -73,6 +73,22 @@ async function processEvent(event) {
     const results = await processEventBatch(event.pipelineId, [event])
     return results[0];
 }
+
+function setupConsoleLogRedirection(vm, logs) {
+    const logLevels = ['log', 'error', 'warn', 'info'];
+
+    logLevels.forEach(level => {
+        vm.on(`console.${level}`, (...args) => {
+            try {
+                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
+                logs.push(`${level.toUpperCase()}: ${logAsString}`);
+            } catch (error) {
+                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
+            }
+        });
+    });
+}
+
 async function processEventBatch(pipelineId, events) {
     const responses = [];
     try {
@@ -86,42 +102,7 @@ async function processEventBatch(pipelineId, events) {
 
         const vm = getVM();
 
-        //TODO refactor this
-        //start setup console log redirection
-        vm.on('console.log', (...args) => {
-            try {
-                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
-                logs.push(`LOG: ${logAsString}`);
-            } catch (error) {
-                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
-            }
-        });
-        vm.on('console.error', (...args) => {
-            try {
-                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
-                logs.push(`ERROR: ${logAsString}`);
-            } catch (error) {
-                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
-            }
-        });
-        vm.on('console.warn', (...args) => {
-            try {
-                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
-                logs.push(`WARN: ${logAsString}`);
-            } catch (error) {
-                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
-            }
-        });
-        vm.on('console.info', (...args) => {
-            try {
-                const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
-                logs.push(`INFO: ${logAsString}`);
-            } catch (error) {
-                logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
-            }
-        });
-
-        //end setup console log redirection
+        setupConsoleLogRedirection(vm, logs);
 
         const pipelineSteps = await resolveSteps(pipeline);
 
@@ -138,7 +119,7 @@ async function processEventBatch(pipelineId, events) {
 
         for (const event of events) {
             const { id, payload } = event;
-            let ctx = {}, evt = { ...payload }, message, consoleLogs;
+            let ctx = {}, evt = { ...payload }, consoleLogs;
             try {
                 for (const step of pipelineSteps.steps) {
                     if (!step.active) {
@@ -155,14 +136,15 @@ async function processEventBatch(pipelineId, events) {
                     await destinationWrappedObject.execute(evt, ctx, destination.config);
                 }
                 consoleLogs = logs.join('\n');
-                responses.push({ id, success: true, message, consoleLogs });
+                responses.push({ id, success: true, consoleLogs });
             } catch (error) {
                 if (typeof error === 'string') {
                     error = new Error(error);
                 }
-                //console.error("Error while processing event", error);
-                consoleLogs = logs.join('\n').substring(0, 4000);
-                responses.push({ id, success: false, message: error.message, consoleLogs });
+
+                logs.push(`ERROR: ${error.message} (error while processing event)`);
+                consoleLogs = logs.join('\n').substring(0, 3999);
+                responses.push({ id, success: false, consoleLogs });
             } finally {
                 logs = [];
             }

@@ -1,6 +1,7 @@
 package com.elcptn.mgmtsvc.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serial;
@@ -10,6 +11,7 @@ import java.io.Serial;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class TransformationDto extends ScriptedStepDto {
 
     @Serial
