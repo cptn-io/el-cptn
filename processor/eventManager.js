@@ -98,7 +98,11 @@ async function processScheduledEvents() {
             if (result.rows.length === 0) {
                 break;
             }
-            await processEvents(client, result.rows, true); //batch mode flag to true
+            try {
+                await processEvents(client, result.rows, true); //batch mode flag to true
+            } catch (err) {
+                console.error("Error processing events via pipeline trigger", err);
+            }
         }
         await client.query('UPDATE pipeline_trigger SET state= $1 WHERE id  = $2', ['COMPLETED', trigger.id]);
         await client.query('COMMIT');
