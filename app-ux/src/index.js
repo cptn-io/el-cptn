@@ -22,6 +22,7 @@ import SignIn from './pages/Public/SignIn';
 import Users from './pages/Users';
 import NewUser from './pages/Users/NewUser';
 import UserDetails from './pages/Users/UserDetails';
+import Community from './pages/Community';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -59,6 +60,9 @@ const AppRoutes = () => {
             <Route path="" element={<Users />} />
             <Route path="new" element={<NewUser />} />
             <Route path=":id" element={<UserDetails />} />
+          </Route>
+          <Route path="community">
+            <Route path="" element={<Community />} />
           </Route>
           <Route exact path="" element={<Navigate to="/home" replace />} />
         </Route>

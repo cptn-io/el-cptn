@@ -1,4 +1,4 @@
-import { IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconHome, IconTransform, IconUsers } from '@tabler/icons-react';
+import { IconApps, IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconHome, IconTransform, IconUsers } from '@tabler/icons-react';
 
 const navItems = [
     {
@@ -36,6 +36,12 @@ const navItems = [
         label: "Users",
         url: "/users",
         Icon: IconUsers
+    },
+    {
+        key: "community",
+        label: "Community Apps",
+        url: "/community",
+        Icon: IconApps
     }
 ];
 
