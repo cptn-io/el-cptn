@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.5</version>
+        <version>3.0.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.elcptn</groupId>
+    <groupId>io.cptn</groupId>
     <artifactId>application</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>elcptn-parent</name>
+    <name>cptn-parent</name>
     <description>CPTN application</description>
     <packaging>pom</packaging>
     <properties>

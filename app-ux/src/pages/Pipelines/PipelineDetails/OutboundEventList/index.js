@@ -142,7 +142,7 @@ const OutboundEventList = ({ pipelineId }) => {
                             <div className="btn-group">
                                 <button onClick={() => showDetails(event)} className="btn btn-sm btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
                                 <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
-                                <button disabled={executing} onClick={() => requeueEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Requeue event"><IconSend size={24} /></button>
+                                <button disabled={executing || event.state === 'QUEUED'} onClick={() => requeueEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Requeue event"><IconSend size={24} /></button>
                             </div>
                         </td>
                     </tr>)}

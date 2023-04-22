@@ -67,9 +67,16 @@ const data = [
         created_by: 'foo',
         logo: '/temp/postgres.png'
     },
+    {
+        id: 10,
+        title: "Snowflake",
+        description: "Write to Snowflake",
+        created_by: 'foo',
+        logo: '/temp/snow.png'
+    },
 ];
 
-const App = ({ data }) => <div class="card bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
+const App = ({ data }) => <div class="card bg-base-100 border-solid border-x border-y border-base-200 shadow col-span-2 md:col-span-1 rounded-2xl">
     <figure className="py-4" style={{ height: '160px', overflow: 'hidden' }}>{data.logo ? <img src={data.logo} height={128} width={128} alt={data.name} /> : <IconBox size={128} />}</figure>
     <div class="card-body bg-base-200 p-4">
         <h2 class="card-title">{data.title}</h2>
@@ -85,7 +92,7 @@ const App = ({ data }) => <div class="card bg-base-100 shadow col-span-2 md:col-
 const Community = () => {
     return <>
         <PageTitle itemKey="community" />
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {data.map((item) => <App data={item} />)}
         </div>
     </>
