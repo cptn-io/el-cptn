@@ -6,13 +6,4 @@
       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
     <include file="db/changelog/db.changelog-1.0.sql"/>
-    <include file="db/changelog/db.changelog-2.0.sql"/>
-    <include file="db/changelog/db.changelog-3.0.sql"/>
-    <include file="db/changelog/db.changelog-4.0.sql"/>
-    <include file="db/changelog/db.changelog-5.0.sql"/>
-    <include file="db/changelog/db.changelog-6.0.sql"/>
-    <include file="db/changelog/db.changelog-7.0.sql"/>
-    <include file="db/changelog/db.changelog-8.0.sql"/>
-    <include file="db/changelog/db.changelog-9.0.sql"/>
-    <include file="db/changelog/db.changelog-10.0.sql"/>
 </databaseChangeLog>

@@ -72,7 +72,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
 
-        UserPrincipal principal = (UserPrincipal) org.springframework.security.core.userdetails.User.withUsername("foo" +
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername("foo" +
                         "@example" +
                         ".com")
                 .disabled(false)
@@ -80,7 +80,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .password(passwordEncoder.encode("bar"))
                 .roles("USER")
                 .build();
-        principal.setId("-1");
-        return principal;
+
+        userDetails = UserPrincipal.userDetails(userDetails)
+                .id("-1").build();
+
+        return userDetails;
     }
 }

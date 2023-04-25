@@ -62,6 +62,7 @@ CREATE TABLE pipeline
     destination_id      UUID,
     transformation_map  JSONB,
     batch_process       BOOLEAN default false,
+    route JSONb,
     CONSTRAINT pk_pipeline PRIMARY KEY (id)
 );
 
@@ -141,11 +142,16 @@ CREATE TABLE outbound_queue
     created_by  VARCHAR(36),
     updated_by  VARCHAR(36),
     steps       JSONB,
+    inbound_event_id UUID,
+    console_log VARCHAR(4000),
     CONSTRAINT pk_outbound_queue PRIMARY KEY (id)
 );
 
 ALTER TABLE outbound_queue
     ADD CONSTRAINT FK_OUTBOUND_QUEUE_ON_PIPELINE FOREIGN KEY (pipeline_id) REFERENCES pipeline (id) ON DELETE CASCADE;
+
+ALTER TABLE outbound_queue
+    ADD CONSTRAINT FK_OUTBOUND_QUEUE_ON_INBOUND_EVENT FOREIGN KEY (inbound_event_id) REFERENCES inbound_queue (id) ON DELETE SET NULL;
 
 CREATE TABLE outbound_write_queue
 (
@@ -160,7 +166,70 @@ CREATE TABLE outbound_rotated_2
 ) INHERITS (outbound_queue);
 
 
+CREATE TABLE pipeline_schedule
+(
+    id              UUID    NOT NULL,
+    version         INTEGER NOT NULL,
+    created_at      TIMESTAMP with time zone,
+    updated_at      TIMESTAMP with time zone,
+    created_by      VARCHAR(36),
+    updated_by      VARCHAR(36),
+    active          BOOLEAN,
+    pipeline_id     UUID,
+    cron_expression VARCHAR(255),
+    time_zone       VARCHAR(255),
+    last_run_at     TIMESTAMP with time zone,
+    next_run_at     TIMESTAMP with time zone,
+    CONSTRAINT pk_pipeline_schedule PRIMARY KEY (id)
+);
+
+ALTER TABLE pipeline_schedule
+    ADD CONSTRAINT FK_PIPELINE_SCHEDULE_ON_PIPELINE FOREIGN KEY (pipeline_id) REFERENCES pipeline (id) ON DELETE CASCADE;
+
+CREATE TABLE shedlock
+(
+    name       VARCHAR(64)  NOT NULL,
+    lock_until TIMESTAMP    NOT NULL,
+    locked_at  TIMESTAMP    NOT NULL,
+    locked_by  VARCHAR(255) NOT NULL,
+    PRIMARY KEY (name)
+);
+
+CREATE TABLE "cptn_user"
+(
+    id              UUID    NOT NULL,
+    version         INTEGER NOT NULL,
+    created_at      TIMESTAMP with time zone,
+    updated_at      TIMESTAMP with time zone,
+    created_by      VARCHAR(36),
+    updated_by      VARCHAR(36),
+    first_name      VARCHAR(128),
+    last_name       VARCHAR(128),
+    email           VARCHAR(128),
+    hashed_password VARCHAR(255),
+    disabled        BOOLEAN NOT NULL,
+    locked_out      BOOLEAN NOT NULL,
+    last_login_at   TIMESTAMP WITHOUT TIME ZONE,
+    mfa_enabled     BOOLEAN NOT NULL,
+    mfa_key         VARCHAR(255),
+    CONSTRAINT pk_cptn_user PRIMARY KEY (id)
+);
 
 
-
-
+CREATE TABLE instance
+(
+    id               UUID    NOT NULL,
+    version          INTEGER NOT NULL,
+    created_at       TIMESTAMP with time zone,
+    updated_at       TIMESTAMP with time zone,
+    created_by       VARCHAR(36),
+    updated_by       VARCHAR(36),
+    registered_until TIMESTAMP with time zone,
+    company_name     VARCHAR(128),
+    primary_email    VARCHAR(128),
+    secondary_email  VARCHAR(128),
+    token            VARCHAR(1024),
+    accepted_terms   BOOLEAN,
+    collect_stats    BOOLEAN,
+    CONSTRAINT pk_instance PRIMARY KEY (id)
+);
