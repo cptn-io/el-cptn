@@ -28,7 +28,7 @@ CREATE TABLE destination
     created_by VARCHAR(36),
     updated_by VARCHAR(36),
     name       VARCHAR(100),
-    script     TEXT,
+    script     VARCHAR(32600),
     active     BOOLEAN,
     config     JSONB,
 CONSTRAINT pk_destination PRIMARY KEY (id)
@@ -215,21 +215,23 @@ CREATE TABLE "cptn_user"
     CONSTRAINT pk_cptn_user PRIMARY KEY (id)
 );
 
-
-CREATE TABLE instance
+CREATE TABLE app
 (
-    id               UUID    NOT NULL,
-    version          INTEGER NOT NULL,
-    created_at       TIMESTAMP with time zone,
-    updated_at       TIMESTAMP with time zone,
-    created_by       VARCHAR(36),
-    updated_by       VARCHAR(36),
-    registered_until TIMESTAMP with time zone,
-    company_name     VARCHAR(128),
-    primary_email    VARCHAR(128),
-    secondary_email  VARCHAR(128),
-    token            VARCHAR(1024),
-    accepted_terms   BOOLEAN,
-    collect_stats    BOOLEAN,
-    CONSTRAINT pk_instance PRIMARY KEY (id)
+    id         UUID         NOT NULL,
+    version    INTEGER      NOT NULL,
+    created_at TIMESTAMP with time zone,
+    updated_at TIMESTAMP with time zone,
+    created_by VARCHAR(36),
+    updated_by VARCHAR(36),
+    key        VARCHAR(32)  NOT NULL,
+    name       VARCHAR(100) NOT NULL,
+    script     VARCHAR(32600),
+    config     JSONB,
+    type       VARCHAR(32)  NOT NULL,
+    hash       VARCHAR(32)  NOT NULL,
+    logo_url   VARCHAR(255),
+    CONSTRAINT pk_app PRIMARY KEY (id)
 );
+
+ALTER TABLE app
+    ADD CONSTRAINT uc_app_key UNIQUE (key);

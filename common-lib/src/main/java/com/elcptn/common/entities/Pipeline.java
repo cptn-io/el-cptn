@@ -3,10 +3,7 @@ package com.elcptn.common.entities;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Sets;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -21,6 +18,7 @@ import java.util.UUID;
 @Table(name = "pipeline")
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Pipeline extends BaseEntity {
 
     @Serial

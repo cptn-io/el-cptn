@@ -3,10 +3,7 @@ package com.elcptn.common.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 
@@ -15,6 +12,7 @@ import java.time.ZonedDateTime;
 @Table(name = "cptn_user")
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class User extends BaseEntity {
 
 

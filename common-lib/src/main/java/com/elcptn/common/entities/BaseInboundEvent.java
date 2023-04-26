@@ -2,6 +2,7 @@ package com.elcptn.common.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -11,6 +12,7 @@ import java.io.Serial;
 
 /* @author: kc, created on 3/30/23 */
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public abstract class BaseInboundEvent extends BaseEntity {
 
     @Serial

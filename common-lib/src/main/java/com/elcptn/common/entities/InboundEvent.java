@@ -2,6 +2,7 @@ package com.elcptn.common.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serial;
@@ -10,6 +11,7 @@ import java.io.Serial;
 @Entity
 @Table(name = "inbound_queue")
 @ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class InboundEvent extends BaseInboundEvent {
 
     @Serial

@@ -3,6 +3,7 @@ package com.elcptn.common.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Entity
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Transformation extends ScriptedStep {
 
     @Serial

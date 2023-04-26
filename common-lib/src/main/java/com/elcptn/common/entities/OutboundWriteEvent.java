@@ -2,6 +2,7 @@ package com.elcptn.common.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -12,6 +13,7 @@ import java.io.Serial;
 @Table(name = "outbound_write_queue")
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class OutboundWriteEvent extends BaseOutboundEvent {
     @Serial
     private static final long serialVersionUID = -2615881382902684770L;

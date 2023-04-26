@@ -2,14 +2,13 @@ package com.elcptn.common.entities;
 
 import com.elcptn.common.listeners.EntityListener;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 /* @author: kc, created on 2/7/23 */
@@ -17,6 +16,7 @@ import java.util.UUID;
 @MappedSuperclass
 @EntityListeners(EntityListener.class)
 @ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class BaseEntity implements Serializable {
 
     @Id
@@ -24,6 +24,7 @@ public abstract class BaseEntity implements Serializable {
     @Setter
     @Column(columnDefinition = "uuid", updatable = false)
     @ToString.Include
+    @EqualsAndHashCode.Include
     @GeneratedValue
     private UUID id = null;
 
@@ -51,21 +52,5 @@ public abstract class BaseEntity implements Serializable {
     @Setter
     @Column(length = 36)
     private String updatedBy;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-            return false;
-        }
-        BaseEntity entity = (BaseEntity) o;
-        return getId() != null && Objects.equals(getId(), entity.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.getId().hashCode();
-    }
+    
 }
