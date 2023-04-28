@@ -7,6 +7,6 @@ public enum AppType {
     @JsonProperty("DESTINATION")
     DESTINATION,
 
-    @JsonProperty("TRANSFORMER")
-    TRANSFORMER
+    @JsonProperty("TRANSFORMATION")
+    TRANSFORMATION
 }

@@ -1,10 +1,13 @@
 package com.elcptn.mgmtsvc.services;
 
-import com.elcptn.common.entities.App;
+import com.elcptn.common.entities.Destination;
+import com.elcptn.common.entities.ScriptedStep;
+import com.elcptn.common.entities.Transformation;
 import com.elcptn.common.pojos.ConfigItem;
 import com.elcptn.common.repositories.AppRepository;
 import com.elcptn.common.services.CommonService;
 import com.elcptn.common.web.ListEntitiesParam;
+import liquibase.util.MD5Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,11 +23,20 @@ public class AppService extends CommonService {
 
     private final AppRepository appRepository;
 
+    private final DestinationService destinationService;
+
+    private final TransformationService transformationService;
+
     public App createApp() {
         App app = new App();
-        app.setName("New App");
-        app.setHash("hash1");
-        app.setKey("key1");
+
+        //generate random string
+        String key = UUID.randomUUID().toString();
+        //get md5 for the key
+        String hash = MD5Util.computeMD5(key);
+        app.setName(key);
+        app.setHash(hash);
+        app.setKey(hash);
         ConfigItem configItem = new ConfigItem();
         configItem.setKey("key1");
         configItem.setValue("value1");
@@ -43,10 +55,29 @@ public class AppService extends CommonService {
 
     public List<App> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
+
         return appRepository.findAll(pageable).stream().collect(Collectors.toList());
     }
 
     public long count() {
         return appRepository.count();
+    }
+
+    public ScriptedStep useApp(App app) {
+        if (AppType.DESTINATION.equals(app.getType())) {
+            Destination destination = new Destination();
+            destination.setConfig(app.getConfig());
+            destination.setName(app.getName());
+            destination.setScript(app.getScript());
+            destination.setActive(true);
+            return destinationService.create(destination);
+        } else if (AppType.TRANSFORMATION.equals(app.getType())) {
+            Transformation transformation = new Transformation();
+            transformation.setName(app.getName());
+            transformation.setScript(app.getScript());
+            transformation.setActive(true);
+            return transformationService.create(transformation);
+        }
+        return null;
     }
 }
