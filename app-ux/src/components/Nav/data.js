@@ -38,9 +38,9 @@ const navItems = [
         Icon: IconUsers
     },
     {
-        key: "community",
-        label: "Community Apps",
-        url: "/community",
+        key: "apps",
+        label: "Apps",
+        url: "/apps",
         Icon: IconApps
     }
 ];

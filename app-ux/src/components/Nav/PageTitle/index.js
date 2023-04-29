@@ -1,10 +1,14 @@
 import { navItems } from "../data";
 import find from 'lodash/find';
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 const PageTitle = (props) => {
     const navItem = find(navItems, ['key', props.itemKey])
     return <div>
+        <Helmet>
+            <title>{props.label || navItem.label} | cptn.io</title>
+        </Helmet>
         {props.breadcrumbs && <div>
             <div className="text-sm breadcrumbs">
                 <ul>

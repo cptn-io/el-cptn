@@ -51,7 +51,7 @@ const getConfirmationMessage = (app) => {
     }
 }
 
-const Community = () => {
+const Apps = () => {
     const { addNotification } = useNotifications();
     const navigate = useNavigate();
 
@@ -117,7 +117,7 @@ const Community = () => {
             setExecuting(false);
             setContextApp(null);
         });
-    }, [contextApp, addNotification]);
+    }, [contextApp, navigate, addNotification]);
 
     const handleShowConfirmation = useCallback((app) => {
         setContextApp(app);
@@ -134,7 +134,7 @@ const Community = () => {
     }, []);
 
     return <>
-        <PageTitle itemKey="community" />
+        <PageTitle itemKey="apps" />
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
                 {totalCount > 0 ? <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -164,4 +164,4 @@ const renderNoApps = () => {
 
 }
 
-export default Community;
+export default Apps;

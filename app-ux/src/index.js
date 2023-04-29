@@ -22,7 +22,7 @@ import SignIn from './pages/Public/SignIn';
 import Users from './pages/Users';
 import NewUser from './pages/Users/NewUser';
 import UserDetails from './pages/Users/UserDetails';
-import Community from './pages/Community';
+import Apps from './pages/Apps';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -61,8 +61,8 @@ const AppRoutes = () => {
             <Route path="new" element={<NewUser />} />
             <Route path=":id" element={<UserDetails />} />
           </Route>
-          <Route path="community">
-            <Route path="" element={<Community />} />
+          <Route path="apps">
+            <Route path="" element={<Apps />} />
           </Route>
           <Route exact path="" element={<Navigate to="/home" replace />} />
         </Route>

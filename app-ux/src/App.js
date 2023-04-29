@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import Loading from "./components/Loading";
 import { useIdleTimer, workerTimers } from 'react-idle-timer';
-import LogoutModal from "./components/LogoutModal"
+import LogoutModal from "./components/LogoutModal";
 
 const PROMPT_DURATION = 2 * 60 * 1000; //2 min prompt
 const TIMEOUT_INTERVAL = 15 * 60 * 1000; //15 min timeout
