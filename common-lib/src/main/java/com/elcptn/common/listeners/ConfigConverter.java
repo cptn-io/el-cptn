@@ -28,6 +28,9 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItem>, Jso
 
     @Override
     public JsonNode convertToDatabaseColumn(List<ConfigItem> configItemDtos) {
+        if (configItemDtos == null) {
+            return null;
+        }
         try {
             ArrayNode configArray = JsonHelper.getMapper().valueToTree(configItemDtos);
             for (int i = 0; i < configArray.size(); i++) {

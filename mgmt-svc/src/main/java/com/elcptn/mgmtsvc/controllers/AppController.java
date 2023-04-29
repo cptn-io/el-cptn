@@ -7,6 +7,7 @@ import com.elcptn.common.web.ListEntitiesParam;
 import com.elcptn.mgmtsvc.dto.AppDto;
 import com.elcptn.mgmtsvc.mappers.AppMapper;
 import com.elcptn.mgmtsvc.services.AppService;
+import com.elcptn.mgmtsvc.services.AppSynchronizer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,8 @@ public class AppController {
 
     private final AppMapper mapper;
 
+    private final AppSynchronizer appSynchronizer;
+
     @GetMapping("/api/app")
     public ResponseEntity<List<AppDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
@@ -57,6 +60,12 @@ public class AppController {
         responseNode.put("id", createdStep.getId().toString());
         responseNode.put("type", app.getType().name());
         return ResponseEntity.ok(responseNode);
+    }
+
+    @PostMapping("/api/app/sync")
+    public ResponseEntity syncApps() {
+        appSynchronizer.syncWithRepository();
+        return ResponseEntity.ok().build();
     }
 
     private AppDto convert(App app) {

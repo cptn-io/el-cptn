@@ -8,10 +8,26 @@ import get from "lodash/get";
 import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
 import ConfirmModal from "../../components/ConfirmModal";
+import moment from "moment-timezone";
+import './styles.scss';
+
+const now = moment();
+
+const getAppCornerTag = (app) => {
+    if (moment.duration(now.diff(moment(app.createdAt))).asDays() <= 1) {
+        return <div className="corner"><div className="text">New!</div></div>;
+    } else if (moment.duration(now.diff(moment(app.updatedAt))).asDays() <= 1) {
+        return <div className="corner info"><div className="text">Updated!</div></div>;
+    } else {
+        return null;
+    }
+}
 
 const App = ({ data, setContextApp }) => <div className="card bg-base-100 border-solid border-x border-y border-base-200 shadow col-span-2 md:col-span-1 rounded-2xl">
-    <figure className="py-4" style={{ height: '160px', overflow: 'hidden' }}>{data.logoUrl ? <img src={data.logoUrl} height={128} width={128} alt={data.name} /> : <IconBox className="text-base-300" size={128} />}</figure>
+    {getAppCornerTag(data)}
+    <figure className="py-4" style={{ height: '160px', overflow: 'hidden' }}>{data.logoUrl ? <img title={data.name} className="text-base-300" src={data.logoUrl} height={128} width={128} alt={data.name} /> : <IconBox className="text-base-300" size={156} />}</figure>
     <div className="card-body bg-base-200 p-4 flex flex-col justify-between">
+        <div className="text-xs">{data.type}</div>
         <h2 className="card-title">{data.name}</h2>
         <div className="card-actions mt-4 justify-end">
             <button onClick={() => setContextApp(data)} className="btn btn-primary">{data.type === 'DESTINATION' ? `New Destination` : `New Transformation`}</button>

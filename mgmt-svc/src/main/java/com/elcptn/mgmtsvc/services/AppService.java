@@ -1,8 +1,6 @@
 package com.elcptn.mgmtsvc.services;
 
-import com.elcptn.common.entities.Destination;
-import com.elcptn.common.entities.ScriptedStep;
-import com.elcptn.common.entities.Transformation;
+import com.elcptn.common.entities.*;
 import com.elcptn.common.pojos.ConfigItem;
 import com.elcptn.common.repositories.AppRepository;
 import com.elcptn.common.services.CommonService;
@@ -43,6 +41,18 @@ public class AppService extends CommonService {
         app.setConfig(List.of(configItem));
         app.setScript("//script goes here");
         return appRepository.save(app);
+    }
+
+    public void upsertApp(App app) {
+        App existingApp = getAppByKey(app.getKey());
+        if (existingApp != null) {
+            if (app.getHash().equals(existingApp.getHash())) {
+                //no updates for the app
+                return;
+            }
+            app.setId(existingApp.getId());
+        }
+        appRepository.save(app);
     }
 
     public App getAppById(UUID id) {

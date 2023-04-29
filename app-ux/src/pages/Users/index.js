@@ -75,7 +75,7 @@ const Users = () => {
 const renderNoUsers = () => {
     return <div className="flex flex-col justify-center my-5">
         <div className="flex justify-center mb-4 text-primary">
-            <img alt="Create new Transformation" src="/undraw/coding.svg" className="w-3/6 max-w-3/5" />
+            <img alt="Create new Transformation" src="/undraw/teamwork.svg" className="w-3/6 max-w-3/5" />
         </div>
         <div className="flex justify-center mb-4 text-center">
             There are no Users. Click the button below to add a new User
