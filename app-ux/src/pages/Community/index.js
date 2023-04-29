@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PageTitle from "../../components/Nav/PageTitle";
-import { IconBox } from "@tabler/icons-react";
+import { IconBox, IconInfoCircle } from "@tabler/icons-react";
 import axios from "axios";
 import useNotifications from "../../hooks/useNotifications";
 import { useCallback, useEffect, useState } from "react";
@@ -10,10 +10,11 @@ import Loading from "../../components/Loading";
 import ConfirmModal from "../../components/ConfirmModal";
 import moment from "moment-timezone";
 import './styles.scss';
-
-const now = moment();
+import Modal from "../../components/Modal";
+import AppDetails from "./AppDetails";
 
 const getAppCornerTag = (app) => {
+    const now = moment();
     if (moment.duration(now.diff(moment(app.createdAt))).asDays() <= 1) {
         return <div className="corner"><div className="text">New!</div></div>;
     } else if (moment.duration(now.diff(moment(app.updatedAt))).asDays() <= 1) {
@@ -23,14 +24,15 @@ const getAppCornerTag = (app) => {
     }
 }
 
-const App = ({ data, setContextApp }) => <div className="card bg-base-100 border-solid border-x border-y border-base-200 shadow col-span-2 md:col-span-1 rounded-2xl">
+const App = ({ data, executing, handleShowConfirmation, handleShowAppDetails }) => <div className="card bg-base-100 border-solid border-x border-y border-base-200 shadow col-span-2 md:col-span-1 rounded-2xl">
     {getAppCornerTag(data)}
     <figure className="py-4" style={{ height: '160px', overflow: 'hidden' }}>{data.logoUrl ? <img title={data.name} className="text-base-300" src={data.logoUrl} height={128} width={128} alt={data.name} /> : <IconBox className="text-base-300" size={156} />}</figure>
     <div className="card-body bg-base-200 p-4 flex flex-col justify-between">
         <div className="text-xs">{data.type}</div>
         <h2 className="card-title">{data.name}</h2>
         <div className="card-actions mt-4 justify-end">
-            <button onClick={() => setContextApp(data)} className="btn btn-primary">{data.type === 'DESTINATION' ? `New Destination` : `New Transformation`}</button>
+            <button disabled={executing} onClick={() => handleShowAppDetails(data)} className="btn btn-ghost"><IconInfoCircle size={24} /></button>
+            <button disabled={executing} onClick={() => handleShowConfirmation(data)} className="btn btn-primary">{data.type === 'DESTINATION' ? `New Destination` : `New Transformation`}</button>
         </div>
     </div>
 </div>
@@ -60,12 +62,23 @@ const Community = () => {
     const [data, setData] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [contextApp, setContextApp] = useState(null);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [showAppDetails, setShowAppDetails] = useState(false);
+
     const [executing, setExecuting] = useState(false);
+
+
 
     useEffect(() => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
     }, [searchParams]);
 
+    useEffect(() => {
+        if (!contextApp) {
+            setShowAppDetails(false);
+            setShowConfirmation(false)
+        }
+    }, [contextApp]);
 
     useEffect(() => {
         axios.get(`/api/app?page=${page}`).then(response => {
@@ -81,7 +94,7 @@ const Community = () => {
         });
     }, [page, addNotification]);
 
-    const onConfirm = useCallback(() => {
+    const onConfirmAppUse = useCallback(() => {
         setExecuting(true);
         axios.post(`/api/app/${contextApp.id}/use`).then(response => {
             const data = response.data;
@@ -104,21 +117,38 @@ const Community = () => {
             setExecuting(false);
             setContextApp(null);
         });
-    }, [contextApp, addNotification])
+    }, [contextApp, addNotification]);
+
+    const handleShowConfirmation = useCallback((app) => {
+        setContextApp(app);
+        setShowConfirmation(true);
+    }, []);
+
+    const handleShowAppDetails = useCallback((app) => {
+        setContextApp(app);
+        setShowAppDetails(true);
+    }, []);
+
+    const clearContextApp = useCallback(() => {
+        setContextApp(null);
+    }, []);
 
     return <>
         <PageTitle itemKey="community" />
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
                 {totalCount > 0 ? <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {data.map((item) => <App key={item.id} data={item} setContextApp={setContextApp} />)}
+                    {data.map((item) => <App key={item.id} data={item} executing={executing} handleShowConfirmation={handleShowConfirmation} handleShowAppDetails={handleShowAppDetails} />)}
                 </div> : renderNoApps()}
             </div>
             {totalCount > 0 && <Pagination totalCount={totalCount} />}
         </div>
         }
 
-        {contextApp && <ConfirmModal {...getConfirmationMessage(contextApp)} onConfirm={onConfirm} onCancel={() => setContextApp(null)} />}
+        {contextApp && showConfirmation && <ConfirmModal {...getConfirmationMessage(contextApp)} onConfirm={onConfirmAppUse} onCancel={clearContextApp} />}
+        {contextApp && showAppDetails && <Modal title="App Details" onCancel={clearContextApp} >
+            <AppDetails app={contextApp} onCancel={clearContextApp} onUseApp={onConfirmAppUse} />
+        </Modal>}
     </>
 }
 
@@ -131,6 +161,7 @@ const renderNoApps = () => {
             There are no Appps. Please wait until the instance syncs with the server to load available apps.
         </div>
     </div>
+
 }
 
 export default Community;
