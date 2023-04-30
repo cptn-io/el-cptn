@@ -16,15 +16,15 @@ import AppDetails from "./AppDetails";
 const getAppCornerTag = (app) => {
     const now = moment();
     if (moment.duration(now.diff(moment(app.createdAt))).asDays() <= 1) {
-        return <div className="corner"><div className="text">New!</div></div>;
+        return <div className="corner"><span className="text">New!</span></div>;
     } else if (moment.duration(now.diff(moment(app.updatedAt))).asDays() <= 1) {
-        return <div className="corner info"><div className="text">Updated!</div></div>;
+        return <div className="corner info"><span className="text">Updated!</span></div>;
     } else {
         return null;
     }
 }
 
-const App = ({ data, executing, handleShowConfirmation, handleShowAppDetails }) => <div className="card bg-base-100 border-solid border-x border-y border-base-200 shadow col-span-2 md:col-span-1 rounded-2xl">
+const App = ({ data, executing, handleShowConfirmation, handleShowAppDetails }) => <div className="card app bg-neutral-50 border-solid border-x border-y border-base-200 shadow col-span-2 md:col-span-1 rounded-2xl">
     {getAppCornerTag(data)}
     <figure className="py-4" style={{ height: '160px', overflow: 'hidden' }}>{data.logoUrl ? <img title={data.name} className="text-base-300" src={data.logoUrl} height={128} width={128} alt={data.name} /> : <IconBox className="text-base-300" size={156} />}</figure>
     <div className="card-body bg-base-200 p-4 flex flex-col justify-between">

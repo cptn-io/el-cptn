@@ -1,6 +1,7 @@
 import { IconCircleCheck, IconCircleX } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useSearchParams } from "react-router-dom";
 
 const getErrorMessage = (error) => {
@@ -33,6 +34,9 @@ const SignIn = () => {
         setCsrf(document.cookie.match(/XSRF-TOKEN=(.*)/)?.[1]);
     }
     return <div className="w-4/5 mx-auto bg-base-300 rounded-lg overflow-hidden md:w-2/4 lg:w-1/4">
+        <Helmet>
+            <title>Sign In | cptn.io</title>
+        </Helmet>
         <div className="p-5">
             {logout &&
                 <div className="my-2 alert alert-success">
