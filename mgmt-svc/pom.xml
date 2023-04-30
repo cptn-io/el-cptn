@@ -13,7 +13,7 @@
     <properties>
         <java.version>17</java.version>
         <commonstext.version>1.10.0</commonstext.version>
-        <org.mapstruct.version>1.5.4.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
         <liquibase.version>4.21.1</liquibase.version>
     </properties>
