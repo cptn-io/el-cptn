@@ -42,7 +42,7 @@ public class App extends BaseEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(length = 32, nullable = false)
+    @Column(length = 32, nullable = false, columnDefinition = "varchar(32) default 'DESTINATION'")
     private AppType type = AppType.DESTINATION;
 
     @Getter
