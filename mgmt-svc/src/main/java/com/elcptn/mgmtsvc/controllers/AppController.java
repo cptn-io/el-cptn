@@ -46,12 +46,6 @@ public class AppController {
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(appList);
     }
 
-    @PostMapping("/api/app")
-    public ResponseEntity<AppDto> create() {
-        App app = appService.createApp();
-        return ResponseEntity.ok(convert(app));
-    }
-
     @PostMapping("/api/app/{id}/use")
     public ResponseEntity useApp(@PathVariable UUID id) {
         App app = appService.getAppById(id);
