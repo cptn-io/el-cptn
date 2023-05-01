@@ -1,5 +1,6 @@
 package com.elcptn.mgmtsvc.config;
 
+import com.elcptn.common.exceptions.DemoUserException;
 import com.elcptn.mgmtsvc.security.CustomAuthenticationEntryPoint;
 import com.elcptn.mgmtsvc.security.JWTRequestFilter;
 import com.elcptn.mgmtsvc.security.UserPrincipal;
@@ -83,6 +84,8 @@ public class SecurityConfig {
                         response.sendRedirect("/signin?error=disabled");
                     } else if (exception instanceof LockedException) {
                         response.sendRedirect("/signin?error=locked");
+                    } else if (exception.getCause() instanceof DemoUserException) {
+                        response.sendRedirect("/signin?error=demo_user");
                     } else {
                         response.sendRedirect("/signin?error=generic");
                     }

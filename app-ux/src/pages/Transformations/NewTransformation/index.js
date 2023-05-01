@@ -7,6 +7,7 @@ import get from 'lodash/get';
 import { renderErrors } from "../../../common/formHelpers";
 import Editor from '@monaco-editor/react'
 import { breadcrumbs } from "..";
+import ContextHelp from "../../../components/ContextHelp";
 
 const scriptTemplate = `module.exports = function (event, ctx) {
     //add your script here to transform or enrich the event
@@ -137,13 +138,7 @@ const NewTransformation = () => {
                 </form>
             </div>
             <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="text-base font-semibold leading-6">Helpful Information</h3>
-                    <div className="text-base-content mt-1">
-                        <p>Transformations help with enriching and removing sensitive data from your event payload. Add any Javascript code with required npm JS modules to transform your payloads.</p>
-                        <p className="mt-3">Remember that Transformations must return updated event payload for the event data to move across all the Pipeline steps. Pipeline will stop processing an event if a Transformation does not return the event object.</p>
-                    </div>
-                </div>
+                <ContextHelp page="create-transformation" />
             </div>
         </div>
     </Fragment>

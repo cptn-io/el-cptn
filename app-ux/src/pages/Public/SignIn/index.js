@@ -10,7 +10,8 @@ const getErrorMessage = (error) => {
         'bad_credentials': 'Invalid email or password.',
         'locked': 'Your account is locked. Please contact your administrator.',
         'disabled': 'Your account is disabled. Please contact your administrator.',
-        'csrf': 'An error occurred while trying to get CSRF token. Please try again.'
+        'csrf': 'An error occurred while trying to get CSRF token. Please try again.',
+        'demo_user': 'Login with demo user is not allowed as valid users are already created in the system'
     }
     return errors[error] || errors['generic'];
 }

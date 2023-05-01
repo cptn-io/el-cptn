@@ -1,7 +1,7 @@
 package com.elcptn.mgmtsvc.security;
 
 import com.elcptn.common.entities.User;
-import com.elcptn.common.exceptions.UnauthorizedException;
+import com.elcptn.common.exceptions.DemoUserException;
 import com.elcptn.mgmtsvc.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public UserDetails loadUserByUserId(String id) {
         if ("-1".equals(id)) {
-            return loginForPreSetup();
+            return loginForPreSetup(false);
         }
 
         User user = userService.getUserById(UUID.fromString(id));
@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         if ("foo@example.com".equals(username)) {
-            return loginForPreSetup();
+            return loginForPreSetup(true);
         }
 
         User user = userService.getUserByEmail(username);
@@ -63,11 +63,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userDetails;
     }
 
-    private UserDetails loginForPreSetup() {
+    private UserDetails loginForPreSetup(boolean isUserLoggingInWithPassword) {
 
         //check for user record count
-        if (userService.count() > 0) {
-            throw new UnauthorizedException("foo@example.com is only intended for use during initial setup " +
+        if (isUserLoggingInWithPassword && userService.count() > 0) {
+            throw new DemoUserException("foo@example.com is only intended for use during initial setup " +
                     "process to create the first user record. Please use a different email address to login");
         }
 

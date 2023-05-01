@@ -11,6 +11,7 @@ import get from "lodash/get";
 import CreateSource from "../../Sources/NewSource/CreateSource";
 import Modal from "../../../components/Modal";
 import CreateDestination from "../../Destinations/NewDestination/CreateDestination";
+import ContextHelp from "../../../components/ContextHelp";
 
 const NewPipeline = (props) => {
     const navigate = useNavigate();
@@ -164,12 +165,7 @@ const NewPipeline = (props) => {
                 </form>
             </div>
             <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="text-base font-semibold leading-6">Create a new Source</h3>
-                    <p className="text-base-content mt-1 text-sm">
-                        This information will be displayed publicly so be careful what you share.
-                    </p>
-                </div>
+                <ContextHelp page="create-pipeline" />
             </div>
         </div>
         {showSourceSelector && <ItemSelectorModal url="/api/source" title="Select a Source" cols={[{ "label": "Name", "datacss": "text-left", "css": "w-1/2", "name": "name" }, { "label": "Active", "datacss": "", "css": "text-center", "name": "active" }, { "label": "Secured", "datacss": "", "css": "text-center", "name": "secured" }]}

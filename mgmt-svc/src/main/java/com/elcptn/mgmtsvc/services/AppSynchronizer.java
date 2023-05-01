@@ -74,7 +74,10 @@ public class AppSynchronizer {
 
     public void syncWithRepository() {
         try {
-            FileUtils.delete(new File(localPath), FileUtils.RECURSIVE);
+            File localLocation = new File(localPath);
+            if (localLocation.exists()) {
+                FileUtils.delete(localLocation, FileUtils.RECURSIVE);
+            }
         } catch (IOException e) {
             log.error("Error deleting local repository: " + e.getMessage(), e);
             throw new RuntimeException(e);

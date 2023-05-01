@@ -75,7 +75,7 @@ public class TableRotator {
     private Long getRotationInterval() {
         Long interval = DEFAULT_ROTATION_INTERVAL;
         Settings rotationInterval = settingsService.get(TABLE_ROTATION_INTERVAL);
-        if (rotationInterval == null) {
+        if (rotationInterval != null) {
             String intervalString = rotationInterval.getValue();
             try {
                 interval = Long.parseLong(intervalString);

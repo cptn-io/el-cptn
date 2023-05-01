@@ -3,6 +3,7 @@ import PageTitle from "../../../components/Nav/PageTitle";
 import { useNavigate } from "react-router-dom";
 import { breadcrumbs } from "..";
 import CreateDestination from "./CreateDestination";
+import ContextHelp from "../../../components/ContextHelp";
 
 
 const NewDestination = () => {
@@ -23,12 +24,7 @@ const NewDestination = () => {
                 <CreateDestination onSuccess={onSuccess} onCancel={onCancel} />
             </div>
             <div className="md:col-span-1">
-                <div className="px-4 sm:px-0">
-                    <h3 className="text-base font-semibold leading-6">Create a new Destination</h3>
-                    <p className="text-base-content mt-1 text-sm">
-                        This information will be displayed publicly so be careful what you share.
-                    </p>
-                </div>
+                <ContextHelp page="create-destination" />
             </div>
         </div>
     </Fragment>
