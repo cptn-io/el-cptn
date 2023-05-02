@@ -4,3 +4,4 @@ app-ux/.dccache
 .dccache
 target/
 *.log
+.vscode
