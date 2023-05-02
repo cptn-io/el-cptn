@@ -1,8 +1,10 @@
 package io.cptn.mgmtsvc.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.cptn.common.dto.BaseDto;
 import io.cptn.common.entities.Source;
 import io.cptn.common.validation.OnCreate;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 /* @author: kc, created on 2/7/23 */
 
@@ -43,4 +46,8 @@ public class SourceDto extends BaseDto {
 
     @Null
     private ZonedDateTime lastKeyRotationAt;
+
+    @Valid
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<HeaderDto> headers;
 }

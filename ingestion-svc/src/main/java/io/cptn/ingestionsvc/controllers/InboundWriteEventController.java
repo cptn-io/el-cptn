@@ -12,6 +12,7 @@ import io.cptn.ingestionsvc.services.SourceService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ public class InboundWriteEventController {
 
     private final InboundWriteEventMapper inboundEventMapper;
 
+    
     @PostMapping("/event/source/{sourceId}")
     public ResponseEntity<InboundWriteEventDto> createEvent(@PathVariable UUID sourceId,
                                                             @RequestBody JsonNode jsonPayload, HttpServletRequest request) {
@@ -51,7 +53,13 @@ public class InboundWriteEventController {
         event.setPayload(jsonPayload);
         event.setSource(source);
 
-        return ResponseEntity.ok(convert(inboundEventService.create(event)));
+        HttpHeaders httpHeaders = new HttpHeaders();
+        source.getHeaders().stream().map(header -> {
+            httpHeaders.add(header.getKey(), header.getValue());
+            return header;
+        });
+
+        return ResponseEntity.ok().headers(httpHeaders).body(convert(inboundEventService.create(event)));
     }
 
     public void verifySecurity(Source source, HttpServletRequest request) {

@@ -2,7 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
+import filter from 'lodash/filter';
 import { renderErrors } from "../../../common/formHelpers";
+import HeaderBuilder from "../../../components/HeaderBuilder";
 
 const CreateSource = (props) => {
     const { onCancel, onSuccess, noShadow = false } = props;
@@ -13,6 +15,7 @@ const CreateSource = (props) => {
     const [active, setActive] = useState(true);
     const [executing, setExecuting] = useState(false);
     const [error, setError] = useState({ message: null, details: [] });
+    const [headers, setHeaders] = useState([{ key: "", value: "" }]);
 
     const resetAll = () => {
         setName('');
@@ -34,7 +37,8 @@ const CreateSource = (props) => {
         const payload = {
             name,
             secured,
-            active
+            active,
+            headers: filter(headers, item => item.key)
         };
         axios.post('/api/source', payload).then(response => {
             resetAll();
@@ -64,6 +68,13 @@ const CreateSource = (props) => {
                     </label>
                     <input type="text" placeholder="Provide a name for the Source" value={name} className="input input-bordered w-full" onChange={e => setName(e.target.value)} />
                     {renderErrors(error, 'name')}
+                </div>
+                <div className="form-control w-full">
+                    <label className="label">
+                        <span className="label-text">Response Headers</span>
+                    </label>
+                    <HeaderBuilder headers={headers} setHeaders={setHeaders} />
+                    {renderErrors(error, 'config')}
                 </div>
                 <div className="form-control w-full">
                     <label className="label">

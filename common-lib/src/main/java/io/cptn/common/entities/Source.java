@@ -1,12 +1,18 @@
 package io.cptn.common.entities;
 
 import io.cptn.common.helpers.StringHelper;
+import io.cptn.common.listeners.HeaderConverter;
+import io.cptn.common.pojos.Header;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /* @author: kc, created on 2/7/23 */
@@ -45,6 +51,14 @@ public class Source extends BaseEntity {
     @Getter
     @Column(columnDefinition = "timestamp with time zone")
     private ZonedDateTime lastKeyRotationAt;
+
+    @Getter
+    @Setter
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    @Convert(converter = HeaderConverter.class)
+    @EqualsAndHashCode.Include //this is required to trigger update of headers
+    private List<Header> headers;
 
     public Source(UUID id) {
         this.setId(id);

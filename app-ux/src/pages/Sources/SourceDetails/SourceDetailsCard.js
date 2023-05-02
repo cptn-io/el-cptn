@@ -1,5 +1,5 @@
 import { IconCheck, IconClipboard, IconEye, IconEyeOff, IconX } from '@tabler/icons-react';
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";
 import keys from 'lodash/keys';
@@ -8,12 +8,14 @@ import toPairs from 'lodash/toPairs';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
+import filter from 'lodash/filter';
 import axios from 'axios';
 import ConfirmModal from '../../../components/ConfirmModal';
 import { useNavigate } from 'react-router-dom';
+import HeaderBuilder from '../../../components/HeaderBuilder';
 
 const SourceDetailsCard = (props) => {
-    const { data: { id, name, secured, active, primaryKey, secondaryKey }, onUpdate = () => { }, readOnly = false } = props;
+    const { data: { id, name, secured, active, primaryKey, secondaryKey, headers }, onUpdate = () => { }, readOnly = false } = props;
     const navigate = useNavigate();
     const [showPrimary, setShowPrimary] = useState(false);
     const [showSecondary, setShowSecondary] = useState(false);
@@ -24,6 +26,7 @@ const SourceDetailsCard = (props) => {
     const [executing, setExecuting] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [headerChanges, setHeaderChanges] = useState(headers || []);
 
     const copyToClipboard = (key, message) => {
         navigator.clipboard.writeText(key)
@@ -33,10 +36,22 @@ const SourceDetailsCard = (props) => {
         })
     }
 
+    useEffect(() => {
+        setChanges(current => ({
+            ...current,
+            headers: filter(headerChanges, item => item.key)
+        }));
+    }, [headerChanges]);
+
     const saveChanges = (e) => {
         e.preventDefault();
 
         const payload = fromPairs(differenceWith(toPairs(changes), toPairs(props.data), isEqual));
+
+        if (changes.headers && changes.headers.length > 0) {
+            payload.headers = changes.headers;
+        }
+
         if (keys(payload).length === 0) {
             setEditMode(false);
             return;
@@ -125,6 +140,13 @@ const SourceDetailsCard = (props) => {
                         name: e.target.value
                     }))} />
                     {renderErrors(error, 'name')}</Fragment> : <div className="p-1 text-lg">{name}</div>}
+            </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Response Headers</span>
+                </label>
+                <HeaderBuilder headers={headerChanges} setHeaders={setHeaderChanges} readOnly={!editMode} />
+                {renderErrors(error, 'headers')}
             </div>
             <div className="flex">
                 <div className="form-control w-6/12">
