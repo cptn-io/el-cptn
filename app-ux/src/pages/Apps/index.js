@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PageTitle from "../../components/Nav/PageTitle";
-import { IconBox, IconInfoCircle } from "@tabler/icons-react";
+import { IconBox, IconInfoCircle, IconTransform } from "@tabler/icons-react";
 import axios from "axios";
 import useNotifications from "../../hooks/useNotifications";
 import { useCallback, useEffect, useState } from "react";
@@ -26,7 +26,7 @@ const getAppCornerTag = (app) => {
 
 const App = ({ data, executing, handleShowConfirmation, handleShowAppDetails }) => <div className="card app bg-neutral-50 border-solid border-x border-y border-base-200 shadow col-span-2 md:col-span-1 rounded-2xl">
     {getAppCornerTag(data)}
-    <figure className="py-4" style={{ height: '160px', overflow: 'hidden' }}>{data.logoUrl ? <img title={data.name} className="text-base-300" src={data.logoUrl} height={128} width={128} alt={data.name} /> : <IconBox className="text-base-300" size={156} />}</figure>
+    <figure className="py-4" style={{ height: '160px', overflow: 'hidden' }}>{data.logoUrl ? <img title={data.name} className="text-base-300" src={data.logoUrl} height={128} width={128} alt={data.name} /> : (data.type === 'DESTINATION' ? <IconBox className="text-base-300" size={156} /> : <IconTransform className="text-base-300" size={156} />)}</figure>
     <div className="card-body bg-base-200 p-4 flex flex-col justify-between">
         <div className="text-xs">{data.type}</div>
         <h2 className="card-title">{data.name}</h2>
