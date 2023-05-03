@@ -5,6 +5,7 @@ import io.cptn.mgmtsvc.services.AppSynchronizer;
 import io.cptn.mgmtsvc.services.SettingsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class AppUpdateChecker {
     @SchedulerLock(name = "appChecker", lockAtLeastFor = "5m", lockAtMostFor = "10m")
     public void run() {
         try {
+            LockAssert.assertLocked();
             log.info("Running App Update Checker");
 
             Long interval = getAppCheckInterval();

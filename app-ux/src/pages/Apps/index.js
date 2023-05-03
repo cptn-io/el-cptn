@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PageTitle from "../../components/Nav/PageTitle";
-import { IconBox, IconInfoCircle, IconTransform } from "@tabler/icons-react";
+import { IconBox, IconInfoCircle, IconRefresh, IconTransform } from "@tabler/icons-react";
 import axios from "axios";
 import useNotifications from "../../hooks/useNotifications";
 import { useCallback, useEffect, useState } from "react";
@@ -80,7 +80,8 @@ const Apps = () => {
         }
     }, [contextApp]);
 
-    useEffect(() => {
+    const refreshApps = useCallback(() => {
+        setLoading(true);
         axios.get(`/api/app?page=${page}`).then(response => {
             setTotalCount(response.headers['x-total-count'] || 0);
             setData(response.data);
@@ -93,6 +94,10 @@ const Apps = () => {
             setLoading(false);
         });
     }, [page, addNotification]);
+
+    useEffect(() => {
+        refreshApps();
+    }, [refreshApps]);
 
     const onConfirmAppUse = useCallback(() => {
         setExecuting(true);
@@ -133,13 +138,16 @@ const Apps = () => {
         setContextApp(null);
     }, []);
 
+
     return <>
-        <PageTitle itemKey="apps" />
+        <PageTitle itemKey="apps">
+
+        </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
                 {totalCount > 0 ? <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {data.map((item) => <App key={item.id} data={item} executing={executing} handleShowConfirmation={handleShowConfirmation} handleShowAppDetails={handleShowAppDetails} />)}
-                </div> : renderNoApps()}
+                </div> : <NoApps refreshApps={refreshApps} />}
             </div>
             {totalCount > 0 && <Pagination totalCount={totalCount} />}
         </div>
@@ -152,13 +160,39 @@ const Apps = () => {
     </>
 }
 
-const renderNoApps = () => {
+const NoApps = ({ refreshApps }) => {
+    const { addNotification } = useNotifications();
+    const [executing, setExecuting] = useState(false);
+
+    const syncApps = (e) => {
+        e.preventDefault();
+        setExecuting(true);
+        axios.post(`/api/app/sync`).then(response => {
+            addNotification({
+                message: `Successfully synced Apps`,
+                type: 'success'
+            });
+            refreshApps();
+        }).catch(err => {
+            addNotification({
+                message: get(err, 'response.data.message', 'An error occurred while syncing Apps'),
+                type: 'error'
+            });
+        }).finally(() => {
+            setExecuting(false);
+        });
+    };
+
+
     return <div className="flex flex-col justify-center my-5">
         <div className="flex justify-center mb-4 text-primary">
             <img alt="Create new Destination" src="/undraw/apps.svg" className="w-3/6 max-w-3/5" />
         </div>
         <div className="flex justify-center mb-4 text-center">
             There are no Appps. Please wait until the instance syncs with the server to load available apps.
+        </div>
+        <div className="flex justify-center">
+            <button disabled={executing} className="btn btn-primary btn-sm md:btn-md" onClick={syncApps}><IconRefresh size={24} className="mr-2" />Force Sync Apps</button>
         </div>
     </div>
 

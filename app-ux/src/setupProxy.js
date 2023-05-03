@@ -9,7 +9,7 @@ module.exports = function (app) {
         })
     );
     app.use(
-        ['/api/*', '/login', '/logout', '/myprofile'],
+        ['/api/*', '/login', '/logout', '/mgmt/*'],
         createProxyMiddleware({
             target: 'http://localhost:8080',
             changeOrigin: false,

@@ -3,6 +3,7 @@ package io.cptn.mgmtsvc.controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cptn.common.entities.App;
 import io.cptn.common.entities.ScriptedStep;
+import io.cptn.common.exceptions.WebApplicationException;
 import io.cptn.common.helpers.JsonHelper;
 import io.cptn.common.web.ListEntitiesParam;
 import io.cptn.mgmtsvc.dto.AppDto;
@@ -58,7 +59,13 @@ public class AppController {
 
     @PostMapping("/api/app/sync")
     public ResponseEntity syncApps() {
-        appSynchronizer.syncWithRepository();
+        try {
+            appSynchronizer.syncWithRepository();
+        } catch (Exception e) {
+            log.error("Unable to sync apps - " + e.getMessage(), e);
+            throw new WebApplicationException("Unable to sync with remote app repository. Your service must have " +
+                    "access to internet to sync applications.");
+        }
         return ResponseEntity.ok().build();
     }
 

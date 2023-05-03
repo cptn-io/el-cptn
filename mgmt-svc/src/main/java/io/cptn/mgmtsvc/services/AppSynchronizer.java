@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /* @author: kc, created on 4/27/23 */
@@ -45,7 +47,9 @@ public class AppSynchronizer {
         if (folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
             if (files != null) {
-                for (File file : files) {
+                List<File> fileList = Arrays.asList(files);
+                Collections.sort(fileList, Collections.reverseOrder());
+                for (File file : fileList) {
                     try {
                         App pojo = readJsonFile(file);
                         if (pojo != null) {

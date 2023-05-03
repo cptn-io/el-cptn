@@ -13,6 +13,10 @@
 		reverse_proxy mgmt-svc:8080
 	}
 
+	handle /mgmt/* {
+        reverse_proxy mgmt-svc:8080
+    }
+
 	handle /event/* {
 		reverse_proxy ingestion-svc:8081
 	}
