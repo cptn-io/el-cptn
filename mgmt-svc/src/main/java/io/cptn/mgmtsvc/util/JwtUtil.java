@@ -63,7 +63,7 @@ public class JwtUtil implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        Assert.hasText(this.secret, "JWT_SECRET is null");
+    public void afterPropertiesSet() {
+        Assert.notNull(this.secret, "JWT_SECRET is null");
     }
 }

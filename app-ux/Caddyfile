@@ -1,4 +1,4 @@
-:8080 {
+{$APP_URL} {
 	encode gzip
 
 	handle /api/* {

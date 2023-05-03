@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   db:
@@ -9,7 +9,7 @@ services:
     expose:
       - 5432
     environment:
-      - POSTGRES_DB=elcptn
+      - POSTGRES_DB=${DB_NAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
@@ -30,25 +30,33 @@ services:
       retries: 5
 
   app-ux:
-    image: io.cptn/app-ux
+    image: io.cptn/app-ux:latest
+    restart: unless-stopped
     ports:
-      - 80:8080
+      - 80:80
+      - 443:443
+    environment:
+      - APP_URL=${APP_URL}
 
   mgmt-svc:
-    image: io.cptn/mgmt-svc
+    image: io.cptn/mgmt-svc:latest
     deploy:
       replicas: 1
     expose:
       - 8080
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - DB_URL=jdbc:postgresql://db:5432/elcptn
+      - DB_URL=jdbc:postgresql://db:5432/${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
-      - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
+      - JWT_SECRET=${JWT_SECRET}
     healthcheck:
-      test: "exit 0"
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q 'UP'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     depends_on:
       db:
         condition: service_healthy
@@ -56,18 +64,17 @@ services:
         condition: service_healthy
 
   ingestion-svc:
-    image: io.cptn/ingestion-svc
+    image: io.cptn/ingestion-svc:latest
     deploy:
       replicas: 1
     expose:
       - 8081
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - DB_URL=jdbc:postgresql://db:5432/elcptn
+      - DB_URL=jdbc:postgresql://db:5432/${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
-      - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
     depends_on:
       db:
         condition: service_healthy
@@ -77,18 +84,18 @@ services:
         condition: service_healthy
 
   processor:
-    image: io.cptn/processor
+    image: io.cptn/processor:latest
     deploy:
       replicas: 1
     environment:
+      - NODE_ENV=production
       - PGHOST=db
       - PGPORT=5432
-      - PGDATABASE=elcptn
+      - PGDATABASE=${DB_NAME}
       - PGUSER=${DB_USER}
       - PGPASSWORD=${DB_PASSWORD}
       - PGSSLMODE=disable
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
-      - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
     depends_on:
       db:
         condition: service_healthy

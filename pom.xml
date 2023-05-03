@@ -16,12 +16,15 @@
     <packaging>pom</packaging>
     <properties>
         <java.version>17</java.version>
+        <nodeVersion>v18.0.0</nodeVersion>
+        <npmVersion>8.15.0</npmVersion>
     </properties>
     <modules>
         <module>common-lib</module>
         <module>mgmt-svc</module>
         <module>ingestion-svc</module>
         <module>app-ux</module>
+        <module>processor</module>
     </modules>
     <build>
         <pluginManagement>
@@ -30,6 +33,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.4.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>

@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    public String[] PUBLIC_PAGES = new String[]{"/event/source/**"};
+    public String[] PUBLIC_PAGES = new String[]{"/event/source/**", "/actuator/health"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

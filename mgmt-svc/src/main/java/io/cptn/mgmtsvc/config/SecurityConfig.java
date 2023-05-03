@@ -34,7 +34,7 @@ import java.util.Set;
 public class SecurityConfig {
 
     public static final String AUTH_COOKIE = "jwt";
-    public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login");
+    public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health");
 
     private final JwtUtil jwtUtil;
 

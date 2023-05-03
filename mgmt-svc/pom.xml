@@ -6,6 +6,7 @@
         <groupId>io.cptn</groupId>
         <artifactId>application</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>mgmt-svc</artifactId>
     <name>Management Services</name>
@@ -190,6 +191,39 @@
                 <configuration>
                     <propertyFile>src/main/resources/application.properties</propertyFile>
                     <propertyFileWillOverride>true</propertyFileWillOverride>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>tag-latest</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <tag>latest</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>tag-current-version</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>${project.groupId}/${project.artifactId}</repository>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>
