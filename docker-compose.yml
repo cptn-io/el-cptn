@@ -1,0 +1,98 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:14.7-alpine3.17
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_DB=elcptn
+      - POSTGRES_PASSWORD=${DB_PASS}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:6.2-alpine
+    volumes:
+      - redis:/data
+    expose:
+      - 6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app-ux:
+    image: io.cptn/app-ux
+    ports:
+      - 80:8080
+
+  mgmt-svc:
+    image: io.cptn/mgmt-svc
+    deploy:
+      replicas: 1
+    expose:
+      - 8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
+      - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
+    healthcheck:
+      test: "exit 0"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  ingestion-svc:
+    image: io.cptn/ingestion-svc
+    deploy:
+      replicas: 1
+    expose:
+      - 8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
+      - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mgmt-svc:
+        condition: service_healthy
+
+  processor:
+    image: io.cptn/processor
+    deploy:
+      replicas: 1
+    environment:
+      - PGHOST=db
+      - PGDATABASE=elcptn
+      - PGUSER=${DB_USER}
+      - PGPASSWORD=${DB_PASS}
+      - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
+      - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mgmt-svc:
+        condition: service_healthy
+
+volumes:
+  postgres:
+  redis:

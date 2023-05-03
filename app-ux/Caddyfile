@@ -2,19 +2,19 @@
 	encode gzip
 
 	handle /api/* {
-		reverse_proxy mgmt-svc:7080
+		reverse_proxy mgmt-svc:8080
 	}
 
 	handle /login {
-		reverse_proxy mgmt-svc:7080
+		reverse_proxy mgmt-svc:8080
 	}
 
 	handle /logout {
-		reverse_proxy mgmt-svc:7080
+		reverse_proxy mgmt-svc:8080
 	}
 
 	handle /event/* {
-		reverse_proxy ingestion-svc:7081
+		reverse_proxy ingestion-svc:8080
 	}
 
 	handle {
