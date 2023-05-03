@@ -15,7 +15,9 @@ import org.springframework.web.context.request.WebRequest;
 public class RestExceptionHandler extends CommonExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {
-        log.debug(ex.getMessage(), ex);
+        if (log.isDebugEnabled()) {
+            log.debug(ex.getMessage(), ex);
+        }
         return super.handleException(ex, request);
     }
 }

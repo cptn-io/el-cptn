@@ -19,13 +19,15 @@ public class CryptoHelper implements InitializingBean {
 
     private static final int SALT_LENGTH = 16;
 
+    private SecureRandom secureRandom = new SecureRandom();
+
     @Value("${cptn.crypto.secret}")
     private String password;
 
 
     public String encrypt(String plainText) {
         byte[] salt = new byte[SALT_LENGTH];
-        new SecureRandom().nextBytes(salt);
+        secureRandom.nextBytes(salt);
 
         BytesEncryptor encryptor = getEncryptor(salt);
 
@@ -53,7 +55,7 @@ public class CryptoHelper implements InitializingBean {
         BytesEncryptor encryptor = getEncryptor(salt);
 
         byte[] plainTextBytes = encryptor.decrypt(cipherBytes);
-        return new String(plainTextBytes);
+        return String.valueOf(plainTextBytes);
     }
 
     private BytesEncryptor getEncryptor(byte[] salt) {

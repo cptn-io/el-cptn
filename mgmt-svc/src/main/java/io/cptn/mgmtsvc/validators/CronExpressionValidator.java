@@ -34,7 +34,9 @@ public class CronExpressionValidator implements ConstraintValidator<CronExpressi
                 throw new BadRequestException("Invalid cron expression. Minimum interval must be 5 minutes");
             }
         } catch (Exception e) {
-            log.debug("Unable to validate cron expression = " + cronExpression, e);
+            if (log.isDebugEnabled()) {
+                log.debug("Unable to validate cron expression = " + cronExpression, e);
+            }
             return false;
         }
 

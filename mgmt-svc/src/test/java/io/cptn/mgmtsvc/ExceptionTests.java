@@ -9,8 +9,10 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -31,8 +33,8 @@ public class ExceptionTests {
         Set<ConstraintViolation<SourceDto>> violations = validator.validate(sourceDto, OnCreate.class);
 
         ConstraintViolationException exception = new ConstraintViolationException("error message", violations);
-
-        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception, null);
+        WebRequest webRequestMock = Mockito.mock(WebRequest.class);
+        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception, webRequestMock);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals("Invalid data", responseEntity.getBody().getMessage());
