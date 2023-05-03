@@ -1,5 +1,6 @@
 package io.cptn.common.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.cptn.common.listeners.ConfigConverter;
 import io.cptn.common.pojos.ConfigItem;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @ToString(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class App extends BaseEntity {
 
     @Getter

@@ -1,0 +1,25 @@
+:8080 {
+	encode gzip
+
+	handle /api/* {
+		reverse_proxy mgmt-svc:7080
+	}
+
+	handle /login {
+		reverse_proxy mgmt-svc:7080
+	}
+
+	handle /logout {
+		reverse_proxy mgmt-svc:7080
+	}
+
+	handle /event/* {
+		reverse_proxy ingestion-svc:7081
+	}
+
+	handle {
+		root * /usr/share/caddy/ux
+		try_files {path} /index.html
+		file_server
+	}
+}

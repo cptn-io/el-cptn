@@ -4,6 +4,8 @@
   "description": "elcptn event processor",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "lint": "jshint src/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "KC",
@@ -15,6 +17,10 @@
     "pg": "^8.10.0",
     "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.17",
+    "winston": "^3.8.2",
     "workerpool": "^6.4.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.13.6"
   }
 }

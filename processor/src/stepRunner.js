@@ -1,5 +1,6 @@
 
 const Destination = require('./entities/Destination');
+const logger = require('./logger');
 const { findMissingRequiredModules, installModule } = require('./nodeModuleHelper');
 
 async function installRequiredModules(stepScript) {
@@ -7,7 +8,7 @@ async function installRequiredModules(stepScript) {
         const missingModules = findMissingRequiredModules(stepScript);
         missingModules.forEach(installModule);
     } catch (err) {
-        console.error("Unable to install missing modules", err.message);
+        logger.error("Unable to install missing modules", err.message);
         throw err;
     }
 }
@@ -25,7 +26,7 @@ async function getDestinationWrappedObject(vm, step) {
         const wrappedObject = vm.run(stepScript, './script.js');
         return wrappedObject;
     } catch (err) {
-        console.error("Error running destination setup script in Sandbox", err.message, err);
+        logger.error("Error running destination setup script in Sandbox", err.message, err);
         throw err;
     }
 }
@@ -49,7 +50,7 @@ async function runStep(vm, step, evt, ctx) {
         //     }
         // }
     } catch (err) {
-        console.error("Error running script in Sandbox", err.message, err);
+        logger.error("Error running script in Sandbox", err.message, err);
         throw err;
     }
 }
@@ -57,4 +58,4 @@ async function runStep(vm, step, evt, ctx) {
 module.exports = {
     getDestinationWrappedObject,
     runStep
-}
+};

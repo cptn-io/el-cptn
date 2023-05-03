@@ -1,10 +1,17 @@
 const { spawnSync } = require('child_process');
+const logger = require('./logger');
 
-function isModuleInstalled(module) {
+function isModuleInstalled(moduleName) {
+    const isBuiltinModule = require('module').builtinModules.includes(moduleName);
+    return isBuiltinModule || moduleExistsInNodeModules(moduleName);
+}
+
+function moduleExistsInNodeModules(moduleName) {
     try {
-        require(module);
+        require.resolve(`${moduleName}/package.json`);
         return true;
-    } catch (err) {
+    } catch (error) {
+        logger.error("error while checking if module exists", error);
         return false;
     }
 }
@@ -22,10 +29,10 @@ function findMissingRequiredModules(script) {
 }
 
 function installModule(module) {
-    console.info(`Installing missing node module ${module}`)
+    logger.info(`Installing missing node module ${module}`);
     const result = spawnSync('npm', ['install', '--no-save', module], { stdio: 'inherit' });
     if (result.status !== 0) {
-        console.error(`Failed to install module ${module}.`);
+        logger.error(`Failed to install module ${module}.`);
     }
 }
 
@@ -34,4 +41,4 @@ module.exports = {
     isModuleInstalled,
     findMissingRequiredModules,
     installModule
-}
+};

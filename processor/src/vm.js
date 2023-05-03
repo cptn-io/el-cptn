@@ -13,7 +13,7 @@ function getVM() {
             builtin: ['*'],
             mock: {
                 fs: readOnlyFS,
-            },
+            }
         },
         eval: false,
         wasm: false

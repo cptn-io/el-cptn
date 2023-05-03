@@ -5,6 +5,7 @@ const Pipeline = require('./entities/Pipeline');
 const { runStep, getDestinationWrappedObject } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
 const getVM = require('./vm');
+const logger = require('./logger');
 
 async function getTransformation(transformationId) {
     const key = `transformation-proc::${transformationId}`;
@@ -70,7 +71,7 @@ async function resolveSteps(pipeline) {
 }
 
 async function processEvent(event) {
-    const results = await processEventBatch(event.pipelineId, [event])
+    const results = await processEventBatch(event.pipelineId, [event]);
     return results[0];
 }
 
@@ -108,7 +109,7 @@ async function processEventBatch(pipelineId, events) {
 
         const destination = pipelineSteps.destination;
         if (!destination || !destination.active) {
-            console.error("Invalid destination");
+            logger.error("Invalid destination");
             throw "Destination is inactive or invalid";
         }
         const destinationWrappedObject = await getDestinationWrappedObject(vm, destination);
@@ -139,10 +140,10 @@ async function processEventBatch(pipelineId, events) {
                 responses.push({ id, success: true, consoleLogs });
             } catch (error) {
                 if (typeof error === 'string') {
-                    error = new Error(error);
+                    logs.push(`ERROR: ${error} (error while processing event)`);
+                } else {
+                    logs.push(`ERROR: ${error.message} (error while processing event)`);
                 }
-
-                logs.push(`ERROR: ${error.message} (error while processing event)`);
                 consoleLogs = logs.join('\n').substring(0, 3999);
                 responses.push({ id, success: false, consoleLogs });
             } finally {
@@ -154,11 +155,11 @@ async function processEventBatch(pipelineId, events) {
             await destinationWrappedObject.teardown(destination.config);
         }
     } catch (error) {
-        console.error("Error while processing event", error, error.message);
+        logger.error("Error while processing event", error, error.message);
     }
     return responses;
 }
 module.exports = {
     processEvent,
     processEventBatch
-}
+};

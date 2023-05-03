@@ -1,9 +1,9 @@
-
-const pgPool = require('./database')
+const pgPool = require('./database');
 const workerpool = require('workerpool');
 const Event = require('./entities/Event');
 const workerExecPool = workerpool.pool(__dirname + '/eventWorker.js');
 const { processEventBatch } = require('./eventProcessor');
+const logger = require('./logger');
 
 const QUERY_BATCH_SIZE = process.env.QUERY_BATCH_SIZE || 100;
 const DELAY_IF_NOEVENTS = process.env.DELAY_IF_NOEVENTS || 5000;
@@ -19,7 +19,7 @@ async function processEventWithWorker(row) {
     } else {
         return workerExecPool.exec('processEvent', [new Event(row)]).timeout(WORKER_TIMEOUT_MAX)
             .catch(err => {
-                console.log(err);
+                logger.log(err);
                 return { id: row.id, success: false, consoleLogs: `ERROR: ${err.message}` };
             });
     }
@@ -51,7 +51,7 @@ async function processEvents(client, rows, batchMode = false) {
  * Method to process events in adhoc mode without an associated scheduled trigger
  */
 async function processQueuedEvents() {
-    console.log('processing queued events');
+    logger.info('processing queued events');
     const client = await pgPool.connect();
     try {
         await client.query('BEGIN');
@@ -66,7 +66,7 @@ async function processQueuedEvents() {
         await processEvents(client, result.rows, false); //batch mode must be false
         await client.query('COMMIT');
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         await client.query('ROLLBACK');
         await new Promise(resolve => setTimeout(resolve, 5000));
     } finally {
@@ -78,7 +78,7 @@ async function processQueuedEvents() {
  * Method to process scheduled events in batch mode
  */
 async function processScheduledEvents() {
-    console.log('processing scheduled events');
+    logger.info('processing scheduled events');
     const client = await pgPool.connect();
     try {
         await client.query('BEGIN');
@@ -101,13 +101,13 @@ async function processScheduledEvents() {
             try {
                 await processEvents(client, result.rows, true); //batch mode flag to true
             } catch (err) {
-                console.error("Error processing events via pipeline trigger", err);
+                logger.error("Error processing events via pipeline trigger", err);
             }
         }
         await client.query('UPDATE pipeline_trigger SET state= $1 WHERE id  = $2', ['COMPLETED', trigger.id]);
         await client.query('COMMIT');
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         await client.query('ROLLBACK');
         await new Promise(resolve => setTimeout(resolve, 5000));
     } finally {

@@ -1,6 +1,11 @@
 const { createClient } = require('redis');
 
-const client = createClient();
+const client = createClient({
+    socket: {
+        host: 'redis',
+        port: '6379'
+    }
+});
 
 async function getClient() {
     if (!client.isOpen) {
