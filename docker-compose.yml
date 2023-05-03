@@ -10,7 +10,7 @@ services:
       - 5432
     environment:
       - POSTGRES_DB=elcptn
-      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
@@ -42,8 +42,9 @@ services:
       - 8080
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - DB_URL=jdbc:postgresql://db:5432/elcptn
       - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
+      - DB_PASSWORD=${DB_PASSWORD}
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
       - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
     healthcheck:
@@ -59,11 +60,12 @@ services:
     deploy:
       replicas: 1
     expose:
-      - 8080
+      - 8081
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - DB_URL=jdbc:postgresql://db:5432/elcptn
       - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
+      - DB_PASSWORD=${DB_PASSWORD}
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
       - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
     depends_on:
@@ -80,9 +82,11 @@ services:
       replicas: 1
     environment:
       - PGHOST=db
+      - PGPORT=5432
       - PGDATABASE=elcptn
       - PGUSER=${DB_USER}
-      - PGPASSWORD=${DB_PASS}
+      - PGPASSWORD=${DB_PASSWORD}
+      - PGSSLMODE=disable
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
       - CPTN_CRYPTO_SALT=${CPTN_CRYPTO_SALT}
     depends_on:

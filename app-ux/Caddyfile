@@ -14,7 +14,7 @@
 	}
 
 	handle /event/* {
-		reverse_proxy ingestion-svc:8080
+		reverse_proxy ingestion-svc:8081
 	}
 
 	handle {
