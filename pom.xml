@@ -26,6 +26,9 @@
         <module>app-ux</module>
         <module>processor</module>
     </modules>
+    <scm>
+        <developerConnection>scm:git:https://github.com/kcthota/el-cptn.git</developerConnection>
+    </scm>
     <build>
         <pluginManagement>
             <plugins>

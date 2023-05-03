@@ -5,3 +5,4 @@ app-ux/.dccache
 target/
 *.log
 .vscode
+release.properties
