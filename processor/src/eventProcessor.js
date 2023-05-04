@@ -155,6 +155,12 @@ async function processEventBatch(pipelineId, events) {
             await destinationWrappedObject.teardown(destination.config);
         }
     } catch (error) {
+        if (responses.length === 0) {
+            //if no events were processed, return error for all events
+            for (const event of events) {
+                responses.push({ id: event.id, success: false, consoleLogs: error.message });
+            }
+        }
         logger.error("Error while processing event", error, error.message);
     }
     return responses;
