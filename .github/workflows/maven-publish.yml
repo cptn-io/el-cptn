@@ -15,6 +15,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -28,7 +31,7 @@ jobs:
           git config --global user.name "Release Bot"
           git config --global user.email "kcthota@gmail.com"
           git config --global credential.helper store
-          echo "machine github.com login kcthota@gmail.com password ${GITHUB_TOKEN}" > ~/.netrc
+          echo "machine github.com login kcthota@gmail.com password ${{ github.token }}" > ~/.netrc
 
       - name: Build and release
         run: |
