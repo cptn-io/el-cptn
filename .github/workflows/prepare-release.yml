@@ -47,6 +47,14 @@ jobs:
         with:
           ref: v${{ github.event.inputs.current_version }}
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+          settings-path: ${{ github.workspace }}
+          
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
