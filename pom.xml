@@ -27,7 +27,7 @@
         <module>processor</module>
     </modules>
     <scm>
-        <developerConnection>scm:git:https://github.com/kcthota/el-cptn.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/cptn-io/el-cptn.git</developerConnection>
     </scm>
     <build>
         <pluginManagement>
@@ -45,4 +45,16 @@
             </plugins>
         </pluginManagement>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/cptn-io/el-cptn</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>GitHub</name>
+            <url>https://maven.pkg.github.com/cptn-io/el-cptn</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

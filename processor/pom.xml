@@ -32,7 +32,7 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <configuration>                           
+                        <configuration>
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
@@ -58,6 +58,7 @@
                             <goal>build</goal>
                             <goal>tag</goal>
                         </goals>
+                        <phase>none</phase>
                         <configuration>
                             <tag>latest</tag>
                         </configuration>
@@ -68,13 +69,14 @@
                             <goal>build</goal>
                             <goal>tag</goal>
                         </goals>
+                        <phase>none</phase>
                         <configuration>
                             <tag>${project.version}</tag>
                         </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>${project.groupId}/${project.artifactId}</repository>
+                    <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
                 </configuration>
             </plugin>
         </plugins>

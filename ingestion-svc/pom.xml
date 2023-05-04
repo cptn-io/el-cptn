@@ -151,6 +151,7 @@
                             <goal>build</goal>
                             <goal>tag</goal>
                         </goals>
+                        <phase>none</phase>
                         <configuration>
                             <tag>latest</tag>
                         </configuration>
@@ -161,13 +162,14 @@
                             <goal>build</goal>
                             <goal>tag</goal>
                         </goals>
+                        <phase>none</phase>
                         <configuration>
                             <tag>${project.version}</tag>
                         </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>${project.groupId}/${project.artifactId}</repository>
+                    <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>

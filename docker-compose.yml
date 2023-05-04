@@ -30,7 +30,7 @@ services:
       retries: 5
 
   app-ux:
-    image: io.cptn/app-ux:latest
+    image: ghcr.io/cptn-io/app-ux:latest
     restart: unless-stopped
     ports:
       - 80:80
@@ -39,7 +39,7 @@ services:
       - APP_URL=${APP_URL}
 
   mgmt-svc:
-    image: io.cptn/mgmt-svc:latest
+    image: ghcr.io/cptn-io/mgmt-svc:latest
     deploy:
       replicas: 1
     expose:
@@ -64,7 +64,7 @@ services:
         condition: service_healthy
 
   ingestion-svc:
-    image: io.cptn/ingestion-svc:latest
+    image: ghcr.io/cptn-io/ingestion-svc:latest
     deploy:
       replicas: 1
     expose:
@@ -84,7 +84,7 @@ services:
         condition: service_healthy
 
   processor:
-    image: io.cptn/processor:latest
+    image: ghcr.io/cptn-io/processor:latest
     deploy:
       replicas: 1
     environment:
