@@ -35,4 +35,4 @@ jobs:
 
       - name: Build and release
         run: |
-          mvn --batch-mode release:prepare release:perform -DskipTests
+          mvn --batch-mode release:prepare release:perform -DskipTests -s $GITHUB_WORKSPACE/settings.xml
