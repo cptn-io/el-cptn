@@ -3,3 +3,5 @@ node_modules
 .dccache
 *.log
 node
+logs/
+*-audit.json

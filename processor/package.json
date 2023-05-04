@@ -18,6 +18,7 @@
     "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.17",
     "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1",
     "workerpool": "^6.4.0"
   },
   "devDependencies": {

@@ -55,7 +55,7 @@ async function processEvents(client, rows, batchMode = false) {
  * Method to process events in adhoc mode without an associated scheduled trigger
  */
 async function processQueuedEvents() {
-    logger.info('processing queued events');
+    logger.debug('processing queued events');
     const client = await pgPool.connect();
     try {
         await client.query('BEGIN');
@@ -82,7 +82,7 @@ async function processQueuedEvents() {
  * Method to process scheduled events in batch mode
  */
 async function processScheduledEvents() {
-    logger.info('processing scheduled events');
+    logger.debug('processing scheduled events');
     const client = await pgPool.connect();
     try {
         await client.query('BEGIN');

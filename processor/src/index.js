@@ -8,6 +8,7 @@ function wait(delay) {
 
 
 const pollQueued = async () => {
+    logger.info('Starting event processor');
     while (true) {
         try {
             await processQueuedEvents();
@@ -19,6 +20,7 @@ const pollQueued = async () => {
 };
 
 const pollScheduled = async () => {
+    logger.info('Starting scheduled event processor');
     while (true) {
         try {
             await processScheduledEvents();

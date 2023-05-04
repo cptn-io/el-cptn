@@ -16,8 +16,6 @@ const edgeTypes = {
     buttonedge: ButtonEdge,
 };
 
-const proOptions = { hideAttribution: true };
-
 const PipelineView = forwardRef((props, ref) => {
     const { draft } = props;
     const { addNotification } = useNotifications();
@@ -109,7 +107,7 @@ const PipelineView = forwardRef((props, ref) => {
         edgeUpdateSuccessful.current = true;
     }, [setEdges]);
 
-    return <ReactFlow edgeTypes={edgeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} nodes={nodes} edges={edges} defaultEdgeOptions={edgeOptions} proOptions={proOptions} onConnect={onConnect} onEdgeUpdate={onEdgeUpdate}
+    return <ReactFlow attributionPosition="bottom-left" edgeTypes={edgeTypes} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} nodes={nodes} edges={edges} defaultEdgeOptions={edgeOptions} onConnect={onConnect} onEdgeUpdate={onEdgeUpdate}
         onEdgeUpdateStart={onEdgeUpdateStart} onEdgeUpdateEnd={onEdgeUpdateEnd}>
         <Background />
         <Controls />
