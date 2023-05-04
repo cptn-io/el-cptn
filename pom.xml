@@ -45,6 +45,14 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.4.13</version>
+                    <configuration>
+                        <skipBuild>true</skipBuild>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>

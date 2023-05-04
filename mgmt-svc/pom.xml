@@ -222,6 +222,7 @@
                     <!--                    </execution>-->
                 </executions>
                 <configuration>
+                    <skipBuild>false</skipBuild>
                     <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
