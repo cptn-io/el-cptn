@@ -73,7 +73,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>tag-current-version</id>
+                        <id>tag-version</id>
                         <goals>
                             <goal>build</goal>
                             <goal>tag</goal>

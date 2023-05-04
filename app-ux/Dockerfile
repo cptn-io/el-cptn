@@ -1,5 +1,7 @@
 FROM caddy:latest
 
+LABEL org.opencontainers.image.description="Caddy server with UX"
+
 COPY Caddyfile /etc/caddy/Caddyfile
 
 COPY build /usr/share/caddy/ux

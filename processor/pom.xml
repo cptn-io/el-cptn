@@ -64,7 +64,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>tag-current-version</id>
+                        <id>tag-version</id>
                         <goals>
                             <goal>build</goal>
                             <goal>tag</goal>
@@ -79,6 +79,7 @@
                 <configuration>
                     <skip>false</skip>
                     <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
+
                 </configuration>
             </plugin>
         </plugins>

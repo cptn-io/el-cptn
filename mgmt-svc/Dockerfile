@@ -1,5 +1,7 @@
 FROM eclipse-temurin:17-jdk-alpine
 
+LABEL org.opencontainers.image.description="Management Service"
+
 ARG JAR_FILE
 
 RUN addgroup -S spring && adduser -S spring -G spring
