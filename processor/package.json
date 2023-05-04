@@ -13,7 +13,7 @@
   "dependencies": {
     "async": "^3.2.4",
     "lodash": "^4.17.21",
-    "memfs": "^3.4.13",
+    "memfs": "^3.5.1",
     "pg": "^8.10.0",
     "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.17",
