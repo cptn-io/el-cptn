@@ -66,6 +66,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish images to GitHub Packages
-        run: mvn dockerfile:build dockerfile:tag@tag-version dockerfile:tag@tag-latest dockerfile:push@tag-version dockerfile:push@tag-latest -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn dockerfile:build dockerfile:tag@tag-version dockerfile:push@push-latest dockerfile:push@push-version -s $GITHUB_WORKSPACE/settings.xml
         env:
           GITHUB_TOKEN: ${{ github.token }}
