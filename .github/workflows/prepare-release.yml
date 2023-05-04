@@ -2,14 +2,13 @@ name: Prepare release
 
 on:
   workflow_dispatch:
-    workflow_dispatch:
-      inputs:
-        current_version:
-          description: "Current release"
-          default: "x.y.z"
-        next_version:
-          description: "Next release"
-          default: "x.y.z-SNAPSHOT"
+    inputs:
+      current_version:
+        description: "Current release"
+        default: "x.y.z"
+      next_version:
+        description: "Next release"
+        default: "x.y.z-SNAPSHOT"
 
 env:
   REGISTRY: ghcr.io
