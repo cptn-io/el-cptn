@@ -55,4 +55,9 @@ public class App extends BaseEntity {
     @Getter
     @Setter
     private String logoUrl;
+
+    @Getter
+    @Setter
+    @Column(nullable = false, columnDefinition = "INTEGER default 100")
+    private int orderIndex = 100;
 }

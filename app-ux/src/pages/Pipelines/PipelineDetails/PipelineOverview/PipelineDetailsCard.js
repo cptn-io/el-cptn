@@ -64,7 +64,7 @@ const PipelineDetailsCard = (props) => {
         setExecuting(true);
         axios.post(`/api/pipeline/${data.id}/run`).then(response => {
             addNotification({
-                message: 'Pipeline has been scheduld for execution. Queued events will be processed shortly.',
+                message: 'Pipeline has been scheduled for execution. Queued events will be processed shortly.',
                 type: 'success'
             });
         }).catch(err => {

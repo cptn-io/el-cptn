@@ -1,13 +1,13 @@
 package io.cptn.mgmtsvc.services;
 
 import io.cptn.common.entities.*;
-import io.cptn.common.pojos.ConfigItem;
 import io.cptn.common.repositories.AppRepository;
 import io.cptn.common.services.CommonService;
 import io.cptn.common.web.ListEntitiesParam;
-import liquibase.util.MD5Util;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,24 +24,6 @@ public class AppService extends CommonService {
     private final DestinationService destinationService;
 
     private final TransformationService transformationService;
-
-    public App createApp() {
-        App app = new App();
-
-        //generate random string
-        String key = UUID.randomUUID().toString();
-        //get md5 for the key
-        String hash = MD5Util.computeMD5(key);
-        app.setName(key);
-        app.setHash(hash);
-        app.setKey(hash);
-        ConfigItem configItem = new ConfigItem();
-        configItem.setKey("key1");
-        configItem.setValue("value1");
-        app.setConfig(List.of(configItem));
-        app.setScript("//script goes here");
-        return appRepository.save(app);
-    }
 
     public void upsertApp(App app) {
         App existingApp = getAppByKey(app.getKey());
@@ -64,8 +46,8 @@ public class AppService extends CommonService {
     }
 
     public List<App> getAll(ListEntitiesParam param) {
-        Pageable pageable = getPageable(param);
-
+        Pageable pageable = PageRequest.of(param.getPage(), param.getSize(),
+                Sort.by(Sort.Direction.ASC, "orderIndex").and(Sort.by(Sort.Direction.DESC, "createdAt")));
         return appRepository.findAll(pageable).stream().collect(Collectors.toList());
     }
 

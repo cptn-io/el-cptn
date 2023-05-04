@@ -27,6 +27,10 @@ const Scheduler = (props) => {
     const [executing, setExecuting] = useState(false);
 
 
+    const clearErrors = () => {
+        setError({ message: null, details: [] });
+    };
+
     useEffect(() => {
         axios.get(`/api/pipeline_schedule/pipeline/${pipelineId}`).then(response => {
             setSchedule(response.data[0]);
@@ -59,6 +63,7 @@ const Scheduler = (props) => {
         setActive(schedule.active);
     };
     const saveSchedule = () => {
+        clearErrors();
         const changes = {
             timeZone,
             cronExpression,
