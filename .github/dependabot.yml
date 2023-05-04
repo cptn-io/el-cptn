@@ -5,10 +5,27 @@
 
 version: 2
 updates:
-  - package-ecosystem: "maven" # See documentation for possible values
-    directory: "/mgmt-svc" # Location of package manifests
+  - package-ecosystem: "maven"
+    directory: "/common-lib"
     schedule:
       interval: "weekly"
-    ignore:
-      - dependency-name: "spring-boot-starter-parent"
-        versions: ["3.x"]         # Ignore 3.x updates for Spring
+
+  - package-ecosystem: "maven"
+    directory: "/mgmt-svc"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "maven"
+    directory: "/ingestion-svc"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/app-ux"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/processor"
+    schedule:
+      interval: "weekly"

@@ -22,9 +22,9 @@
     <modules>
         <module>common-lib</module>
         <module>mgmt-svc</module>
-        <!--        <module>ingestion-svc</module>-->
-        <!--        <module>app-ux</module>-->
-        <!--        <module>processor</module>-->
+        <module>ingestion-svc</module>
+        <module>app-ux</module>
+        <module>processor</module>
     </modules>
     <scm>
         <connection>scm:git:${project.scm.url}</connection>

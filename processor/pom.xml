@@ -76,7 +76,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skipBuild>false</skipBuild>
+                    <skip>false</skip>
                     <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
                 </configuration>
             </plugin>
