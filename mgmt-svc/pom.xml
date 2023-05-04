@@ -198,26 +198,10 @@
                 <version>1.4.13</version>
                 <executions>
                     <execution>
-                        <id>build-and-tag-latest</id>
-                        <phase>none</phase>
+                        <id>push-latest</id>
                         <goals>
                             <goal>build</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>tag-version</id>
-                        <phase>none</phase>
-                        <goals>
                             <goal>tag</goal>
-                        </goals>
-                        <configuration>
-                            <tag>${project.version}</tag>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>push-latest</id>
-                        <phase>none</phase>
-                        <goals>
                             <goal>push</goal>
                         </goals>
                         <configuration>
@@ -226,8 +210,9 @@
                     </execution>
                     <execution>
                         <id>push-version</id>
-                        <phase>none</phase>
                         <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
                             <goal>push</goal>
                         </goals>
                         <configuration>

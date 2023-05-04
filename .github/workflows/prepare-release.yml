@@ -55,9 +55,6 @@ jobs:
           cache: maven
           settings-path: ${{ github.workspace }}
 
-      - name: Build with release branch
-        run: mvn -B package --file pom.xml
-
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -67,6 +64,6 @@ jobs:
 
         #ref:https://github.com/spotify/dockerfile-maven/issues/10#issuecomment-331697440
       - name: Publish images to GitHub Packages
-        run: mvn dockerfile:build dockerfile:tag@tag-version dockerfile:push@push-latest dockerfile:push@push-version -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
         env:
           GITHUB_TOKEN: ${{ github.token }}
