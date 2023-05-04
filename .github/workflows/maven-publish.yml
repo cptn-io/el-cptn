@@ -23,13 +23,13 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Release
-        uses: qcastel/github-actions-maven-release@master
-        env:
-          JAVA_HOME: /usr/lib/jvm/java-17-openjdk/
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          git-release-bot-name: "release-bot"
-          git-release-bot-email: "kcthota@gmail.com"
-          release-branch-name: "main"
-          version-patch: true
+      - name: Configure Git
+        run: |
+          git config --global user.name "Release Bot"
+          git config --global user.email "kcthota@gmail.com"
+          git config --global credential.helper store
+          echo "machine github.com login kcthota@gmail.com password ${GITHUB_TOKEN}" > ~/.netrc
+
+      - name: Build and release
+        run: |
+          mvn --batch-mode release:prepare release:perform -DskipTests
