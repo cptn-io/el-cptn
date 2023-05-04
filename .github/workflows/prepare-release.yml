@@ -65,6 +65,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+        #ref:https://github.com/spotify/dockerfile-maven/issues/10#issuecomment-331697440
       - name: Publish images to GitHub Packages
         run: mvn dockerfile:build dockerfile:tag@tag-version dockerfile:push@push-latest dockerfile:push@push-version -s $GITHUB_WORKSPACE/settings.xml
         env:
