@@ -23,7 +23,7 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.tag || github.ref }}
