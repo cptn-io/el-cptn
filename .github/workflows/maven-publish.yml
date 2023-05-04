@@ -23,12 +23,13 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Configure Git User
-        run: |
-          git config --global user.name "Github Actions"
-          git config --global user.email "actions@github.com"
-
-      - name: Publish to GitHub Packages Apache Maven
-        run: mvn release:prepare release:perform -s $GITHUB_WORKSPACE/settings.xml
+      - name: Release
+        uses: qcastel/github-actions-maven-release@master
         env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk/
           GITHUB_TOKEN: ${{ github.token }}
+        with:
+          git-release-bot-name: "release-bot"
+          git-release-bot-email: "kcthota@gmail.com"
+          release-branch-name: "main"
+          version-patch: true
