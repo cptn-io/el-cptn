@@ -28,6 +28,6 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn dockerfile:build dockerfile:push -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn dockerfile:build dockerfile:tag dockerfile:push -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ github.token }}
