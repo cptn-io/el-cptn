@@ -50,7 +50,8 @@
                     <artifactId>dockerfile-maven-plugin</artifactId>
                     <version>1.4.13</version>
                     <configuration>
-                        <skipBuild>true</skipBuild>
+                        <skip>true</skip>
+                        <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
                     </configuration>
                 </plugin>
             </plugins>

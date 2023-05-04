@@ -205,24 +205,14 @@
                             <goal>tag</goal>
                             <goal>push</goal>
                         </goals>
+                        <phase>none</phase>
                         <configuration>
                             <tag>latest</tag>
                         </configuration>
                     </execution>
-                    <!--                    <execution>-->
-                    <!--                        <id>tag-current-version</id>-->
-                    <!--                        <goals>-->
-                    <!--                            <goal>build</goal>-->
-                    <!--                            <goal>tag</goal>-->
-                    <!--                        </goals>-->
-                    <!--                        <phase>none</phase>-->
-                    <!--                        <configuration>-->
-                    <!--                            <tag>${project.version}</tag>-->
-                    <!--                        </configuration>-->
-                    <!--                    </execution>-->
                 </executions>
                 <configuration>
-                    <skipBuild>false</skipBuild>
+                    <skip>false</skip>
                     <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
