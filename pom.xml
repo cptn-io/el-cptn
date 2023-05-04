@@ -27,7 +27,7 @@
         <module>processor</module>
     </modules>
     <scm>
-        <developerConnection>scm:git:ssh://git@github.com:cptn-io/el-cptn.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/cptn-io/el-cptn.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <build>
