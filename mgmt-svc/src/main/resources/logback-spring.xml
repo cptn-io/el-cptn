@@ -5,19 +5,6 @@
     <property name="LOG_FILE" value="./logs/cptn/${container_id}/mgmt-svc.log"/>
 
     <springProfile name="dev">
-        <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${LOG_FILE}</file>
-            <encoder>
-                <pattern>${FILE_LOG_PATTERN}</pattern>
-                <charset>utf8</charset>
-            </encoder>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
-                <maxHistory>10</maxHistory>
-                <totalSizeCap>1GB</totalSizeCap>
-            </rollingPolicy>
-        </appender>
-
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>${CONSOLE_LOG_PATTERN}</pattern>

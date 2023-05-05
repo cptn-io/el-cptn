@@ -103,7 +103,7 @@ services:
   processor:
     image: ghcr.io/cptn-io/processor:latest
     deploy:
-      replicas: 2
+      replicas: 1
     volumes:
       - ./logs:/app/logs
     environment:
