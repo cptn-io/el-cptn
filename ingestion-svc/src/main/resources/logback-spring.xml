@@ -2,7 +2,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <property name="LOG_FILE" value="./logs/ingestion-svc.log"/>
+    <property name="LOG_FILE" value="./logs/cptn/${container_id}/ingestion-svc.log"/>
 
     <springProfile name="dev">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -35,12 +35,21 @@
             </rollingPolicy>
         </appender>
 
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>utf8</charset>
+            </encoder>
+        </appender>
+
         <logger name="io.cptn" level="INFO" additivity="false">
             <appender-ref ref="ROLLING_FILE"/>
+            <appender-ref ref="CONSOLE"/>
         </logger>
 
         <root level="WARN">
             <appender-ref ref="ROLLING_FILE"/>
+            <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
 </configuration>

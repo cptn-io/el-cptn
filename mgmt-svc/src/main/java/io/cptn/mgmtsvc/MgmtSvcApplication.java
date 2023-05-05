@@ -18,6 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MgmtSvcApplication {
 
     public static void main(String[] args) {
+        String containerId = System.getenv("HOSTNAME");
+        if (containerId != null) {
+            System.setProperty("container_id", containerId);
+        } else {
+            System.setProperty("container_id", "local");
+        }
+
         SpringApplication.run(MgmtSvcApplication.class, args);
     }
 

@@ -3,7 +3,7 @@ version: "3.8"
 services:
   db:
     image: postgres:14.7-alpine3.17
-    restart: always
+    restart: unless-stopped
     volumes:
       - postgres:/var/lib/postgresql/data
     expose:
@@ -19,6 +19,7 @@ services:
 
   redis:
     image: redis:6.2-alpine
+    restart: unless-stopped
     volumes:
       - redis:/data
     expose:
@@ -35,6 +36,11 @@ services:
     ports:
       - 80:80
       - 443:443
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
       - APP_URL=${APP_URL}
 
@@ -44,6 +50,8 @@ services:
       replicas: 1
     expose:
       - 8080
+    volumes:
+      - ./logs:/logs
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - DB_URL=jdbc:postgresql://db:5432/${DB_NAME}
@@ -51,6 +59,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
       - JWT_SECRET=${JWT_SECRET}
+    restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q 'UP'" ]
       interval: 30s
@@ -67,6 +76,8 @@ services:
     image: ghcr.io/cptn-io/ingestion-svc:latest
     deploy:
       replicas: 1
+    volumes:
+      - ./logs:/logs
     expose:
       - 8081
     environment:
@@ -75,6 +86,12 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q 'UP'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     depends_on:
       db:
         condition: service_healthy
@@ -86,7 +103,9 @@ services:
   processor:
     image: ghcr.io/cptn-io/processor:latest
     deploy:
-      replicas: 1
+      replicas: 2
+    volumes:
+      - ./logs:/app/logs
     environment:
       - NODE_ENV=production
       - PGHOST=db
@@ -96,6 +115,12 @@ services:
       - PGPASSWORD=${DB_PASSWORD}
       - PGSSLMODE=disable
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "ps -ef | grep 'node src/index.js' | grep -v grep > /dev/null || exit 1" ]
+      interval: 10s
+      timeout: 15s
+      retries: 5
     depends_on:
       db:
         condition: service_healthy
