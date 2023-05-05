@@ -16,12 +16,16 @@ async function getClient() {
 
 async function set(key, value) {
     const client = await getClient();
-    client.json.set(key, '.', value)
+    client.set(key, JSON.stringify(value))
 }
 
 async function get(key) {
     const client = await getClient();
-    return client.json.get(key, '.')
+    const cached = await client.get(key, '.')
+    if (cached) {
+        return JSON.parse(cached)
+    }
+    return null;
 }
 
 module.exports = {

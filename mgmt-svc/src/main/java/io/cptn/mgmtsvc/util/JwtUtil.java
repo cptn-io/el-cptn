@@ -10,6 +10,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class JwtUtil implements InitializingBean {
                 .setSubject(userPrincipal.getId())
                 .setIssuedAt(iat.getTime())
                 .setExpiration(exp.getTime())
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8)).compact();
     }
 
     public boolean validateToken(String token, UserPrincipal userPrincipal) {
@@ -57,7 +58,7 @@ public class JwtUtil implements InitializingBean {
 
     private Claims parseToken(String token) {
 
-        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
 
         return claimsJws.getBody();
     }

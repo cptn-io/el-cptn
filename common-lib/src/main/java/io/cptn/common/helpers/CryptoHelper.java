@@ -55,7 +55,7 @@ public class CryptoHelper implements InitializingBean {
         BytesEncryptor encryptor = getEncryptor(salt);
 
         byte[] plainTextBytes = encryptor.decrypt(cipherBytes);
-        return String.valueOf(plainTextBytes);
+        return new String(plainTextBytes, StandardCharsets.UTF_8);
     }
 
     private BytesEncryptor getEncryptor(byte[] salt) {
