@@ -32,9 +32,17 @@ public class AppService extends CommonService {
                 //no updates for the app
                 return;
             }
-            app.setId(existingApp.getId());
+            existingApp.setConfig(app.getConfig());
+            existingApp.setHash(app.getHash());
+            existingApp.setName(app.getName());
+            existingApp.setOrderIndex(app.getOrderIndex());
+            existingApp.setScript(app.getScript());
+            existingApp.setType(app.getType());
+            existingApp.setLogoUrl(app.getLogoUrl());
+            appRepository.save(existingApp);
+        } else {
+            appRepository.save(app);
         }
-        appRepository.save(app);
     }
 
     public App getAppById(UUID id) {
