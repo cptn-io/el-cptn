@@ -36,11 +36,6 @@ services:
     ports:
       - 80:80
       - 443:443
-    healthcheck:
-      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:2019/metrics" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     environment:
       - APP_URL=${APP_URL}
 
