@@ -183,24 +183,25 @@ async function processEventBatch(pipelineId, events) {
             }
         }
     } catch (error) {
-        if (!error) {
-            error = new Error("Unknown error while processing event");
-        } else if (typeof error === 'string') {
-            error = new Error(error);
+        let currentError = error;
+        if (!currentError) {
+            currentError = new Error("Unknown error while processing event");
+        } else if (typeof currentError === 'string') {
+            currentError = new Error(currentError);
         }
 
-        logger.error("Error while processing event", error, error.message);
+        logger.error("Error while processing event", currentError, currentError.message);
 
         if (responses.length === 0) {
             //if no events were processed, return error for all events
             for (const event of events) {
-                responses.push({ id: event.id, success: false, consoleLogs: error.message });
+                responses.push({ id: event.id, success: false, consoleLogs: currentError.message });
             }
         } else {
             //if some events were processed, append error to all responses
             for (const response of responses) {
                 response.success = false;
-                response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + error.message : error.message).substring(0, 3999);
+                response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + currentError.message : currentError.message).substring(0, 3999);
             }
         }
     }
