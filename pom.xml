@@ -9,7 +9,7 @@
     </parent>
     <groupId>io.cptn</groupId>
     <artifactId>application</artifactId>
-    <version>0.0.22</version>
+    <version>0.0.23-SNAPSHOT</version>
     <name>cptn-parent</name>
     <description>CPTN application</description>
     <packaging>pom</packaging>
@@ -29,7 +29,7 @@
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
         <url>https://github.com/cptn-io/el-cptn.git</url>
-        <tag>v0.0.22</tag>
+        <tag>HEAD</tag>
     </scm>
     <build>
         <pluginManagement>
