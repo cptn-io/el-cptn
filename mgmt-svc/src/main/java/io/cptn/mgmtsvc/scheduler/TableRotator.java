@@ -5,11 +5,12 @@ import io.cptn.common.repositories.DBMaintenanceRepository;
 import io.cptn.mgmtsvc.services.SettingsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /* @author: kc, created on 5/1/23 */
+/*
+    Currently not in use due to deadlocks.  This is a work in progress to rotate tables in the database.
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -25,8 +26,8 @@ public class TableRotator {
 
     private final SettingsService settingsService;
 
-    @Scheduled(cron = "0 */15 * * * *")
-    @SchedulerLock(name = "tableRotator", lockAtLeastFor = "5m", lockAtMostFor = "10m")
+    //@Scheduled(cron = "0 */15 * * * *")
+    //@SchedulerLock(name = "tableRotator", lockAtLeastFor = "5m", lockAtMostFor = "10m")
     public void run() {
         try {
             log.info("Running Table Rotator");

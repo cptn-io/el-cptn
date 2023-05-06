@@ -6,6 +6,7 @@ const { runStep, getDestinationWrappedObject } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
 const getVM = require('./vm');
 const logger = require('./logger');
+const { set } = require('lodash');
 
 async function getTransformation(transformationId) {
     const key = `transformation-proc::${transformationId}`;
@@ -90,6 +91,13 @@ function setupConsoleLogRedirection(vm, logs) {
     });
 }
 
+function prependSetupLogs(setupLogs, logs) {
+    if (setupLogs) {
+        logs.unshift(setupLogs);
+    }
+    return logs;
+}
+
 async function processEventBatch(pipelineId, events) {
     const responses = [];
     try {
@@ -114,9 +122,14 @@ async function processEventBatch(pipelineId, events) {
         }
         const destinationWrappedObject = await getDestinationWrappedObject(vm, destination);
 
+        let setupLogs;
         if (destinationWrappedObject.setup && typeof destinationWrappedObject.setup === 'function') {
             await destinationWrappedObject.setup(destination.config);
+            setupLogs = logs.join('\n');
         }
+
+        //flush logs before and after event processing - setup and teardown logs are appended to event logs
+        logs.length = 0;
 
         for (const event of events) {
             const { id, payload } = event;
@@ -136,7 +149,11 @@ async function processEventBatch(pipelineId, events) {
                 if (evt && destinationWrappedObject.execute && typeof destinationWrappedObject.execute === 'function') {
                     await destinationWrappedObject.execute(evt, ctx, destination.config);
                 }
-                consoleLogs = logs.join('\n');
+
+
+                prependSetupLogs(setupLogs, logs);
+                consoleLogs = logs.join('\n').substring(0, 3999);
+
                 responses.push({ id, success: true, consoleLogs });
             } catch (error) {
                 if (typeof error === 'string') {
@@ -144,24 +161,48 @@ async function processEventBatch(pipelineId, events) {
                 } else {
                     logs.push(`ERROR: ${error.message} (error while processing event)`);
                 }
+                prependSetupLogs(setupLogs, logs);
                 consoleLogs = logs.join('\n').substring(0, 3999);
+
                 responses.push({ id, success: false, consoleLogs });
             } finally {
-                logs = [];
+                logs.length = 0;
             }
         }
 
+        logs.length = 0;
+
+
         if (destinationWrappedObject.teardown && typeof destinationWrappedObject.teardown === 'function') {
             await destinationWrappedObject.teardown(destination.config);
+            if (logs.length > 0) {
+                //append teardown logs to all responses
+                for (const response of responses) {
+                    response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + logs.join('\n') : logs.join('\n')).substring(0, 3999);
+                }
+            }
         }
     } catch (error) {
+        if (!error) {
+            error = new Error("Unknown error while processing event");
+        } else if (typeof error === 'string') {
+            error = new Error(error);
+        }
+
+        logger.error("Error while processing event", error, error.message);
+
         if (responses.length === 0) {
             //if no events were processed, return error for all events
             for (const event of events) {
                 responses.push({ id: event.id, success: false, consoleLogs: error.message });
             }
+        } else {
+            //if some events were processed, append error to all responses
+            for (const response of responses) {
+                response.success = false;
+                response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + error.message : error.message).substring(0, 3999);
+            }
         }
-        logger.error("Error while processing event", error, error.message);
     }
     return responses;
 }

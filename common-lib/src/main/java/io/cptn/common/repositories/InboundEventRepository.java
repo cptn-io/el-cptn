@@ -36,4 +36,9 @@ public interface InboundEventRepository extends JpaRepository<InboundEvent, UUID
     @Transactional
     @Query(value = "UPDATE InboundEvent SET state=:state where id = :eventId")
     void updateEventState(UUID eventId, State state);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM inbound_queue WHERE inbound_queue.created_at < :createdBefore", nativeQuery = true)
+    void purgeStaleDataInInboundQueue(@Param("createdBefore") ZonedDateTime createdBefore);
 }

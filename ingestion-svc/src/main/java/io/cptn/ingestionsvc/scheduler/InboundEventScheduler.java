@@ -26,7 +26,9 @@ public class InboundEventScheduler {
 
     @Scheduled(fixedDelayString = "${inbound.event.processor.interval:5000}")
     public void run() {
-        log.debug("Running inbound event processor");
+        if (log.isDebugEnabled()) {
+            log.debug("Running inbound event processor");
+        }
         processRecords();
     }
 

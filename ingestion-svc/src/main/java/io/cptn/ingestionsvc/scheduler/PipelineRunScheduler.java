@@ -30,7 +30,9 @@ public class PipelineRunScheduler {
     public void run() {
         try {
             LockAssert.assertLocked();
-            log.info("Running Pipeline Run Scheduler");
+            if (log.isDebugEnabled()) {
+                log.debug("Running Pipeline Run Scheduler");
+            }
             pipelineScheduleRepository.findPipelineScheduleByActiveTrueAndNextRunAtLessThanEqual(ZonedDateTime.now()).forEach(pipelineSchedule -> {
                 try {
                     pipelineSchedule.computeNextRunAt();

@@ -47,7 +47,7 @@ async function processEvents(client, rows, batchMode = false) {
             logger.error('eventStatus is invalid. Pipeline may stop processing');
         }
         const { id, success, consoleLogs } = eventStatus;
-        client.query('UPDATE outbound_queue SET state= $1, console_log=$2 WHERE id = $3', [success ? 'COMPLETED' : 'FAILED', consoleLogs, id]);
+        client.query('UPDATE outbound_queue SET state= $1, console_log=$2 WHERE id = $3', [success ? 'COMPLETED' : 'FAILED', consoleLogs || '', id]);
     });
 }
 
