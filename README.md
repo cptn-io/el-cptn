@@ -3,7 +3,7 @@ cptn.io is an open source platform that helps develop and deploy integrations an
 
 ## Getting Started
 
-### Local environment setup
+### Local machine setup
 
 0. Install docker
 1. Run `git clone https://github.com/cptn-io/el-cptn.git`
@@ -49,4 +49,9 @@ Refer [this page](https://docs.cptn.io/docs/architecture/overview) for more deta
 - Caddy for reverse proxy
 - Postgres
 - Redis
+
+## Ready to use Apps
+The platform has a mechanism to automatically download ready-to-use apps contributed my the community. These apps allow users to readily use the most common transformations or destinations. If the OOTB apps do not work, users can always modify the scripts as per their requirements.
+
+The git repo supporting this functionality is at https://github.com/cptn-io/apps. We will shortly publish an SDK or a mechanism that allows users to contribute apps to the community.
 
