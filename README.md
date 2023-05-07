@@ -80,5 +80,16 @@ automatically check to see if there are any new apps available and download them
 The git repo supporting this functionality is at https://github.com/cptn-io/apps. We will shortly publish an SDK or a
 mechanism that allows users to contribute apps to the community.
 
+## Releases
+
+Updates to the platform for bug fixes are released at any time and will be available as docker images.
+But milestone releases which include new features are named after places in alphabetical order.
+Following are the upcoming releases:
+
+- Alameda
+- Belmont
+- Cupertino
+- Dublin
+
 Copyright 2023 DevRaven Inc. All rights reserved.
 
