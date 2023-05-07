@@ -54,6 +54,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
       - JWT_SECRET=${JWT_SECRET}
+      - SETUP_DEFAULT_PASSWORD=${SETUP_DEFAULT_PASSWORD}
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q 'UP'" ]
