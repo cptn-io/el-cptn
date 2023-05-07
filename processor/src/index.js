@@ -1,4 +1,3 @@
-const async = require('async');
 const logger = require('./logger');
 const { processQueuedEvents, processScheduledEvents } = require('./eventManager');
 
@@ -6,10 +5,11 @@ function wait(delay) {
     return new Promise(resolve => setTimeout(resolve, delay));
 }
 
+let shouldStop = false;
 
 const pollQueued = async () => {
     logger.info('Starting event processor');
-    while (true) {
+    while (!shouldStop) {
         try {
             await processQueuedEvents();
         } catch (err) {
@@ -21,7 +21,7 @@ const pollQueued = async () => {
 
 const pollScheduled = async () => {
     logger.info('Starting scheduled event processor');
-    while (true) {
+    while (!shouldStop) {
         try {
             await processScheduledEvents();
         } catch (err) {
@@ -32,7 +32,14 @@ const pollScheduled = async () => {
 };
 
 async function main() {
-    async.parallel([pollQueued, pollScheduled]);
+    await Promise.all([pollQueued(), pollScheduled()]);
+    logger.info('Exiting event processor');
+    process.exit(0);
 }
+
+process.on('SIGINT', function () {
+    console.log("Received signal to stop. Process will terminate soon");
+    shouldStop = true;
+});
 
 main();
