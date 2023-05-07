@@ -21,7 +21,7 @@ public class TableCleaner {
 
     private static final String DATA_STORAGE_INTERVAL_KEY = "data.storage.interval";
 
-    private static final Long DEFAULT_DATA_STORAGE_INTERVAL = 24 * 60 * 60 * 1000L;
+    private static final Long DEFAULT_DATA_STORAGE_INTERVAL = 3 * 24 * 60 * 60 * 1000L;
 
     private final SettingsService settingsService;
 

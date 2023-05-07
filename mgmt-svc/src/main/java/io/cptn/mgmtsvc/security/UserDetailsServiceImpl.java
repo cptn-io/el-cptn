@@ -4,6 +4,7 @@ import io.cptn.common.entities.User;
 import io.cptn.common.exceptions.DemoUserException;
 import io.cptn.mgmtsvc.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,8 +19,10 @@ import java.util.UUID;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
-
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${setup.default.password:bar}")
+    private String defaultPassword;
 
     public UserDetails loadUserByUserId(String id) {
         if ("-1".equals(id)) {
@@ -72,12 +75,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
 
-        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername("foo" +
-                        "@example" +
-                        ".com")
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername("foo@example.com")
                 .disabled(false)
                 .accountLocked(false)
-                .password(passwordEncoder.encode("bar"))
+                .password(passwordEncoder.encode(defaultPassword))
                 .roles("USER")
                 .build();
 
