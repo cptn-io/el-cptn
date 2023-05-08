@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node launcher.js",
-    "lint": "jshint src/*.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "jshint src/*.js launcher.js",
+    "test": "jest --coverage --verbose"
   },
   "author": "KC",
   "license": "MIT",
@@ -21,6 +21,7 @@
     "workerpool": "^6.4.0"
   },
   "devDependencies": {
+    "jest": "^29.5.0",
     "jshint": "^2.13.6"
   }
 }
