@@ -31,15 +31,12 @@ const pollScheduled = async () => {
     }
 };
 
-async function main() {
-    await Promise.all([pollQueued(), pollScheduled()]);
-    logger.info('Exiting event processor');
-    process.exit(0);
-}
-
 process.on('SIGINT', function () {
     console.log("Received signal to stop. Process will terminate soon");
     shouldStop = true;
 });
 
-main();
+module.exports = {
+    pollQueued,
+    pollScheduled
+};
