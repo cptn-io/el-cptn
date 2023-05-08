@@ -4,6 +4,14 @@ cptn.io is an open source platform that helps develop and deploy integrations an
 
 ## Getting Started
 
+### Building Pipelines
+
+[![Building Pipelines](https://img.youtube.com/vi/ibyR48N8xls/0.jpg)](https://www.youtube.com/watch?v=ibyR48N8xls)
+
+### Building Pipelines with Scheduled Batch Processing
+
+[![Scheduled Batch Processing](https://img.youtube.com/vi/QYelqKmW0J0/0.jpg)](https://www.youtube.com/watch?v=QYelqKmW0J0)
+
 ### Local machine setup
 
 0. Install docker
