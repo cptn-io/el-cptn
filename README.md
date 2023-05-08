@@ -6,7 +6,7 @@ cptn.io is an open source platform that helps develop and deploy integrations an
 
 ### Building Pipelines
 
-[![Building Pipelines](https://img.youtube.com/vi/ibyR48N8xls/0.jpg)](https://www.youtube.com/watch?v=ibyR48N8xls)
+[![Building Pipelines](https://img.youtube.com/vi/b28Fu_oI2Tc/0.jpg)](https://www.youtube.com/watch?v=b28Fu_oI2Tc)
 
 ### Building Pipelines with Scheduled Batch Processing
 

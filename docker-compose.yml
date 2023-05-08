@@ -113,7 +113,7 @@ services:
       - CPTN_CRYPTO_SECRET=${CPTN_CRYPTO_SECRET}
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "ps -ef | grep 'node src/index.js' | grep -v grep > /dev/null || exit 1" ]
+      test: [ "CMD-SHELL", "ps -ef | grep 'node launcher.js' | grep -v grep > /dev/null || exit 1" ]
       interval: 10s
       timeout: 15s
       retries: 5
