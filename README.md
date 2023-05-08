@@ -2,6 +2,7 @@
 
 cptn.io is an open source platform that helps develop and deploy integrations and data pipelines quickly and easily.
 
+![GitHub](https://img.shields.io/github/license/cptn-io/el-cptn)
 [![](https://dcbadge.vercel.app/api/server/ZGFyzhDjZ2)](https://discord.gg/ZGFyzhDjZ2)
 
 ## Getting Started
