@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@monaco-editor/react": "^4.5.0",
+    "@monaco-editor/react": "^4.5.1",
     "@sbzen/re-cron": "^2.0.5",
     "@tabler/icons-react": "^2.17.0",
     "axios": "^1.4.0",
