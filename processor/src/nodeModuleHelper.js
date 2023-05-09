@@ -11,7 +11,7 @@ function moduleExistsInNodeModules(moduleName) {
         require.resolve(`${moduleName}/package.json`);
         return true;
     } catch (error) {
-        logger.error("error while checking if module exists", error);
+        logger.info(`Module ${moduleName} not found in node_modules. Will attempt to install it.`);
         return false;
     }
 }
