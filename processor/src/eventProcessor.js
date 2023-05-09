@@ -6,7 +6,6 @@ const { runStep, getDestinationWrappedObject } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
 const getVM = require('./vm');
 const logger = require('./logger');
-const { set } = require('lodash');
 
 async function getTransformation(transformationId) {
     const key = `transformation-proc::${transformationId}`;

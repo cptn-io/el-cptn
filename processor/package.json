@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node launcher.js",
     "lint": "jshint src/*.js launcher.js",
-    "test": "jest --coverage --verbose"
+    "test": "jest --coverage --verbose",
+    "watch-tests": "jest --watchAll --verbose --coverage"
   },
   "author": "KC",
   "license": "MIT",
