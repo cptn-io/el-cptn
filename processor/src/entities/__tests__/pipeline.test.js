@@ -1,4 +1,4 @@
-const Pipeline = require('../pipeline');
+const Pipeline = require('../Pipeline');
 
 describe('Pipeline', () => {
     test('should create a new pipeline for row', () => {
