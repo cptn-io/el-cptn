@@ -18,12 +18,20 @@ public class SSOProfileService {
 
     private final SSOProfileRepository ssoProfileRepository;
 
+    private final UserService userService;
+
     public SSOProfile upsert(SSOProfile ssoProfile) {
 
         SSOProfile currentSSOProfile = getSSOProfile();
         if (currentSSOProfile != null) {
             currentSSOProfile.populate(ssoProfile);
             return ssoProfileRepository.save(currentSSOProfile);
+        }
+
+        //create SSO profile
+        long userCount = userService.count();
+        if (userCount == 0) {
+            throw new BadRequestException("SSO profile cannot be setup until a user has been created");
         }
 
         return ssoProfileRepository.save(ssoProfile);
@@ -35,7 +43,7 @@ public class SSOProfileService {
 
     public ClientRegistration getClientRegistration(String providerName) {
         if (!"oidc".equals(providerName)) {
-            throw new BadRequestException("Unknown Provider " + providerName + ". Only 'oidc' is supported.");
+            return null;
         }
 
         SSOProfile ssoProfile = ssoProfileRepository.findFirstBy();

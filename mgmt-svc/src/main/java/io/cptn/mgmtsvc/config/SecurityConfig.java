@@ -1,10 +1,12 @@
 package io.cptn.mgmtsvc.config;
 
 import io.cptn.common.exceptions.DemoUserException;
+import io.cptn.mgmtsvc.security.CookieBasedAuthorizationRequestRepository;
 import io.cptn.mgmtsvc.security.CustomAuthenticationEntryPoint;
 import io.cptn.mgmtsvc.security.JWTRequestFilter;
 import io.cptn.mgmtsvc.security.UserPrincipal;
 import io.cptn.mgmtsvc.security.oidc.CustomOIDCUserService;
+import io.cptn.mgmtsvc.security.oidc.OIDCClientRegistrationProvider;
 import io.cptn.mgmtsvc.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,11 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
@@ -36,8 +42,8 @@ import java.util.Set;
 public class SecurityConfig {
 
     public static final String AUTH_COOKIE = "jwt";
-    public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health", "/oauth/**",
-            "/ssoLogin");
+    public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health",
+            "/error", "/oauth2/**", "/favicon.ico");
 
     private final JwtUtil jwtUtil;
 
@@ -46,6 +52,10 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     private final CustomOIDCUserService customOIDCUserService;
+
+    private final OIDCClientRegistrationProvider oidcClientRegistrationProvider;
+
+    private final CookieBasedAuthorizationRequestRepository cookieBasedAuthorizationRequestRepository;
 
 
     @Bean
@@ -78,23 +88,13 @@ public class SecurityConfig {
         http.exceptionHandling()
                 .defaultAuthenticationEntryPointFor(customAuthenticationEntryPoint, new AntPathRequestMatcher("/api" +
                         "/**"));
+
         //form login config
         http.formLogin().loginPage("/signin").loginProcessingUrl("/login")
                 .defaultSuccessUrl("/app", true)
                 .successHandler(successHandler())
-                .failureHandler((request, response, exception) -> {
-                    if (exception instanceof BadCredentialsException) {
-                        response.sendRedirect("/signin?error=bad_credentials");
-                    } else if (exception instanceof DisabledException) {
-                        response.sendRedirect("/signin?error=disabled");
-                    } else if (exception instanceof LockedException) {
-                        response.sendRedirect("/signin?error=locked");
-                    } else if (exception.getCause() instanceof DemoUserException) {
-                        response.sendRedirect("/signin?error=demo_user");
-                    } else {
-                        response.sendRedirect("/signin?error=generic");
-                    }
-                });
+                .failureHandler(failureHandler());
+
         //form logout config
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .logoutSuccessHandler((request, response, authentication) -> {
@@ -114,12 +114,41 @@ public class SecurityConfig {
         http.requestCache().requestCache(new CookieRequestCache());
 
         //SSO OAuth/OIDC auth config
-        http.oauth2Login(config -> {
-            config.loginPage("/signin");
-            config.userInfoEndpoint().oidcUserService(customOIDCUserService).and().successHandler(successHandler()).permitAll();
-        }).
+        http.oauth2Login().loginPage("/signin")
+                .authorizationEndpoint(subconfig -> {
+                    subconfig.authorizationRequestResolver(authorizationRequestResolver());
+                    subconfig.authorizationRequestRepository(cookieBasedAuthorizationRequestRepository);
+                }).userInfoEndpoint().oidcUserService(customOIDCUserService)
+                .and().failureHandler(failureHandler())
+                .successHandler(successHandler()).permitAll();
+
 
         return http.build();
+    }
+
+    private OAuth2AuthorizationRequestResolver authorizationRequestResolver() {
+        DefaultOAuth2AuthorizationRequestResolver authorizationRequestResolver =
+                new DefaultOAuth2AuthorizationRequestResolver(
+                        oidcClientRegistrationProvider, "/oauth2/authorization");
+        return authorizationRequestResolver;
+    }
+
+    private AuthenticationFailureHandler failureHandler() {
+        return (request, response, exception) -> {
+            if (exception instanceof BadCredentialsException) {
+                response.sendRedirect("/signin?error=bad_credentials");
+            } else if (exception instanceof DisabledException) {
+                response.sendRedirect("/signin?error=disabled");
+            } else if (exception instanceof LockedException) {
+                response.sendRedirect("/signin?error=locked");
+            } else if (exception instanceof DemoUserException || exception.getCause() instanceof DemoUserException) {
+                response.sendRedirect("/signin?error=demo_user");
+            } else if (exception instanceof UsernameNotFoundException || exception.getCause() instanceof UsernameNotFoundException) {
+                response.sendRedirect("/signin?error=user_not_found");
+            } else {
+                response.sendRedirect("/signin?error=generic");
+            }
+        };
     }
 
     private AuthenticationSuccessHandler successHandler() {

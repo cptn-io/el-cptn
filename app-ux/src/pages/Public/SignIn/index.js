@@ -11,7 +11,8 @@ const getErrorMessage = (error) => {
         'locked': 'Your account is locked. Please contact your administrator.',
         'disabled': 'Your account is disabled. Please contact your administrator.',
         'csrf': 'An error occurred while trying to get CSRF token. Please try again.',
-        'demo_user': 'Login with demo user is not allowed as valid users are already created in the system'
+        'demo_user': 'Login with demo user is not allowed for this instance.',
+        'user_not_found': 'User not found with this email.',
     }
     return errors[error] || errors['generic'];
 }

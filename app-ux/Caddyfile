@@ -17,6 +17,10 @@
         reverse_proxy mgmt-svc:8080
     }
 
+    handle /oauth2/* {
+        reverse_proxy mgmt-svc:8080
+    }
+
 	handle /event/* {
 		reverse_proxy ingestion-svc:8081
 	}

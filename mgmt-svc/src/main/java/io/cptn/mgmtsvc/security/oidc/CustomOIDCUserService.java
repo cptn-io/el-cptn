@@ -2,11 +2,13 @@ package io.cptn.mgmtsvc.security.oidc;
 
 import io.cptn.common.entities.SSOProfile;
 import io.cptn.common.entities.User;
+import io.cptn.common.exceptions.DemoUserException;
 import io.cptn.mgmtsvc.security.AbstractUserService;
 import io.cptn.mgmtsvc.security.UserPrincipal;
 import io.cptn.mgmtsvc.services.SSOProfileService;
 import io.cptn.mgmtsvc.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -41,23 +43,24 @@ public class CustomOIDCUserService extends AbstractUserService {
 
     private UserPrincipal getUserPrincipal(OidcUserRequest userRequest, OidcUser oidcUser) {
         Object email = oidcUser.getClaims().get("email");
+
         if (email == null) {
-            return null;
+            log.error("OIDC user email is null");
+            throw new UsernameNotFoundException("User not found");
         }
 
         if ("foo@example.com".equals(email)) {
-            return (UserPrincipal) loginForPreSetup(userService, true);
+            throw new DemoUserException("foo@example.com is only intended for use during initial setup." +
+                    "SSO is not permitted for this user. Please use a different email address to login");
         }
 
-
         User user = userService.getUserByEmail((String) email);
-
 
         if (user == null) {
 
             SSOProfile ssoProfile = ssoProfileService.getSSOProfile();
             if (ssoProfile == null || !ssoProfile.getActive() || !ssoProfile.getEnableCreateUser()) {
-                return null;
+                throw new UsernameNotFoundException("User not found");
             }
 
             user = new User();
