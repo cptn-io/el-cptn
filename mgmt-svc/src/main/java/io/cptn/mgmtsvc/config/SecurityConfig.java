@@ -4,6 +4,7 @@ import io.cptn.common.exceptions.DemoUserException;
 import io.cptn.mgmtsvc.security.CustomAuthenticationEntryPoint;
 import io.cptn.mgmtsvc.security.JWTRequestFilter;
 import io.cptn.mgmtsvc.security.UserPrincipal;
+import io.cptn.mgmtsvc.security.oidc.CustomOIDCUserService;
 import io.cptn.mgmtsvc.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.session.NullAuthenticated
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.savedrequest.CookieRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Optional;
@@ -34,13 +36,16 @@ import java.util.Set;
 public class SecurityConfig {
 
     public static final String AUTH_COOKIE = "jwt";
-    public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health");
+    public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health", "/oauth/**",
+            "/ssoLogin");
 
     private final JwtUtil jwtUtil;
 
     private final JWTRequestFilter jwtRequestFilter;
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    private final CustomOIDCUserService customOIDCUserService;
 
 
     @Bean
@@ -99,11 +104,20 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID", "XSRF-TOKEN", AUTH_COOKIE)
                 .clearAuthentication(true)
                 .invalidateHttpSession(true).permitAll();
+
         //http basic auth config
         http.httpBasic().authenticationEntryPoint(customAuthenticationEntryPoint).and().addFilterBefore(
                 jwtRequestFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
+
+        http.requestCache().requestCache(new CookieRequestCache());
+
+        //SSO OAuth/OIDC auth config
+        http.oauth2Login(config -> {
+            config.loginPage("/signin");
+            config.userInfoEndpoint().oidcUserService(customOIDCUserService).and().successHandler(successHandler()).permitAll();
+        }).
 
         return http.build();
     }

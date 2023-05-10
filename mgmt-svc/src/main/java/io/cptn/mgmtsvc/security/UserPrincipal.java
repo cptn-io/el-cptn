@@ -4,11 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.io.Serial;
+import java.util.Map;
 
 /* @author: kc, created on 4/12/23 */
-public class UserPrincipal extends User {
+public class UserPrincipal extends User implements OidcUser {
 
     @Serial
     private static final long serialVersionUID = -8842807186125997189L;
@@ -17,8 +21,13 @@ public class UserPrincipal extends User {
     @Setter
     private String id;
 
+    @Getter
+    @Setter
+    private UserDetails userDetails;
+
     public UserPrincipal(UserDetails user) {
         super(user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(), user.getAuthorities());
+        this.userDetails = user;
     }
 
 
@@ -26,6 +35,31 @@ public class UserPrincipal extends User {
         UserPrincipal.UserBuilder builder = new UserPrincipal.UserBuilder();
         builder.userDetails(user);
         return builder;
+    }
+
+    @Override
+    public Map<String, Object> getClaims() {
+        return null;
+    }
+
+    @Override
+    public OidcUserInfo getUserInfo() {
+        return null;
+    }
+
+    @Override
+    public OidcIdToken getIdToken() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return this.getUsername();
     }
 
 
@@ -48,6 +82,7 @@ public class UserPrincipal extends User {
         public UserDetails build() {
             UserPrincipal principal = new UserPrincipal(user);
             principal.setId(id);
+            principal.setUserDetails(user);
             return principal;
         }
     }
