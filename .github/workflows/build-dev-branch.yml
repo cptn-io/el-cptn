@@ -24,4 +24,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean install dockerfile:build@push-dev dockerfile:tag@push-dev
+        run: mvn clean install dockerfile:build@push-dev dockerfile:tag@push-dev dockerfile:push@push-dev
