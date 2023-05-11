@@ -19,6 +19,7 @@ const getErrorMessage = (error) => {
 
 const SignIn = () => {
     const [csrf, setCsrf] = useState('');
+    const [showSSO, setShowSSO] = useState(false);
     const [searchParams] = useSearchParams();
     const [error, setError] = useState(searchParams.has("error") ? searchParams.get("error") : null);
     const [logout] = useState(searchParams.has("logout") ? searchParams.get("logout") : null);
@@ -30,7 +31,13 @@ const SignIn = () => {
         }).catch((error) => {
             setError('csrf');
         });
-    }, [])
+
+        axios.get('/api/checksso').then((response) => {
+            setShowSSO(true);
+        }).catch((error) => {
+            setShowSSO(false);
+        });
+    }, []);
 
     const setToken = (e) => {
         setCsrf(document.cookie.match(/XSRF-TOKEN=(.*)/)?.[1]);
@@ -78,12 +85,19 @@ const SignIn = () => {
                         />
                     </div>
                     <input name="_csrf" type="hidden" value={csrf} />
-                    <button
-                        type="submit"
-                        className="w-full btn-primary py-2 px-4 rounded-md"
-                    >
-                        Sign In
-                    </button>
+                    <div>
+                        <button
+                            type="submit"
+                            className="w-full btn btn-primary rounded-md"
+                        >
+                            Sign In
+                        </button>
+                    </div>
+                    {showSSO && <div className="mt-2">
+                        <a className="w-full btn btn-accent rounded-md" alt="Login with SSO" href="/login?sso=true">
+                            Sign In with SSO
+                        </a>
+                    </div>}
                 </form>
             </div>
         </div>

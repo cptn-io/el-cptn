@@ -8,6 +8,8 @@ import io.cptn.mgmtsvc.security.UserPrincipal;
 import io.cptn.mgmtsvc.services.SSOProfileService;
 import io.cptn.mgmtsvc.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -73,6 +75,14 @@ public class CustomOIDCUserService extends AbstractUserService {
             user.setHashedPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
 
             user = userService.create(user);
+        }
+
+        if (user.isDisabled()) {
+            throw new DisabledException("User is disabled");
+        }
+
+        if (user.isLockedOut()) {
+            throw new LockedException("User is locked out");
         }
 
         return (UserPrincipal) getUserDetailsForUser(user);

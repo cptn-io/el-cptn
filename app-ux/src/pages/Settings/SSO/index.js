@@ -3,6 +3,7 @@ import { renderErrors } from "../../../common/formHelpers";
 import useNotifications from "../../../hooks/useNotifications";
 import axios from "axios";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import get from "lodash/get";
 
 const SSO = () => {
     const { addNotification } = useNotifications();
@@ -32,11 +33,13 @@ const SSO = () => {
             setSsoOnly(data.ssoOnly);
             setEnableCreateUser(data.enableCreateUser);
         }).catch(err => {
-            addNotification({
-                title: 'Error',
-                message: 'Failed to load SSO configuration.',
-                type: 'error'
-            });
+            if (err.response.status !== 404) {
+                addNotification({
+                    title: 'Error',
+                    message: 'Failed to load SSO configuration.',
+                    type: 'error'
+                });
+            }
         }).finally(() => {
             setExecuting(false);
         });
@@ -58,16 +61,16 @@ const SSO = () => {
 
         axios.post('/api/ssoProfile', payload).then(response => {
             addNotification({
-                title: 'Success',
                 message: 'SSO configuration has been saved.',
                 type: 'success'
             });
         }).catch(err => {
+
             addNotification({
-                title: 'Error',
-                message: 'Failed to save SSO configuration.',
+                message: get(err, 'response.data.message', 'An error occurred while saving SSO Configuration'),
                 type: 'error'
             });
+            setError(err.response.data);
         }).finally(() => {
             setExecuting(false);
         });
@@ -87,7 +90,7 @@ const SSO = () => {
                         <span className="label-text">Client ID</span>
                     </label>
                     <input type="text" placeholder="Provide the Client ID" value={clientId} className="input input-bordered w-full" onChange={e => setClientId(e.target.value)} />
-                    {renderErrors(error, 'name')}
+                    {renderErrors(error, 'clientId')}
                 </div>
 
                 <div className="form-control w-full">
@@ -102,7 +105,7 @@ const SSO = () => {
                             {showClientSecret && <IconEyeOff size="24" />}
                         </button>
                     </div>
-                    {renderErrors(error, 'name')}
+                    {renderErrors(error, 'clientSecret')}
                 </div>
 
                 <div className="form-control w-full">
@@ -110,15 +113,15 @@ const SSO = () => {
                         <span className="label-text">Well-Known URL</span>
                     </label>
                     <input type="text" placeholder="Well-Known URL provided by your authentication provider" value={wellKnownUrl} className="input input-bordered w-full" onChange={e => setWellKnownUrl(e.target.value)} />
-                    {renderErrors(error, 'name')}
+                    {renderErrors(error, 'wellKnownUrl')}
                 </div>
 
                 <div className="form-control w-full">
                     <label className="label">
                         <span className="label-text">Auto Create User on Login</span>
                     </label>
-                    <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={enableCreateUser} onChange={(e) => setEnableCreateUser(e.target.checked)} />
-                    {renderErrors(error, 'active')}
+                    <input type="checkbox" className={`toggle toggle-lg ${enableCreateUser ? 'toggle-success' : ''}`} checked={enableCreateUser} onChange={(e) => setEnableCreateUser(e.target.checked)} />
+                    {renderErrors(error, 'enableCreateUser')}
                 </div>
 
                 <div className="form-control w-full">
@@ -133,8 +136,8 @@ const SSO = () => {
                     <label className="label">
                         <span className="label-text">Allow login only with SSO</span>
                     </label>
-                    <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={ssoOnly} onChange={(e) => setSsoOnly(e.target.checked)} />
-                    {renderErrors(error, 'active')}
+                    <input type="checkbox" className={`toggle toggle-lg ${ssoOnly ? 'toggle-success' : ''}`} checked={ssoOnly} onChange={(e) => setSsoOnly(e.target.checked)} />
+                    {renderErrors(error, 'ssoOnly')}
                 </div>
             </div>
             <div className="bg-base-200 px-4 py-3 text-right sm:px-6">

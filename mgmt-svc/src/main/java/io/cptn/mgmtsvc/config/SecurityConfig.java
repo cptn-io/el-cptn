@@ -43,7 +43,7 @@ public class SecurityConfig {
 
     public static final String AUTH_COOKIE = "jwt";
     public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health",
-            "/error", "/oauth2/**", "/favicon.ico");
+            "/error", "/oauth2/**", "/favicon.ico", "/api/checksso");
 
     private final JwtUtil jwtUtil;
 
