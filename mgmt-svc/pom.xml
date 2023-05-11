@@ -231,6 +231,17 @@
                             <tag>${project.version}</tag>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>push-dev</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>dev</tag>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration>
                     <skip>false</skip>
