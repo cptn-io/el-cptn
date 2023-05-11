@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.cptn</groupId>
@@ -84,11 +85,21 @@
                             <tag>${project.version}</tag>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>push-dev</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>dev</tag>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration>
                     <skip>false</skip>
                     <repository>ghcr.io/cptn-io/${project.artifactId}</repository>
-
                 </configuration>
             </plugin>
         </plugins>
