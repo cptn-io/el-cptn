@@ -113,6 +113,7 @@ public class SecurityConfig {
 
         http.requestCache().requestCache(new CookieRequestCache());
 
+
         //SSO OAuth/OIDC auth config
         http.oauth2Login().loginPage("/signin")
                 .authorizationEndpoint(subconfig -> {
