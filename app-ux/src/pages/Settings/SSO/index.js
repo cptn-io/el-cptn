@@ -43,7 +43,7 @@ const SSO = () => {
         }).finally(() => {
             setExecuting(false);
         });
-    }, []);
+    }, [addNotification]);
 
     const submit = async (e) => {
         e.preventDefault();
