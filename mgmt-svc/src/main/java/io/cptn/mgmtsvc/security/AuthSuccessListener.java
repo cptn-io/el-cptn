@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.authentication.OAuth2LoginAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -26,6 +27,10 @@ public class AuthSuccessListener implements ApplicationListener<AuthenticationSu
         String emailAddress = null;
         if (event.getAuthentication() instanceof UsernamePasswordAuthenticationToken) {
             emailAddress = ((UserDetails) event.getAuthentication().getPrincipal()).getUsername();
+        } else if (event.getAuthentication() instanceof OAuth2LoginAuthenticationToken) {
+            UserPrincipal userPrincipal =
+                    (UserPrincipal) ((OAuth2LoginAuthenticationToken) event.getAuthentication()).getPrincipal();
+            emailAddress = userPrincipal.getUsername();
         }
 
         if (emailAddress != null) {

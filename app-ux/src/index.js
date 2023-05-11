@@ -23,6 +23,7 @@ import Users from './pages/Users';
 import NewUser from './pages/Users/NewUser';
 import UserDetails from './pages/Users/UserDetails';
 import Apps from './pages/Apps';
+import UnknownError from './pages/Public/UnknownError';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -78,6 +79,7 @@ const PublicRoutes = () => {
       <Routes>
         <Route path="/" element={<Public />}>
           <Route path="signin" element={<SignIn />}> </Route>
+          <Route path="unknownError" element={<UnknownError />}> </Route>
           <Route exact path="" element={<Navigate to="/signin" replace />} />
         </Route>
       </Routes>

@@ -20,4 +20,6 @@ public class RestExceptionHandler extends CommonExceptionHandler {
         }
         return super.handleException(ex, request);
     }
+
+
 }
