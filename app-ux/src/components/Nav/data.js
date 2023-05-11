@@ -1,4 +1,4 @@
-import { IconApps, IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconHome, IconTransform, IconUsers } from '@tabler/icons-react';
+import { IconApps, IconCloudComputing, IconDatabaseExport, IconDatabaseImport, IconHome, IconSettings, IconTransform, IconUsers } from '@tabler/icons-react';
 
 const navItems = [
     {
@@ -42,6 +42,12 @@ const navItems = [
         label: "Apps",
         url: "/apps",
         Icon: IconApps
+    },
+    {
+        key: "settings",
+        label: "Settings",
+        url: "/settings",
+        Icon: IconSettings
     }
 ];
 
