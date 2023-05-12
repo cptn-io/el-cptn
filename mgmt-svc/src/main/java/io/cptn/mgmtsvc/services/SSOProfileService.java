@@ -2,11 +2,11 @@ package io.cptn.mgmtsvc.services;
 
 import io.cptn.common.entities.SSOProfile;
 import io.cptn.common.exceptions.BadRequestException;
+import io.cptn.common.helpers.CryptoHelper;
 import io.cptn.common.repositories.SSOProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrations;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -23,13 +23,19 @@ public class SSOProfileService {
 
     private final UserService userService;
 
+    private final CryptoHelper cryptoHelper;
+
+    //a workaround to force use cache for ssoprofile. Cacheable doesn't seem to work when invoked from the same object
+    private final EncryptedSSOProfileService encryptedSSOProfileService;
+
     @CachePut(value = "ssoprofile", key = "'ssoprofile'")
     public SSOProfile upsert(SSOProfile ssoProfile) {
 
         SSOProfile currentSSOProfile = getSSOProfile();
         if (currentSSOProfile != null) {
             currentSSOProfile.populate(ssoProfile);
-            return ssoProfileRepository.save(currentSSOProfile);
+
+            return save(currentSSOProfile);
         }
 
         //create SSO profile
@@ -38,12 +44,19 @@ public class SSOProfileService {
             throw new BadRequestException("SSO profile cannot be setup until a user has been created");
         }
 
-        return ssoProfileRepository.save(ssoProfile);
+        return save(ssoProfile);
     }
 
-    @Cacheable(value = "ssoprofile", key = "'ssoprofile'")
+
     public SSOProfile getSSOProfile() {
-        return ssoProfileRepository.findFirstBy();
+
+        //must be called from another object instance to use cache
+        SSOProfile ssoProfile = encryptedSSOProfileService.getSSOProfileWithCipherSecret(ssoProfileRepository);
+        if (ssoProfile == null) {
+            return null;
+        }
+        ssoProfile.setClientSecret(cryptoHelper.decrypt(ssoProfile.getClientSecret()));
+        return ssoProfile;
     }
 
     public ClientRegistration getClientRegistration(String providerName) {
@@ -51,7 +64,7 @@ public class SSOProfileService {
             return null;
         }
 
-        SSOProfile ssoProfile = ssoProfileRepository.findFirstBy();
+        SSOProfile ssoProfile = getSSOProfile();
 
         if (ssoProfile == null || !ssoProfile.getActive()) {
             return null;
@@ -75,5 +88,11 @@ public class SSOProfileService {
         if (ssoProfile != null) {
             ssoProfileRepository.delete(ssoProfile);
         }
+    }
+
+    private SSOProfile save(SSOProfile ssoProfile) {
+        //encrypt client secret before save
+        ssoProfile.setClientSecret(cryptoHelper.encrypt(ssoProfile.getClientSecret()));
+        return ssoProfileRepository.save(ssoProfile);
     }
 }

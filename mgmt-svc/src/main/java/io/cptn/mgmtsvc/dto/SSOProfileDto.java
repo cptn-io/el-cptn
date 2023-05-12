@@ -1,7 +1,6 @@
 package io.cptn.mgmtsvc.dto;
 
 import io.cptn.common.dto.BaseDto;
-import io.cptn.common.validation.OnCreate;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,13 +19,13 @@ public class SSOProfileDto extends BaseDto {
     @Serial
     private static final long serialVersionUID = 3640009933885958355L;
 
-    @NotNull(message = "Client Id is required", groups = OnCreate.class)
+    @NotNull(message = "Client Id is required")
     private String clientId;
 
-    @NotNull(message = "Client Secret is required", groups = OnCreate.class)
+    @NotNull(message = "Client Secret is required")
     private String clientSecret;
 
-    @NotNull(message = "WellKnown URL is required", groups = OnCreate.class)
+    @NotNull(message = "WellKnown URL is required")
     private String wellKnownUrl;
 
     private Boolean active;

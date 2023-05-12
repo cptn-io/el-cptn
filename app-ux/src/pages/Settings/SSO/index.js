@@ -4,10 +4,11 @@ import useNotifications from "../../../hooks/useNotifications";
 import axios from "axios";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import get from "lodash/get";
+import Loading from "../../../components/Loading";
 
 const SSO = () => {
     const { addNotification } = useNotifications();
-
+    const [loading, setLoading] = useState(true);
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [wellKnownUrl, setWellKnownUrl] = useState('');
@@ -42,6 +43,7 @@ const SSO = () => {
             }
         }).finally(() => {
             setExecuting(false);
+            setLoading(false);
         });
     }, [addNotification]);
 
@@ -79,6 +81,10 @@ const SSO = () => {
     const toggleClientSecretVisibility = (e) => {
         e.preventDefault();
         setShowClientSecret(current => !current);
+    }
+
+    if (loading) {
+        return <Loading />
     }
 
     return <form onSubmit={submit}>
