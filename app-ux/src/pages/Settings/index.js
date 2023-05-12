@@ -24,7 +24,7 @@ const Settings = () => {
                     <div className="xl:col-span-6 mt-4">
                         <SSO />
                     </div>
-                    <div className="hidden xl:col-span-2 xl:block">
+                    <div className="hidden xl:col-span-2 mt-4 xl:block">
                         <ContextHelp page="sso-help" />
                     </div>
                 </div>

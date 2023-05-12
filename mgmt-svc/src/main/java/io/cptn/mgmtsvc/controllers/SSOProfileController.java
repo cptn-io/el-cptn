@@ -67,14 +67,14 @@ public class SSOProfileController {
     public ResponseEntity<JsonNode> checkIfSSOIsEnabled() {
         SSOProfile ssoProfile = ssoProfileService.getSSOProfile();
 
-        if (ssoProfile == null || !ssoProfile.getActive()) {
-            throw new NotFoundException("SSO is not enabled");
-        }
-
         ObjectMapper mapper = JsonHelper.getMapper();
-        
         ObjectNode node = mapper.createObjectNode();
-        node.put("ssoOnly", ssoProfile.getSsoOnly());
+        if (ssoProfile == null || !ssoProfile.getActive()) {
+            node.put("ssoEnabled", false);
+        } else {
+            node.put("ssoEnabled", true);
+            node.put("ssoOnly", ssoProfile.getSsoOnly());
+        }
         return ResponseEntity.ok(node);
     }
 }

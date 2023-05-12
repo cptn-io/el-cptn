@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useSearchParams } from "react-router-dom";
+import Loading from "../../../components/Loading";
 
 const getErrorMessage = (error) => {
     const errors = {
@@ -19,6 +20,7 @@ const getErrorMessage = (error) => {
 }
 
 const SignIn = () => {
+    const [loading, setLoading] = useState(true);
     const [csrf, setCsrf] = useState('');
     const [showSSO, setShowSSO] = useState(false);
     const [ssoOnly, setSSOOnly] = useState(false);
@@ -28,17 +30,18 @@ const SignIn = () => {
 
 
     useEffect(() => {
-        axios.get("/api/csrf").then((response) => {
-            setCsrf(response.data.token);
+        Promise.all([
+            axios.get("/api/csrf"),
+            axios.get('/api/checksso')
+        ]).then((responses) => {
+            setCsrf(responses[0].data.token);
+            setShowSSO(responses[1].data.ssoEnabled);
+            setSSOOnly(responses[1].data.ssoEnabled && responses[1].data.ssoOnly);
         }).catch((error) => {
             setError('csrf');
-        });
-
-        axios.get('/api/checksso').then((response) => {
-            setShowSSO(true);
-            setSSOOnly(response.data.ssoOnly);
-        }).catch((error) => {
             setShowSSO(false);
+        }).finally(() => {
+            setLoading(false);
         });
     }, []);
 
@@ -63,10 +66,11 @@ const SignIn = () => {
             <div className="mb-4">
                 <h2 className="text-lg font-semibold uppercase">Sign In</h2>
             </div>
-            <div>
+            {loading && <div className="flex items-center justify-center"><Loading /></div>}
+            {!loading && <div>
                 {ssoOnly &&
                     <div className="my-2 alert alert-info">
-                        <span><IconInfoCircle className="mr-2" size={24} />Password based authentication is disabled on this instance.</span>
+                        <span><IconInfoCircle className="mr-2" size={24} />Password based auth is disabled.</span>
                     </div>
                 }
                 {!ssoOnly && <form method="POST" onSubmit={setToken} action="/login">
@@ -108,7 +112,8 @@ const SignIn = () => {
                         Sign In with SSO
                     </a>
                 </div>}
-            </div>
+            </div>}
+
         </div>
     </div>
 }

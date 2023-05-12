@@ -29,6 +29,12 @@
 		reverse_proxy ingestion-svc:8081
 	}
 
+	header / {
+        Cache-Control "no-cache, no-store, must-revalidate"
+        Pragma "no-cache"
+        Expires "0"
+    }
+
 	handle {
 		root * /usr/share/caddy/ux
 		try_files {path} /index.html
