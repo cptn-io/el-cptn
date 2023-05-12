@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
 public abstract class AbstractUserService extends OidcUserService {
 
+    public static final String DEMO_USER_EMAIL = "foo@example.com";
     private final PasswordEncoder passwordEncoder;
 
     @Value("${setup.default.password:bar}")
@@ -27,12 +28,12 @@ public abstract class AbstractUserService extends OidcUserService {
 
         //check for user record count
         if (isUserLoggingInWithPassword && userService.count() > 0) {
-            throw new DemoUserException("foo@example.com is only intended for use during initial setup " +
+            throw new DemoUserException("Demo user login is only intended for use during initial setup " +
                     "process to create the first user record. Please use a different email address to login");
         }
 
 
-        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername("foo@example.com")
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(DEMO_USER_EMAIL)
                 .disabled(false)
                 .accountLocked(false)
                 .password(passwordEncoder.encode(defaultPassword))

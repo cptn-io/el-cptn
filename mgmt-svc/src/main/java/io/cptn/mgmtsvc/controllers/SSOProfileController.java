@@ -1,8 +1,12 @@
 package io.cptn.mgmtsvc.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cptn.common.entities.SSOProfile;
 import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.exceptions.NotFoundException;
+import io.cptn.common.helpers.JsonHelper;
 import io.cptn.common.validation.OnCreate;
 import io.cptn.common.validation.OnUpdate;
 import io.cptn.mgmtsvc.dto.SSOProfileDto;
@@ -60,12 +64,17 @@ public class SSOProfileController {
     }
 
     @GetMapping("/api/checksso")
-    public ResponseEntity<ResponseEntity> checkIfSSOIsEnabled() {
+    public ResponseEntity<JsonNode> checkIfSSOIsEnabled() {
         SSOProfile ssoProfile = ssoProfileService.getSSOProfile();
 
         if (ssoProfile == null || !ssoProfile.getActive()) {
             throw new NotFoundException("SSO is not enabled");
         }
-        return ResponseEntity.ok().build();
+
+        ObjectMapper mapper = JsonHelper.getMapper();
+        
+        ObjectNode node = mapper.createObjectNode();
+        node.put("ssoOnly", ssoProfile.getSsoOnly());
+        return ResponseEntity.ok(node);
     }
 }

@@ -1,4 +1,4 @@
-import { IconCircleCheck, IconCircleX } from "@tabler/icons-react";
+import { IconCircleCheck, IconCircleX, IconInfoCircle } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -13,6 +13,7 @@ const getErrorMessage = (error) => {
         'csrf': 'An error occurred while trying to get CSRF token. Please try again.',
         'demo_user': 'Login with demo user is not allowed for this instance.',
         'user_not_found': 'User not found with this email.',
+        'passwordauth_disabled': 'Password authentication is disabled for this instance.'
     }
     return errors[error] || errors['generic'];
 }
@@ -20,6 +21,7 @@ const getErrorMessage = (error) => {
 const SignIn = () => {
     const [csrf, setCsrf] = useState('');
     const [showSSO, setShowSSO] = useState(false);
+    const [ssoOnly, setSSOOnly] = useState(false);
     const [searchParams] = useSearchParams();
     const [error, setError] = useState(searchParams.has("error") ? searchParams.get("error") : null);
     const [logout] = useState(searchParams.has("logout") ? searchParams.get("logout") : null);
@@ -34,6 +36,7 @@ const SignIn = () => {
 
         axios.get('/api/checksso').then((response) => {
             setShowSSO(true);
+            setSSOOnly(response.data.ssoOnly);
         }).catch((error) => {
             setShowSSO(false);
         });
@@ -61,7 +64,12 @@ const SignIn = () => {
                 <h2 className="text-lg font-semibold uppercase">Sign In</h2>
             </div>
             <div>
-                <form method="POST" onSubmit={setToken} action="/login">
+                {ssoOnly &&
+                    <div className="my-2 alert alert-info">
+                        <span><IconInfoCircle className="mr-2" size={24} />Password based authentication is disabled on this instance.</span>
+                    </div>
+                }
+                {!ssoOnly && <form method="POST" onSubmit={setToken} action="/login">
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-content font-bold mb-2">Email</label>
                         <input
@@ -93,12 +101,13 @@ const SignIn = () => {
                             Sign In
                         </button>
                     </div>
-                    {showSSO && <div className="mt-2">
-                        <a className="w-full btn btn-accent rounded-md" alt="Login with SSO" href="/login?sso=true">
-                            Sign In with SSO
-                        </a>
-                    </div>}
                 </form>
+                }
+                {showSSO && <div className="mt-2">
+                    <a className="w-full btn btn-accent rounded-md" alt="Login with SSO" href="/login?sso=true">
+                        Sign In with SSO
+                    </a>
+                </div>}
             </div>
         </div>
     </div>

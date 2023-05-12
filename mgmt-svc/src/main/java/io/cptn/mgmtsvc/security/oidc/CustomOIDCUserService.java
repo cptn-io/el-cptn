@@ -51,8 +51,8 @@ public class CustomOIDCUserService extends AbstractUserService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        if ("foo@example.com".equals(email)) {
-            throw new DemoUserException("foo@example.com is only intended for use during initial setup." +
+        if (DEMO_USER_EMAIL.equals(email)) {
+            throw new DemoUserException("Demo user login is only intended for use during initial setup." +
                     "SSO is not permitted for this user. Please use a different email address to login");
         }
 

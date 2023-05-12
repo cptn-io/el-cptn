@@ -18,8 +18,7 @@ public class OIDCClientRegistrationProvider implements ClientRegistrationReposit
     @Override
     public ClientRegistration findByRegistrationId(String registrationId) {
         try {
-            ClientRegistration clientRegistration = ssoProfileService.getClientRegistration(registrationId);
-            return clientRegistration;
+            return ssoProfileService.getClientRegistration(registrationId);
         } catch (Exception e) {
             log.error("Error getting client registration for registrationId: {}", registrationId, e);
             return null;

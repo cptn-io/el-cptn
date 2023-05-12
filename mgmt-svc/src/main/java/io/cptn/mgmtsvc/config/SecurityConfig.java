@@ -1,6 +1,7 @@
 package io.cptn.mgmtsvc.config;
 
 import io.cptn.common.exceptions.DemoUserException;
+import io.cptn.common.exceptions.PasswordAuthDisabledException;
 import io.cptn.mgmtsvc.security.CookieBasedAuthorizationRequestRepository;
 import io.cptn.mgmtsvc.security.CustomAuthenticationEntryPoint;
 import io.cptn.mgmtsvc.security.JWTRequestFilter;
@@ -146,6 +147,8 @@ public class SecurityConfig {
                 response.sendRedirect("/signin?error=demo_user");
             } else if (exception instanceof UsernameNotFoundException || exception.getCause() instanceof UsernameNotFoundException) {
                 response.sendRedirect("/signin?error=user_not_found");
+            } else if (exception instanceof PasswordAuthDisabledException || exception.getCause() instanceof PasswordAuthDisabledException) {
+                response.sendRedirect("/signin?error=passwordauth_disabled");
             } else {
                 response.sendRedirect("/signin?error=generic");
             }

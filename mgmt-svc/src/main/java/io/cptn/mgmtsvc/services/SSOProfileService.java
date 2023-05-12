@@ -4,6 +4,9 @@ import io.cptn.common.entities.SSOProfile;
 import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.repositories.SSOProfileRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrations;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -20,6 +23,7 @@ public class SSOProfileService {
 
     private final UserService userService;
 
+    @CachePut(value = "ssoprofile", key = "'ssoprofile'")
     public SSOProfile upsert(SSOProfile ssoProfile) {
 
         SSOProfile currentSSOProfile = getSSOProfile();
@@ -37,6 +41,7 @@ public class SSOProfileService {
         return ssoProfileRepository.save(ssoProfile);
     }
 
+    @Cacheable(value = "ssoprofile", key = "'ssoprofile'")
     public SSOProfile getSSOProfile() {
         return ssoProfileRepository.findFirstBy();
     }
@@ -64,6 +69,7 @@ public class SSOProfileService {
                 .build();
     }
 
+    @CacheEvict(value = "ssoprofile", key = "'ssoprofile'")
     public void delete() {
         SSOProfile ssoProfile = getSSOProfile();
         if (ssoProfile != null) {
