@@ -56,7 +56,7 @@ public class UserDetailsServiceImpl extends AbstractUserService implements UserD
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         SSOProfile ssoProfile = ssoProfileService.getSSOProfile();
-        if (ssoProfile.getSsoOnly()) {
+        if (ssoProfile != null && ssoProfile.getSsoOnly()) {
             throw new PasswordAuthDisabledException("Password based auth is not permitted for this instance");
         }
 
