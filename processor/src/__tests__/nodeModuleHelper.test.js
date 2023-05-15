@@ -72,7 +72,7 @@ describe('installModule', () => {
         installModule('non-existent-module');
 
         expect(logger.info).toHaveBeenCalledWith('Installing missing node module non-existent-module');
-        expect(spawnSync).toHaveBeenCalledWith('npm', ['install', '--no-save', 'non-existent-module'], { stdio: 'inherit' });
+        expect(spawnSync).toHaveBeenCalledWith('npm', ['install', 'non-existent-module'], { stdio: 'inherit' });
     });
 
     test('should log an error if the installation fails', () => {
