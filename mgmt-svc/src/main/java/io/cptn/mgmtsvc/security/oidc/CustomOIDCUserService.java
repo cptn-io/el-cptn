@@ -39,11 +39,11 @@ public class CustomOIDCUserService extends AbstractUserService {
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = super.loadUser(userRequest);
-        return getUserPrincipal(userRequest, oidcUser);
+        return getUserPrincipal(oidcUser);
     }
 
 
-    private UserPrincipal getUserPrincipal(OidcUserRequest userRequest, OidcUser oidcUser) {
+    protected UserPrincipal getUserPrincipal(OidcUser oidcUser) {
         Object email = oidcUser.getClaims().get("email");
 
         if (email == null) {
