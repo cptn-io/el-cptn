@@ -233,6 +233,7 @@
                     </execution>
                     <execution>
                         <id>push-dev</id>
+                        <phase>none</phase>
                         <goals>
                             <goal>build</goal>
                             <goal>tag</goal>
