@@ -30,7 +30,7 @@ function findMissingRequiredModules(script) {
 
 function installModule(module) {
     logger.info(`Installing missing node module ${module}`);
-    const result = spawnSync('npm', ['install', '--no-save', module], { stdio: 'inherit' });
+    const result = spawnSync('npm', ['install', module], { stdio: 'inherit' });
     if (result.status !== 0) {
         logger.error(`Failed to install module ${module}.`);
     }
