@@ -172,6 +172,7 @@ const DestinationDetailsCard = (props) => {
             {!readOnly && <div className="card-actions mt-2 justify-between">
                 <div>{editMode && <button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button>}</div>
                 <div className="flex justify-end">
+                    {!editMode && <a className="btn btn-info mx-2" target="_blank" rel="noreferrer" href={`/api/destination/${id}/export`}>Export as App</a>}
                     {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Destination</button>}
                     {editMode && <button className="btn mr-2" onClick={cancelChanges}>Cancel</button>}
                     {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
