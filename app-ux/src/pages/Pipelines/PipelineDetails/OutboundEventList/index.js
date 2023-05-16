@@ -9,6 +9,8 @@ import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
+import { IconRefreshAlert } from "@tabler/icons-react";
+import ConfirmModal from "../../../../components/ConfirmModal";
 
 export const resolveState = (state) => {
     switch (state) {
@@ -33,6 +35,7 @@ const OutboundEventList = ({ pipelineId }) => {
     const [totalCount, setTotalCount] = useState(0);
     const [searchParams] = useSearchParams();
     const [page, setPage] = useState(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
+    const [showRequeueAllConfirmation, setShowRequeueAllConfirmation] = useState(false);
 
     useEffect(() => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
@@ -109,6 +112,23 @@ const OutboundEventList = ({ pipelineId }) => {
             });
     };
 
+    const requeueAllFailedInPipeline = (e) => {
+        e.preventDefault();
+        setExecuting(true);
+        axios.post(`/api/outbound_event/pipeline/${pipelineId}/requeue`)
+            .then(res => {
+                refreshList();
+            }).catch(err => {
+                addNotification({
+                    message: get(err, 'response.data.message', 'An error occurred while requeuing failed Outbound Events'),
+                    type: 'error'
+                });
+            }).finally(() => {
+                setExecuting(false);
+                setShowRequeueAllConfirmation(false);
+            });
+    }
+
 
     if (loading) {
         return <Loading />
@@ -118,6 +138,9 @@ const OutboundEventList = ({ pipelineId }) => {
         <div className="mb-4 text-lg font-bold flex justify-between items-center">
             <span>Pipeline Events ({totalCount})</span>
             <span>
+                <button disabled={executing} className="btn btn-ghost gap-2" onClick={() => setShowRequeueAllConfirmation(true)}>
+                    <IconRefreshAlert size={24} />Requeue Failed
+                </button>
                 <button disabled={executing} className="btn btn-ghost gap-2" onClick={refreshList}>
                     <IconRefresh size={24} />Refresh
                 </button>
@@ -150,6 +173,7 @@ const OutboundEventList = ({ pipelineId }) => {
                 </tbody>
             </table>
         </div>
+        {showRequeueAllConfirmation && <ConfirmModal title="Requeue All Failed Events" message="Are you sure you want to requeue all failed events in this pipeline?" onConfirm={requeueAllFailedInPipeline} onCancel={() => setShowRequeueAllConfirmation(false)} />}
         {totalCount > 0 && <Pagination totalCount={totalCount} />}
         {event && <Modal title="Event Details" onCancel={() => setEvent(null)}>
             <EventDetails event={event} onCancel={() => setEvent(null)} onSendEvent={() => { }} />

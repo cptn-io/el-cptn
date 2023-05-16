@@ -72,6 +72,12 @@ public class OutboundEventController {
         return ResponseEntity.ok().body(convert(outboundEvent));
     }
 
+    @PostMapping("/api/outbound_event/pipeline/{pipelineId}/requeue")
+    public ResponseEntity requeueAllFailedInPipeline(@PathVariable UUID pipelineId) {
+        outboundEventService.requeueFailedEventsInPipeline(pipelineId);
+        return ResponseEntity.noContent().build();
+    }
+
     private OutboundEvent getById(UUID id) {
         Optional<OutboundEvent> outboundEventOptional = outboundEventService.getById(id);
         if (outboundEventOptional.isEmpty()) {
