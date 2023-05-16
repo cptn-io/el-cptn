@@ -8,6 +8,8 @@ import { renderErrors } from "../../../common/formHelpers";
 import Editor from '@monaco-editor/react'
 import { breadcrumbs } from "..";
 import ContextHelp from "../../../components/ContextHelp";
+import Modal from "../../../components/Modal";
+import { IconArrowsMaximize } from "@tabler/icons-react";
 
 const scriptTemplate = `module.exports = function (event, ctx) {
     //add your script here to transform or enrich the event
@@ -25,6 +27,7 @@ const NewTransformation = () => {
     const [active, setActive] = useState(true);
     const [executing, setExecuting] = useState(false);
     const [error, setError] = useState({ message: null, details: [] });
+    const [expandEditor, setExpandEditor] = useState(false);
 
 
     const resetAll = () => {
@@ -103,15 +106,20 @@ const NewTransformation = () => {
                             </div>
 
                             <div className="form-control w-full">
-                                <label className="label">
-                                    <span className="label-text">Script</span>
-                                </label>
+                                <div className="flex justify-between items-center">
+                                    <label className="label">
+                                        <span className="label-text">Script</span>
+                                    </label>
+                                    <div>
+                                        <button onClick={(e) => { e.preventDefault(); setExpandEditor(current => !current) }} className="btn btn-sm btn-ghost"><IconArrowsMaximize size={16} /></button>
+                                    </div>
+                                </div>
                                 <Editor
                                     theme="vs-dark"
                                     height="300px"
                                     options={{ 'fontSize': 15, quickSuggestions: false, scrollBeyondLastLine: false, minimap: { enabled: false } }}
                                     defaultLanguage="javascript"
-                                    defaultValue={scriptTemplate}
+                                    value={script}
                                     onChange={handleEditorChange}
                                     beforeMount={handleEditorWillMount}
                                     onMount={handleEditorDidMount}
@@ -141,6 +149,25 @@ const NewTransformation = () => {
                 <ContextHelp page="create-transformation" />
             </div>
         </div>
+        {expandEditor && <Modal large={true} title="Script" onCancel={() => setExpandEditor(false)}>
+            <>
+                <div className="px-6 pb-4">
+                    <Editor
+                        theme="vs-dark"
+                        height="75vh"
+                        options={{ 'fontSize': 15, quickSuggestions: false, scrollBeyondLastLine: false, minimap: { enabled: false } }}
+                        defaultLanguage="javascript"
+                        value={script}
+                        onChange={handleEditorChange}
+                        beforeMount={handleEditorWillMount}
+                        onMount={handleEditorDidMount}
+                    />
+                </div>
+                <div className="bg-base-200 px-4 py-3 justify-end sm:px-6 flex">
+                    <button className="btn" onClick={() => setExpandEditor(false)}>Collapse</button>
+                </div>
+            </>
+        </Modal>}
     </Fragment>
 }
 
