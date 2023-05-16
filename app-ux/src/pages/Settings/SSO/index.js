@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { renderErrors } from "../../../common/formHelpers";
 import useNotifications from "../../../hooks/useNotifications";
 import axios from "axios";
-import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import { IconClipboard, IconEye, IconEyeOff } from "@tabler/icons-react";
 import get from "lodash/get";
 import Loading from "../../../components/Loading";
 
@@ -21,6 +21,15 @@ const SSO = () => {
     const [error, setError] = useState({ message: null, details: [] });
     const clearErrors = () => {
         setError({ message: null, details: [] });
+    }
+
+    const copyToClipboard = (e, key, message) => {
+        e.preventDefault();
+        navigator.clipboard.writeText(key)
+        addNotification({
+            message,
+            type: 'info'
+        })
     }
 
     useEffect(() => {
@@ -91,6 +100,18 @@ const SSO = () => {
         <div className={`sm:overflow-hidden sm:rounded-md shadow-inner`}>
             <div className="space-y-3 px-4 py-5 sm:p-6">
                 <div className="text-lg font-bold bg-base-200 p-2 rounded-md">OIDC Provider Configuration</div>
+                <div className="form-control w-full">
+                    <label className="label">
+                        <span className="label-text">Redirect URI</span>
+                    </label>
+                    <div className="p-1">
+                        <div>{`${window.location.origin}/login/oauth2/code/oidc`}
+                            <button title="Copy to Clipboard" className="ml-2 btn btn-ghost btn-xs"
+                                onClick={(e) => copyToClipboard(e, window.location.origin + '/login/oauth2/code/oidc', "Redirect URI has been copied to Clipboard")}>
+                                <IconClipboard size={16} /></button>
+                        </div>
+                    </div>
+                </div>
                 <div className="form-control w-full">
                     <label className="label">
                         <span className="label-text">Client ID</span>
