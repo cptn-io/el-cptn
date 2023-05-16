@@ -36,6 +36,9 @@ public class AppSynchronizer {
     @Value("${app.repo.localpath:/tmp/apps}")
     private String localPath;
 
+    @Value("${app.repo.branch:main}")
+    private String branch;
+
     private static App readJsonFile(File file) throws IOException {
         return objectMapper.readValue(file, App.class);
     }
@@ -67,7 +70,7 @@ public class AppSynchronizer {
 
     private void cloneRepository() {
         try (Git git = Git.cloneRepository()
-                .setURI(repoUrl)
+                .setURI(repoUrl).setBranch(branch)
                 .setDirectory(new File(localPath))
                 .call()) {
             log.info("Repository cloned successfully!");

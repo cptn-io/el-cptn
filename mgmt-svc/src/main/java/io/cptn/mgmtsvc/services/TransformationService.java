@@ -1,5 +1,7 @@
 package io.cptn.mgmtsvc.services;
 
+import io.cptn.common.entities.App;
+import io.cptn.common.entities.AppType;
 import io.cptn.common.entities.Transformation;
 import io.cptn.common.repositories.TransformationRepository;
 import io.cptn.common.services.CommonService;
@@ -9,6 +11,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,5 +53,18 @@ public class TransformationService extends CommonService {
 
     public Optional<Transformation> getById(UUID id) {
         return transformationRepository.findById(id);
+    }
+
+    public App exportAsApp(Transformation transformation) {
+        String key = hash(transformation.getId().toString());
+        App app = new App();
+        app.setName(transformation.getName());
+        app.setConfig(List.of());
+        app.setLogoUrl(null);
+        app.setKey(key);
+        app.setHash(hash(key + Instant.now().toString()));
+        app.setScript(transformation.getScript());
+        app.setType(AppType.TRANSFORMATION);
+        return app;
     }
 }

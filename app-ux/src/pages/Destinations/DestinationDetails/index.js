@@ -50,7 +50,7 @@ const DestinationDetails = (props) => {
                 <div className="xl:col-span-6">
                     <DestinationDetailsCard data={data} onUpdate={setData} />
                 </div>
-                <div className="hidden xl:col-span-2 xl:block">
+                <div className="hidden xl:col-span-2 xl:block pt-4">
                     <ContextHelp page="destination-details" />
                 </div>
             </div>
