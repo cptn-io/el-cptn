@@ -50,4 +50,8 @@ public class OutboundEventService extends CommonService {
     public void save(OutboundEvent outboundEvent) {
         outboundEventRepository.save(outboundEvent);
     }
+
+    public void requeueFailedEventsInPipeline(UUID pipelineId) {
+        outboundEventRepository.requeueFailedEvents(pipelineId);
+    }
 }
