@@ -11,6 +11,7 @@ import io.cptn.mgmtsvc.security.oidc.OIDCClientRegistrationProvider;
 import io.cptn.mgmtsvc.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,6 +41,7 @@ import java.util.Set;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     public static final String AUTH_COOKIE = "jwt";
@@ -150,6 +152,7 @@ public class SecurityConfig {
             } else if (exception instanceof PasswordAuthDisabledException || exception.getCause() instanceof PasswordAuthDisabledException) {
                 response.sendRedirect("/signin?error=passwordauth_disabled");
             } else {
+                log.warn(exception.getMessage(), exception);
                 response.sendRedirect("/signin?error=generic");
             }
         };
