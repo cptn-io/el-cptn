@@ -58,9 +58,9 @@ Create a new user in the platform to disable the default setup credentials.
 
 ### Single Sign On (SSO)
 
-The SSO functionality is still in development and is expected to be released with Alameda release.
+The SSO functionality is also available under open-source MIT license.
 
-The SSO feature will be available part of the open-source MIT license.
+Refer [this doc](https://docs.cptn.io/docs/settings/sso) for more details.
 
 ## Documentation
 
@@ -88,8 +88,7 @@ modify the scripts as per their requirements.
 Apps is just content and users do not need to upgrade the platform to get the latest apps. The platform will
 automatically check to see if there are any new apps available and download them.
 
-The git repo supporting this functionality is at https://github.com/cptn-io/apps. We will shortly publish an SDK or a
-mechanism that allows users to contribute apps to the community.
+The git repo supporting this functionality is at https://github.com/cptn-io/apps. Refer [this page](https://docs.cptn.io/docs/apps/contributing-apps) for more details on how you can build and contribute apps to the community.
 
 ## Releases
 
@@ -97,7 +96,7 @@ Updates to the platform for bug fixes are released at any time and will be avail
 But milestone releases which include new features are named after places in alphabetical order.
 Following are the upcoming releases:
 
-- Alameda
+- Alameda ✅
 - Belmont
 - Cupertino
 - Dublin
