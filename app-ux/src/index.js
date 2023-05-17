@@ -23,6 +23,8 @@ import Users from './pages/Users';
 import NewUser from './pages/Users/NewUser';
 import UserDetails from './pages/Users/UserDetails';
 import Apps from './pages/Apps';
+import UnknownError from './pages/Public/UnknownError';
+import Settings from './pages/Settings';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -64,6 +66,10 @@ const AppRoutes = () => {
           <Route path="apps">
             <Route path="" element={<Apps />} />
           </Route>
+          <Route path="settings">
+            <Route path="" element={<Settings />} />
+            <Route path=":tab" element={<Settings />} />
+          </Route>
           <Route exact path="" element={<Navigate to="/home" replace />} />
         </Route>
         <Route path="*" element={<Navigate to="/home" replace />} />
@@ -78,6 +84,7 @@ const PublicRoutes = () => {
       <Routes>
         <Route path="/" element={<Public />}>
           <Route path="signin" element={<SignIn />}> </Route>
+          <Route path="unknownError" element={<UnknownError />}> </Route>
           <Route exact path="" element={<Navigate to="/signin" replace />} />
         </Route>
       </Routes>

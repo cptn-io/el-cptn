@@ -1,4 +1,4 @@
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconArrowsMaximize, IconCheck, IconX } from '@tabler/icons-react';
 import { Fragment, useState, useRef } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";
@@ -12,6 +12,7 @@ import axios from 'axios';
 import Editor from '@monaco-editor/react';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../../../components/ConfirmModal';
+import Modal from '../../../components/Modal';
 
 const TransformationDetailsCard = (props) => {
     const { data: { id, name, script, active }, onUpdate } = props;
@@ -23,6 +24,7 @@ const TransformationDetailsCard = (props) => {
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [expandEditor, setExpandEditor] = useState(false);
 
 
     const handleEditorWillMount = (monaco) => {
@@ -119,9 +121,14 @@ const TransformationDetailsCard = (props) => {
                     {renderErrors(error, 'name')}</Fragment> : <div className="p-1 text-lg">{name}</div>}
             </div>
             <div className="form-control w-full">
-                <label className="label">
-                    <span className="label-text">Script</span>
-                </label>
+                <div className="flex justify-between items-center">
+                    <label className="label">
+                        <span className="label-text">Script</span>
+                    </label>
+                    <div>
+                        <button onClick={() => setExpandEditor(current => !current)} className="btn btn-sm btn-ghost"><IconArrowsMaximize size={16} /></button>
+                    </div>
+                </div>
                 <Editor
                     theme="vs-dark"
                     height="300px"
@@ -152,6 +159,7 @@ const TransformationDetailsCard = (props) => {
             <div className="card-actions mt-2 justify-between">
                 <div>{editMode && <button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button>}</div>
                 <div className="flex justify-end">
+                    {!editMode && <a className="btn btn-info mx-2" target="_blank" rel="noreferrer" href={`/api/transformation/${id}/export`}>Export as App</a>}
                     {!editMode && <button className="btn" type="button" onClick={() => setEditMode(true)}>Edit Transformation</button>}
                     {editMode && <button className="btn mr-2" type="button" onClick={cancelChanges}>Cancel</button>}
                     {editMode && <button className="btn btn-primary" type="button" disabled={executing} onClick={saveChanges}>Save
@@ -160,6 +168,27 @@ const TransformationDetailsCard = (props) => {
 
             </div>
             {showDeleteConfirmation && <ConfirmModal title="Delete Transformation" message="Are you sure you want to delete this Transformation?" onConfirm={deleteTransformer} onCancel={() => setShowDeleteConfirmation(false)} />}
+
+            {expandEditor && <Modal large={true} title={editMode ? 'Script' : 'Script (Read-only)'} onCancel={() => setExpandEditor(false)}>
+                <>
+                    <div className="px-6 pb-4">
+                        <Editor
+                            theme="vs-dark"
+                            height="75vh"
+                            options={{ 'fontSize': 15, quickSuggestions: false, scrollBeyondLastLine: false, readOnly: !editMode, minimap: { enabled: false } }}
+                            defaultLanguage="javascript"
+                            value={changes.script || script}
+                            onChange={handleEditorChange}
+                            beforeMount={handleEditorWillMount}
+                            onMount={handleEditorDidMount}
+                        />
+                    </div>
+                    <div className="bg-base-200 px-4 py-3 justify-between sm:px-6 flex">
+                        <button disabled={editMode} className="btn btn-primary mr-2" onClick={() => setEditMode(true)}>Edit</button>
+                        <button className="btn" onClick={() => setExpandEditor(false)}>Collapse</button>
+                    </div>
+                </>
+            </Modal>}
         </div>
     </div>
 }

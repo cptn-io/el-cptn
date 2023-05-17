@@ -52,5 +52,10 @@ export const content = {
         'title': 'User Details',
         'body': `Click 'Edit User' to update user details. Changing the email address also changes the username for the user.
         \nClick 'Change Password' to update the password for the user.`
+    },
+    'sso-help': {
+        'title': 'Setting up SSO',
+        'body': `We support setting up Single Sign On using OAuth 2.0/OpenID Connect(OIDC) protocol. Most modern Identity Providers support this protocol for SSO. We do not support SAML based authentication.\n\nFollow the documentation resources for setting up SSO.
+        \nPlease ensure that you do not set 'Allow login only with SSO' option until you have successfully tested the SSO setup. If this option is enabled and your SSO is not properly setup, you will not be able to login to the system.`
     }
 }

@@ -1,4 +1,4 @@
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconArrowsMaximize, IconCheck, IconX } from '@tabler/icons-react';
 import { Fragment, useState, useRef, useEffect } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";
@@ -14,6 +14,7 @@ import ConfigBuilder from '../../../components/ConfigBuilder';
 import filter from 'lodash/filter';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../../../components/ConfirmModal';
+import Modal from '../../../components/Modal';
 
 const DestinationDetailsCard = (props) => {
     const { data: { id, name, script, active, config }, onUpdate = () => { }, readOnly = false } = props;
@@ -26,6 +27,7 @@ const DestinationDetailsCard = (props) => {
     const [executing, setExecuting] = useState(false);
     const [configChanges, setConfigChanges] = useState(config);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [expandEditor, setExpandEditor] = useState(false);
 
 
 
@@ -139,9 +141,14 @@ const DestinationDetailsCard = (props) => {
             </div>
 
             {!readOnly && <div className="form-control w-full">
-                <label className="label">
-                    <span className="label-text">Script</span>
-                </label>
+                <div className="flex justify-between items-center">
+                    <label className="label">
+                        <span className="label-text">Script</span>
+                    </label>
+                    <div>
+                        <button onClick={() => setExpandEditor(current => !current)} className="btn btn-sm btn-ghost"><IconArrowsMaximize size={16} /></button>
+                    </div>
+                </div>
                 <Editor
                     theme="vs-dark"
                     height="300px"
@@ -172,6 +179,7 @@ const DestinationDetailsCard = (props) => {
             {!readOnly && <div className="card-actions mt-2 justify-between">
                 <div>{editMode && <button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button>}</div>
                 <div className="flex justify-end">
+                    {!editMode && <a className="btn btn-info mx-2" target="_blank" rel="noreferrer" href={`/api/destination/${id}/export`}>Export as App</a>}
                     {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Destination</button>}
                     {editMode && <button className="btn mr-2" onClick={cancelChanges}>Cancel</button>}
                     {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
@@ -179,8 +187,28 @@ const DestinationDetailsCard = (props) => {
                 </div>
             </div>}
             {showDeleteConfirmation && <ConfirmModal title="Delete Destination" message="Are you sure you want to delete this Destination?" onConfirm={deleteDestination} onCancel={() => setShowDeleteConfirmation(false)} />}
+            {expandEditor && <Modal large={true} title={editMode ? 'Script' : 'Script (Read-only)'} onCancel={() => setExpandEditor(false)}>
+                <>
+                    <div className="px-6 pb-4">
+                        <Editor
+                            theme="vs-dark"
+                            height="75vh"
+                            options={{ 'fontSize': 15, quickSuggestions: false, scrollBeyondLastLine: false, readOnly: !editMode, minimap: { enabled: false } }}
+                            defaultLanguage="javascript"
+                            value={changes.script || script}
+                            onChange={handleEditorChange}
+                            beforeMount={handleEditorWillMount}
+                            onMount={handleEditorDidMount}
+                        />
+                    </div>
+                    <div className="bg-base-200 px-4 py-3 justify-between sm:px-6 flex">
+                        <button disabled={editMode} className="btn btn-primary mr-2" onClick={() => setEditMode(true)}>Edit</button>
+                        <button className="btn" onClick={() => setExpandEditor(false)}>Collapse</button>
+                    </div>
+                </>
+            </Modal>}
         </div>
-    </div>
+    </div >
 }
 
 export default DestinationDetailsCard;

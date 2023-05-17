@@ -4,7 +4,6 @@ on: workflow_dispatch
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,13 +14,24 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'dev'
-        
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
+          settings-path: ${{ github.workspace }}
+      
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build with Maven
-        run: mvn clean install dockerfile:build@push-dev dockerfile:tag@push-dev
+        run: mvn clean install dockerfile:build@push-dev dockerfile:tag@push-dev dockerfile:push@push-dev -s $GITHUB_WORKSPACE/settings.xml
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+

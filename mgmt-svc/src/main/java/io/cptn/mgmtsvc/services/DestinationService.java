@@ -1,6 +1,9 @@
 package io.cptn.mgmtsvc.services;
 
+import io.cptn.common.entities.App;
+import io.cptn.common.entities.AppType;
 import io.cptn.common.entities.Destination;
+import io.cptn.common.pojos.ConfigItem;
 import io.cptn.common.projections.DestinationView;
 import io.cptn.common.repositories.DestinationRepository;
 import io.cptn.common.services.CommonService;
@@ -13,6 +16,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,5 +65,30 @@ public class DestinationService extends CommonService {
 
     public Optional<Destination> getById(UUID id) {
         return destinationRepository.findById(id);
+    }
+
+    public App exportAsApp(Destination destination) {
+
+        String key = hash(destination.getId().toString());
+        App app = new App();
+        app.setName(destination.getName());
+
+        List<ConfigItem> configItems = destination.getConfig();
+        if (configItems != null) {
+            configItems = configItems.stream().map(configItem -> {
+                configItem.setValue("");
+                return configItem;
+            }).collect(Collectors.toList());
+        } else {
+            configItems = List.of();
+        }
+
+        app.setConfig(configItems);
+        app.setLogoUrl(null);
+        app.setKey(key);
+        app.setHash(hash(key + Instant.now().toString()));
+        app.setScript(destination.getScript());
+        app.setType(AppType.DESTINATION);
+        return app;
     }
 }

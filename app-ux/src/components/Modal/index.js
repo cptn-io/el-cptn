@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 const Modal = (props) => {
 
-    const { title = '', onCancel } = props;
+    const { title = '', onCancel, large = false } = props;
     const [opened, setOpened] = useState(true);
     useEffect(() => {
         const close = (e) => {
@@ -25,7 +25,7 @@ const Modal = (props) => {
         onChange={(e) => setOpened(e.target.checked)}
         className="modal-toggle" />
         <div className="modal">
-            <div className="modal-box relative w-full md:w-1/2 max-w-3xl px-0 pb-0">
+            <div className={`modal-box relative ${large ? 'w-11/12 max-w-screen-2xl' : 'w-full md:w-1/2 max-w-3xl'} px-0 pb-0 pt-4`}>
                 <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                 <h3 className="font-bold text-lg px-4">{title}</h3>
                 {props.children}

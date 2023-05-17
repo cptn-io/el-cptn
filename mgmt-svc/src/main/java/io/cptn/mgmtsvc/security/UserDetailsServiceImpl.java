@@ -1,10 +1,10 @@
 package io.cptn.mgmtsvc.security;
 
+import io.cptn.common.entities.SSOProfile;
 import io.cptn.common.entities.User;
-import io.cptn.common.exceptions.DemoUserException;
+import io.cptn.common.exceptions.PasswordAuthDisabledException;
+import io.cptn.mgmtsvc.services.SSOProfileService;
 import io.cptn.mgmtsvc.services.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,76 +15,57 @@ import java.util.UUID;
 
 /* @author: kc, created on 4/10/23 */
 @Service
-@RequiredArgsConstructor
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl extends AbstractUserService implements UserDetailsService {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
-    @Value("${setup.default.password:bar}")
-    private String defaultPassword;
+    private final SSOProfileService ssoProfileService;
 
+    public UserDetailsServiceImpl(UserService userService, SSOProfileService ssoProfileService,
+                                  PasswordEncoder passwordEncoder) {
+        super(passwordEncoder);
+        this.userService = userService;
+        this.ssoProfileService = ssoProfileService;
+    }
+
+    /**
+     * Invalid during JWT token validation for every API call
+     *
+     * @param id
+     * @return
+     */
     public UserDetails loadUserByUserId(String id) {
+
         if ("-1".equals(id)) {
-            return loginForPreSetup(false);
+            return loginForPreSetup(userService, false); //Login by userId happens post authentication w/ JWT
         }
 
         User user = userService.getUserById(UUID.fromString(id));
         return getUserDetailsForUser(user);
     }
 
+    /**
+     * Invoked during login with username/password
+     *
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @SuppressWarnings("unused")
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        if ("foo@example.com".equals(username)) {
-            return loginForPreSetup(true);
+        SSOProfile ssoProfile = ssoProfileService.getSSOProfile();
+        if (ssoProfile != null && ssoProfile.getActive() && ssoProfile.getSsoOnly()) {
+            throw new PasswordAuthDisabledException("Password based auth is not permitted for this instance");
+        }
+
+        if (DEMO_USER_EMAIL.equals(username)) {
+            return loginForPreSetup(userService, true);
         }
 
         User user = userService.getUserByEmail(username);
 
         return getUserDetailsForUser(user);
-    }
-
-
-    private UserDetails getUserDetailsForUser(User user) {
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        UserDetails userDetails =
-                org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                        .disabled(user.isDisabled())
-                        .accountLocked(user.isLockedOut())
-                        .password(user.getHashedPassword())
-                        .roles("USER")
-                        .build();
-
-        userDetails = UserPrincipal.userDetails(userDetails)
-                .id(user.getId().toString()).build();
-        return userDetails;
-    }
-
-    private UserDetails loginForPreSetup(boolean isUserLoggingInWithPassword) {
-
-        //check for user record count
-        if (isUserLoggingInWithPassword && userService.count() > 0) {
-            throw new DemoUserException("foo@example.com is only intended for use during initial setup " +
-                    "process to create the first user record. Please use a different email address to login");
-        }
-
-
-        UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername("foo@example.com")
-                .disabled(false)
-                .accountLocked(false)
-                .password(passwordEncoder.encode(defaultPassword))
-                .roles("USER")
-                .build();
-
-        userDetails = UserPrincipal.userDetails(userDetails)
-                .id("-1").build();
-
-        return userDetails;
     }
 }

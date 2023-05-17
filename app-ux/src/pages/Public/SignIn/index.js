@@ -1,8 +1,9 @@
-import { IconCircleCheck, IconCircleX } from "@tabler/icons-react";
+import { IconCircleCheck, IconCircleX, IconInfoCircle } from "@tabler/icons-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useSearchParams } from "react-router-dom";
+import Loading from "../../../components/Loading";
 
 const getErrorMessage = (error) => {
     const errors = {
@@ -11,25 +12,38 @@ const getErrorMessage = (error) => {
         'locked': 'Your account is locked. Please contact your administrator.',
         'disabled': 'Your account is disabled. Please contact your administrator.',
         'csrf': 'An error occurred while trying to get CSRF token. Please try again.',
-        'demo_user': 'Login with demo user is not allowed as valid users are already created in the system'
+        'demo_user': 'Login with demo user is not allowed for this instance.',
+        'user_not_found': 'User not found with this email.',
+        'passwordauth_disabled': 'Password authentication is disabled for this instance.'
     }
     return errors[error] || errors['generic'];
 }
 
 const SignIn = () => {
+    const [loading, setLoading] = useState(true);
     const [csrf, setCsrf] = useState('');
+    const [showSSO, setShowSSO] = useState(false);
+    const [ssoOnly, setSSOOnly] = useState(false);
     const [searchParams] = useSearchParams();
     const [error, setError] = useState(searchParams.has("error") ? searchParams.get("error") : null);
     const [logout] = useState(searchParams.has("logout") ? searchParams.get("logout") : null);
 
 
     useEffect(() => {
-        axios.get("/api/csrf").then((response) => {
-            setCsrf(response.data.token);
+        Promise.all([
+            axios.get("/api/csrf"),
+            axios.get('/api/checksso')
+        ]).then((responses) => {
+            setCsrf(responses[0].data.token);
+            setShowSSO(responses[1].data.ssoEnabled);
+            setSSOOnly(responses[1].data.ssoEnabled && responses[1].data.ssoOnly);
         }).catch((error) => {
             setError('csrf');
+            setShowSSO(false);
+        }).finally(() => {
+            setLoading(false);
         });
-    }, [])
+    }, []);
 
     const setToken = (e) => {
         setCsrf(document.cookie.match(/XSRF-TOKEN=(.*)/)?.[1]);
@@ -52,8 +66,14 @@ const SignIn = () => {
             <div className="mb-4">
                 <h2 className="text-lg font-semibold uppercase">Sign In</h2>
             </div>
-            <div>
-                <form method="POST" onSubmit={setToken} action="/login">
+            {loading && <div className="flex items-center justify-center"><Loading /></div>}
+            {!loading && <div>
+                {ssoOnly &&
+                    <div className="my-2 alert alert-info">
+                        <span><IconInfoCircle className="mr-2" size={24} />Password based auth is disabled.</span>
+                    </div>
+                }
+                {!ssoOnly && <form method="POST" onSubmit={setToken} action="/login">
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-content font-bold mb-2">Email</label>
                         <input
@@ -77,14 +97,23 @@ const SignIn = () => {
                         />
                     </div>
                     <input name="_csrf" type="hidden" value={csrf} />
-                    <button
-                        type="submit"
-                        className="w-full btn-primary py-2 px-4 rounded-md"
-                    >
-                        Sign In
-                    </button>
+                    <div>
+                        <button
+                            type="submit"
+                            className="w-full btn btn-primary rounded-md"
+                        >
+                            Sign In
+                        </button>
+                    </div>
                 </form>
-            </div>
+                }
+                {showSSO && <div className="mt-2">
+                    <a className="w-full btn btn-accent rounded-md" alt="Login with SSO" href="/login?sso=true">
+                        Sign In with SSO
+                    </a>
+                </div>}
+            </div>}
+
         </div>
     </div>
 }

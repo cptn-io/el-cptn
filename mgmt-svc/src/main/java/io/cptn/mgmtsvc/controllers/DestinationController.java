@@ -1,5 +1,6 @@
 package io.cptn.mgmtsvc.controllers;
 
+import io.cptn.common.entities.App;
 import io.cptn.common.entities.Destination;
 import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.exceptions.NotFoundException;
@@ -7,12 +8,15 @@ import io.cptn.common.validation.OnCreate;
 import io.cptn.common.validation.OnUpdate;
 import io.cptn.common.web.ListEntitiesParam;
 import io.cptn.mgmtsvc.dto.DestinationDto;
+import io.cptn.mgmtsvc.dto.ExportedAppDto;
 import io.cptn.mgmtsvc.mappers.DestinationMapper;
+import io.cptn.mgmtsvc.mappers.ExportedAppMapper;
 import io.cptn.mgmtsvc.services.DestinationService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +37,8 @@ public class DestinationController {
     private final DestinationService destinationService;
 
     private final DestinationMapper mapper;
+
+    private final ExportedAppMapper exportedAppMapper;
 
     @PostMapping("/api/destination")
     public ResponseEntity<DestinationDto> create(@Validated(OnCreate.class) @RequestBody DestinationDto destinationDto, BindingResult bindingResult) {
@@ -85,6 +91,22 @@ public class DestinationController {
             throw new BadRequestException("Unable to delete destination as it is being used by other entities");
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/api/destination/{id}/export")
+    public ResponseEntity<ExportedAppDto> downloadAsApp(@PathVariable UUID id) {
+        Destination destination = getById(id);
+
+        if (destination == null) {
+            throw new NotFoundException("Destination not found with the passed id");
+        }
+
+        App app = destinationService.exportAsApp(destination);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "attachment; filename=" + app.getKey() + ".json");
+
+        return ResponseEntity.ok().headers(httpHeaders).body(exportedAppMapper.toDto(app));
     }
 
     private Destination getById(UUID id) {

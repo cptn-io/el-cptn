@@ -30,4 +30,9 @@ public interface OutboundEventRepository extends JpaRepository<OutboundEvent, UU
     @Transactional
     @Query(value = "DELETE FROM outbound_queue WHERE outbound_queue.created_at < :createdBefore", nativeQuery = true)
     void purgeStaleDataInOutboundQueue(@Param("createdBefore") ZonedDateTime createdBefore);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE outbound_queue SET state = 'QUEUED' WHERE state = 'FAILED' AND pipeline_id = :pipeline", nativeQuery = true)
+    void requeueFailedEvents(@Param("pipeline") UUID pipelineId);
 }

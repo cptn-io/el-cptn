@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.lang.Assert;
+import lombok.NonNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,7 @@ public class JwtUtil implements InitializingBean {
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8)).compact();
     }
 
+
     public boolean validateToken(String token, UserPrincipal userPrincipal) {
         Claims claims = parseToken(token);
 
@@ -62,6 +64,19 @@ public class JwtUtil implements InitializingBean {
 
         return claimsJws.getBody();
     }
+
+    public String createJWT(@NonNull Map<String, Object> claims, Integer expiresInMinutes) {
+
+        Calendar exp = Calendar.getInstance();
+        exp.add(Calendar.MINUTE, expiresInMinutes);
+
+        return Jwts.builder().setClaims(claims)
+                .setIssuedAt(Calendar.getInstance().getTime())
+                .setExpiration(exp.getTime())
+                .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8)).compact();
+
+    }
+
 
     @Override
     public void afterPropertiesSet() {

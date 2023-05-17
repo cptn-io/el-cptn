@@ -1,18 +1,22 @@
 package io.cptn.mgmtsvc.controllers;
 
+import io.cptn.common.entities.App;
 import io.cptn.common.entities.Transformation;
 import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.exceptions.NotFoundException;
 import io.cptn.common.validation.OnCreate;
 import io.cptn.common.validation.OnUpdate;
 import io.cptn.common.web.ListEntitiesParam;
+import io.cptn.mgmtsvc.dto.ExportedAppDto;
 import io.cptn.mgmtsvc.dto.TransformationDto;
+import io.cptn.mgmtsvc.mappers.ExportedAppMapper;
 import io.cptn.mgmtsvc.mappers.TransformationMapper;
 import io.cptn.mgmtsvc.services.TransformationService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +37,8 @@ public class TransformationController {
     private final TransformationService transformationService;
 
     private final TransformationMapper mapper;
+
+    private final ExportedAppMapper exportedAppMapper;
 
 
     @PostMapping("/api/transformation")
@@ -87,6 +93,22 @@ public class TransformationController {
             throw new BadRequestException("Unable to delete transformation as it is being used by other entities");
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/api/transformation/{id}/export")
+    public ResponseEntity<ExportedAppDto> downloadAsApp(@PathVariable UUID id) {
+        Transformation transformation = getById(id);
+
+        if (transformation == null) {
+            throw new NotFoundException("Transformation not found with the passed id");
+        }
+
+        App app = transformationService.exportAsApp(transformation);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "attachment; filename=" + app.getKey() + ".json");
+
+        return ResponseEntity.ok().headers(httpHeaders).body(exportedAppMapper.toDto(app));
     }
 
     private Transformation getById(UUID id) {
