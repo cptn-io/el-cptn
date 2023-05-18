@@ -5,6 +5,7 @@ import io.cptn.common.entities.InboundWriteEvent;
 import io.cptn.common.entities.Source;
 import io.cptn.common.exceptions.NotFoundException;
 import io.cptn.common.exceptions.UnauthorizedException;
+import io.cptn.common.pojos.Header;
 import io.cptn.ingestionsvc.dto.InboundWriteEventDto;
 import io.cptn.ingestionsvc.mappers.InboundWriteEventMapper;
 import io.cptn.ingestionsvc.services.InboundWriteEventService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,7 +35,7 @@ public class InboundWriteEventController {
 
     private final InboundWriteEventMapper inboundEventMapper;
 
-    
+
     @PostMapping("/event/source/{sourceId}")
     public ResponseEntity<InboundWriteEventDto> createEvent(@PathVariable UUID sourceId,
                                                             @RequestBody JsonNode jsonPayload, HttpServletRequest request) {
@@ -54,11 +56,12 @@ public class InboundWriteEventController {
         event.setSource(source);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        source.getHeaders().stream().map(header -> {
-            httpHeaders.add(header.getKey(), header.getValue());
-            return header;
-        });
 
+        List<Header> headerList = Optional.ofNullable(source.getHeaders()).orElse(List.of());
+        headerList.forEach(header -> {
+            httpHeaders.add(header.getKey(), header.getValue());
+        });
+        
         return ResponseEntity.ok().headers(httpHeaders).body(convert(inboundEventService.create(event)));
     }
 
