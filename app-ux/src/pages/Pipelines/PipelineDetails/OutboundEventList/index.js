@@ -4,12 +4,11 @@ import Loading from "../../../../components/Loading";
 import useNotifications from "../../../../hooks/useNotifications";
 import get from 'lodash/get';
 import moment from "moment-timezone";
-import { IconBolt, IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconClockPause, IconFileDescription, IconRefresh, IconSend } from "@tabler/icons-react";
+import { IconBolt, IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconClockPause, IconFileDescription, IconRefresh } from "@tabler/icons-react";
 import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
-import { IconRefreshAlert } from "@tabler/icons-react";
 import ConfirmModal from "../../../../components/ConfirmModal";
 
 export const resolveState = (state) => {
