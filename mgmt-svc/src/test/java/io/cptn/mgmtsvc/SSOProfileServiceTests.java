@@ -17,8 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 /* @author: kc, created on 5/15/23 */
@@ -51,14 +50,14 @@ public class SSOProfileServiceTests {
     @Test
     public void getClientRegistrationNonOIDCTest() {
         ClientRegistration registration = spy.getClientRegistration("something");
-        assert registration == null;
+        assertNull(registration);
     }
 
     @Test
     public void noSSOProfileTest() {
         when(spy.getSSOProfile()).thenReturn(null);
         ClientRegistration registration = spy.getClientRegistration("oidc");
-        assert registration == null;
+        assertNull(registration);
     }
 
     @Test
@@ -68,7 +67,7 @@ public class SSOProfileServiceTests {
 
         when(spy.getSSOProfile()).thenReturn(ssoProfile);
         ClientRegistration registration = spy.getClientRegistration("oidc");
-        assert registration == null;
+        assertNull(registration);
     }
 
     @Test
@@ -97,9 +96,9 @@ public class SSOProfileServiceTests {
         assertEquals("secret", registration.getClientSecret());
         assertEquals("{baseUrl}/login/oauth2/code/oidc", registration.getRedirectUri());
 
-        assert registration.getScopes().contains("openid");
-        assert registration.getScopes().contains("email");
-        assert registration.getScopes().contains("profile");
+        assertTrue(registration.getScopes().contains("openid"));
+        assertTrue(registration.getScopes().contains("email"));
+        assertTrue(registration.getScopes().contains("profile"));
     }
 
 }

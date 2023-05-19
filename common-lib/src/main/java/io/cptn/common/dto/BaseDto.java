@@ -1,5 +1,9 @@
 package io.cptn.common.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import io.cptn.common.exceptions.BadRequestException;
+import io.cptn.common.helpers.JsonHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,4 +27,27 @@ public abstract class BaseDto implements Serializable {
     private String createdBy;
 
     private String updatedBy;
+
+    protected JsonNode deserializeJson(String serializablePayload) {
+        if (serializablePayload == null) {
+            return null;
+        }
+        try {
+            return JsonHelper.getMapper().readTree(serializablePayload);
+        } catch (JsonProcessingException e) {
+            throw new BadRequestException("Failed to deserialize payload");
+        }
+    }
+
+    public String serializeJson(JsonNode payload) {
+        if (payload == null) {
+            return null;
+        }
+
+        try {
+            return JsonHelper.getMapper().writeValueAsString(payload);
+        } catch (JsonProcessingException e) {
+            throw new BadRequestException("Failed to serialize payload");
+        }
+    }
 }

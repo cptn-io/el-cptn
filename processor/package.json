@@ -12,6 +12,7 @@
   "author": "KC",
   "license": "MIT",
   "dependencies": {
+    "geoip-lite": "^1.4.7",
     "lodash": "^4.17.21",
     "memfs": "^3.5.1",
     "pg": "^8.10.0",

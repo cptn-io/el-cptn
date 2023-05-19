@@ -2,7 +2,11 @@ package io.cptn.mgmtsvc.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
+import io.cptn.common.helpers.JsonHelper;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,6 +25,16 @@ public class DashboardMetricsDto implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<StatusMetricDto> outbound;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private JsonNode entities;
+    private String entities;
+
+    public JsonNode getEntities() {
+        return JsonHelper.deserializeJson(this.entities);
+    }
+
+    public void setEntities(JsonNode entities) {
+        this.entities = JsonHelper.serializeJson(entities);
+    }
 }

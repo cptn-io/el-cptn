@@ -163,11 +163,11 @@ public class OidcUserServiceTests {
         when(ssoProfileService.getSSOProfile()).thenReturn(ssoProfile);
 
         OidcUser principal = spy.loadUser(oidcUserRequest);
-        assert principal != null;
+        assertNotNull(principal);
         assertInstanceOf(UserPrincipal.class, principal);
 
         UserPrincipal userPrincipal = (UserPrincipal) principal;
-        assert userEmail.equals(userPrincipal.getUsername());
+        assertEquals(userEmail, userPrincipal.getUsername());
         assertTrue(userPrincipal.getUserDetails().isAccountNonLocked());
         assertTrue(userPrincipal.getUserDetails().isEnabled());
     }
@@ -187,11 +187,11 @@ public class OidcUserServiceTests {
 
 
         OidcUser principal = spy.loadUser(oidcUserRequest);
-        assert principal != null;
+        assertNotNull(principal);
         assertInstanceOf(UserPrincipal.class, principal);
 
         UserPrincipal userPrincipal = (UserPrincipal) principal;
-        assert userEmail.equals(userPrincipal.getUsername());
+        assertEquals(userEmail, userPrincipal.getUsername());
         assertTrue(userPrincipal.getUserDetails().isAccountNonLocked());
         assertTrue(userPrincipal.getUserDetails().isEnabled());
     }

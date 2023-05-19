@@ -1,12 +1,12 @@
 package io.cptn.common.listeners;
 
-import io.cptn.common.helpers.CryptoHelper;
-import io.cptn.common.helpers.JsonHelper;
-import io.cptn.common.pojos.ConfigItem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.cptn.common.helpers.CryptoHelper;
+import io.cptn.common.helpers.JsonHelper;
+import io.cptn.common.pojos.ConfigItem;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +20,11 @@ import java.util.List;
 @Slf4j
 @Converter(autoApply = true)
 public class ConfigConverter implements AttributeConverter<List<ConfigItem>, JsonNode> {
+
+    private static final String SECRET_ATTRIBUTE = "secret";
+
+    private static final String VALUE_ATTRIBUTE = "value";
+
     private final CryptoHelper cryptoHelper;
 
     public ConfigConverter(CryptoHelper cryptoHelper) {
@@ -35,9 +40,9 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItem>, Jso
             ArrayNode configArray = JsonHelper.getMapper().valueToTree(configItemDtos);
             for (int i = 0; i < configArray.size(); i++) {
                 JsonNode node = configArray.get(i);
-                if (node.has("secret") && node.get("secret").asBoolean() && node.has("value")) {
-                    String value = node.get("value").textValue();
-                    ((ObjectNode) node).put("value", cryptoHelper.encrypt(value));
+                if (node.has(SECRET_ATTRIBUTE) && node.get(SECRET_ATTRIBUTE).asBoolean() && node.has(VALUE_ATTRIBUTE)) {
+                    String value = node.get(VALUE_ATTRIBUTE).textValue();
+                    ((ObjectNode) node).put(VALUE_ATTRIBUTE, cryptoHelper.encrypt(value));
                 }
             }
             return configArray;
@@ -58,9 +63,9 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItem>, Jso
             ArrayNode configArray = (ArrayNode) jsonNode;
             for (int i = 0; i < configArray.size(); i++) {
                 JsonNode node = configArray.get(i);
-                if (node.has("secret") && node.get("secret").asBoolean() && node.has("value")) {
-                    String value = node.get("value").textValue();
-                    ((ObjectNode) node).put("value", cryptoHelper.decrypt(value));
+                if (node.has(SECRET_ATTRIBUTE) && node.get(SECRET_ATTRIBUTE).asBoolean() && node.has(VALUE_ATTRIBUTE)) {
+                    String value = node.get(VALUE_ATTRIBUTE).textValue();
+                    ((ObjectNode) node).put(VALUE_ATTRIBUTE, cryptoHelper.decrypt(value));
                 }
             }
 

@@ -66,8 +66,11 @@ public class PipelineSchedule extends BaseEntity {
 
         ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of(this.getTimeZone()));
         ExecutionTime executionTime = ExecutionTime.forCron(cron);
-        Optional<ZonedDateTime> nextRunAt = executionTime.nextExecution(timeNow);
+        Optional<ZonedDateTime> nextExecution = executionTime.nextExecution(timeNow);
         this.setLastRunAt(this.getNextRunAt());
-        this.setNextRunAt(nextRunAt.get());
+        if (nextExecution.isEmpty()) {
+            throw new RuntimeException("Unable to compute next run time. Ensure that the cron expression is valid");
+        }
+        this.setNextRunAt(nextExecution.get());
     }
 }

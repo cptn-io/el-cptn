@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PipelineService extends CommonService {
-
     private static final ObjectMapper mapper = new ObjectMapper();
 
     private final PipelineRepository pipelineRepository;
@@ -78,7 +77,6 @@ public class PipelineService extends CommonService {
 
     @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
     public Pipeline update(Pipeline pipeline) {
-        validateOnUpdate(pipeline);
         validateAndComputeRoute(pipeline);
         return save(pipeline);
     }
@@ -188,77 +186,46 @@ public class PipelineService extends CommonService {
 
     private void validateOnCreate(Pipeline pipeline) {
         List<FieldError> fieldErrorList = new ArrayList<>();
-        Source source = pipeline.getSource();
-        Destination destination = pipeline.getDestination();
-        if (source == null || source.getId() == null) {
-            fieldErrorList.add(new FieldError("pipeline", "source", "Source is required"));
-        } else {
-            Optional<Source> sourceOptional = sourceService.getById(source.getId());
 
-            if (sourceOptional.isEmpty()) {
-                fieldErrorList.add(new FieldError("pipeline", "source", "Source not found with provided ID"));
-            } else {
-                pipeline.setSource(sourceOptional.get());
-            }
-        }
-
-        if (destination == null || destination.getId() == null) {
-            fieldErrorList.add(new FieldError("pipeline", "destination", "Destination is required"));
-        } else {
-            Optional<Destination> destinationOptional = destinationService.getById(destination.getId());
-
-            if (destinationOptional.isEmpty()) {
-                fieldErrorList.add(new FieldError("pipeline", "destination", "Destination not found with provided" +
-                        " ID"));
-            } else {
-                pipeline.setDestination(destinationOptional.get());
-            }
-        }
+        validateSource(pipeline, fieldErrorList);
+        validateDestination(pipeline, fieldErrorList);
 
         if (fieldErrorList.size() > 0) {
             throw new BadRequestException("Invalid data", fieldErrorList);
         }
     }
 
-    private void validateOnUpdate(Pipeline pipeline) {
-        List<FieldError> fieldErrorList = new ArrayList<>();
+
+    private void validateSource(Pipeline pipeline, List<FieldError> fieldErrorList) {
         Source source = pipeline.getSource();
+        if (source == null || source.getId() == null) {
+            fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.SOURCE, "Source is required"));
+        } else {
+            Optional<Source> sourceOptional = sourceService.getById(source.getId());
+
+            if (sourceOptional.isEmpty()) {
+                fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.SOURCE, "Source not found with provided ID"));
+            } else {
+                pipeline.setSource(sourceOptional.get());
+            }
+        }
+    }
+
+    private void validateDestination(Pipeline pipeline, List<FieldError> fieldErrorList) {
         Destination destination = pipeline.getDestination();
 
-        if (source != null) {
-            if (source.getId() == null) {
-                fieldErrorList.add(new FieldError("pipeline", "source", "Source is required"));
-            } else {
-                Optional<Source> sourceOptional = sourceService.getById(source.getId());
+        if (destination == null || destination.getId() == null) {
+            fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.DESTINATION, "Destination is required"));
+        } else {
+            Optional<Destination> destinationOptional = destinationService.getById(destination.getId());
 
-                if (sourceOptional.isEmpty()) {
-                    fieldErrorList.add(new FieldError("pipeline", "source", "Source not found with provided ID"));
-                } else {
-                    pipeline.setSource(sourceOptional.get());
-                }
+            if (destinationOptional.isEmpty()) {
+                fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.DESTINATION, "Destination not found with provided" +
+                        " ID"));
+            } else {
+                pipeline.setDestination(destinationOptional.get());
             }
         }
-
-        if (destination != null) {
-            if (destination.getId() == null) {
-                fieldErrorList.add(new FieldError("pipeline", "destination", "Destination is required"));
-            } else {
-                Optional<Destination> destinationOptional = destinationService.getById(destination.getId());
-
-                if (destinationOptional.isEmpty()) {
-                    fieldErrorList.add(new FieldError("pipeline", "destination", "Destination not found with provided" +
-                            " ID"));
-                } else {
-                    pipeline.setDestination(destinationOptional.get());
-                }
-            }
-        }
-
-        if (fieldErrorList.size() > 0) {
-            throw new BadRequestException("Invalid data", fieldErrorList);
-        }
-
-
     }
 
     public void addTransformations(Pipeline pipeline, List<TransformationDto> transformationDtoList) {

@@ -62,17 +62,17 @@ public class PipelineScheduleService extends CommonService {
         Pipeline pipeline = pipelineSchedule.getPipeline();
 
         if (pipeline == null) {
-            errors.add(new FieldError("pipelineSchedule", "pipeline", "Pipeline is required"));
+            errors.add(new FieldError(CoreEntities.PIPELINE_SCHEDULE, CoreEntities.PIPELINE, "Pipeline is required"));
         } else {
             UUID pipelineId = pipeline.getId();
 
             Optional<Pipeline> pipelineOptional = pipelineService.getById(pipelineId);
             if (pipelineOptional.isEmpty()) {
-                errors.add(new FieldError("pipelineSchedule", "pipeline", "Pipeline not found with provided ID"));
+                errors.add(new FieldError(CoreEntities.PIPELINE_SCHEDULE, CoreEntities.PIPELINE, "Pipeline not found with provided ID"));
             } else {
                 pipeline = pipelineOptional.get();
                 if (!pipeline.getBatchProcess()) {
-                    errors.add(new FieldError("pipelineSchedule", "pipeline", "Pipeline does not support batch processing"));
+                    errors.add(new FieldError(CoreEntities.PIPELINE_SCHEDULE, CoreEntities.PIPELINE, "Pipeline does not support batch processing"));
                 }
 
             }

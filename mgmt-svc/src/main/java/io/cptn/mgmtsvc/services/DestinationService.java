@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DestinationService extends CommonService {
+    
     private final DestinationRepository destinationRepository;
     @PersistenceContext
     private final EntityManager entityManager;

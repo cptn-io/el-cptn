@@ -3,6 +3,7 @@ package io.cptn.common.entities;
 /* @author: kc, created on 3/9/23 */
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.cptn.common.helpers.JsonHelper;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,11 +15,9 @@ import org.hibernate.type.SqlTypes;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public abstract class BaseOutboundEvent extends BaseEntity {
 
-    @Getter
-    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private JsonNode payload;
+    private String payload;
 
     @Getter
     @Setter
@@ -42,4 +41,12 @@ public abstract class BaseOutboundEvent extends BaseEntity {
     @Setter
     @Column(length = 4000)
     private String consoleLog;
+
+    public JsonNode getPayload() {
+        return JsonHelper.deserializeJson(this.payload);
+    }
+
+    public void setPayload(JsonNode payload) {
+        this.payload = JsonHelper.serializeJson(payload);
+    }
 }

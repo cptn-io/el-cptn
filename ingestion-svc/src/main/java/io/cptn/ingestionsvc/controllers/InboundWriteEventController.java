@@ -51,6 +51,7 @@ public class InboundWriteEventController {
 
         verifySecurity(source, request);
 
+
         InboundWriteEvent event = new InboundWriteEvent();
         event.setPayload(jsonPayload);
         event.setSource(source);
@@ -61,7 +62,7 @@ public class InboundWriteEventController {
         headerList.forEach(header -> {
             httpHeaders.add(header.getKey(), header.getValue());
         });
-        
+
         return ResponseEntity.ok().headers(httpHeaders).body(convert(inboundEventService.create(event)));
     }
 

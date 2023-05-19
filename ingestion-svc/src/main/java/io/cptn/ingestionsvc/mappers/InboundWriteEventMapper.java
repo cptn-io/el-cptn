@@ -12,4 +12,5 @@ public interface InboundWriteEventMapper {
 
     @Mapping(source = "source.id", target = "sourceId")
     InboundWriteEventDto toDto(InboundWriteEvent event);
+
 }
