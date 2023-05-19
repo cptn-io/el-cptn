@@ -4,7 +4,7 @@ import Loading from "../../../../components/Loading";
 import useNotifications from "../../../../hooks/useNotifications";
 import get from 'lodash/get';
 import moment from "moment-timezone";
-import { IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconClockPause, IconFileDescription, IconRefresh, IconSend } from "@tabler/icons-react";
+import { IconBolt, IconCircleCheckFilled, IconCircleDashed, IconCircleXFilled, IconClockPause, IconFileDescription, IconRefresh, IconSend } from "@tabler/icons-react";
 import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
@@ -138,11 +138,11 @@ const OutboundEventList = ({ pipelineId }) => {
         <div className="mb-4 text-lg font-bold flex justify-between items-center">
             <span>Pipeline Events ({totalCount})</span>
             <span>
-                <button disabled={executing} className="btn btn-ghost gap-2" onClick={() => setShowRequeueAllConfirmation(true)}>
-                    <IconRefreshAlert size={24} />Requeue Failed
-                </button>
                 <button disabled={executing} className="btn btn-ghost gap-2" onClick={refreshList}>
                     <IconRefresh size={24} />Refresh
+                </button>
+                <button disabled={executing} className="btn btn-ghost gap-2" onClick={() => setShowRequeueAllConfirmation(true)}>
+                    <IconBolt size={24} />Requeue failed
                 </button>
             </span>
         </div>
@@ -165,7 +165,7 @@ const OutboundEventList = ({ pipelineId }) => {
                             <div className="btn-group">
                                 <button onClick={() => showDetails(event)} className="btn btn-sm btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
                                 <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
-                                <button disabled={executing || event.state === 'QUEUED'} onClick={() => requeueEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Requeue event"><IconSend size={24} /></button>
+                                <button disabled={executing || event.state === 'QUEUED'} onClick={() => requeueEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Requeue event"><IconBolt size={24} /></button>
                             </div>
                         </td>
                     </tr>)}
@@ -173,7 +173,7 @@ const OutboundEventList = ({ pipelineId }) => {
                 </tbody>
             </table>
         </div>
-        {showRequeueAllConfirmation && <ConfirmModal title="Requeue All Failed Events" message="Are you sure you want to requeue all failed events in this pipeline?" onConfirm={requeueAllFailedInPipeline} onCancel={() => setShowRequeueAllConfirmation(false)} />}
+        {showRequeueAllConfirmation && <ConfirmModal title="Requeue all failed events" message="Are you sure you want to requeue all failed events in this pipeline?" onConfirm={requeueAllFailedInPipeline} onCancel={() => setShowRequeueAllConfirmation(false)} />}
         {totalCount > 0 && <Pagination totalCount={totalCount} />}
         {event && <Modal title="Event Details" onCancel={() => setEvent(null)}>
             <EventDetails event={event} onCancel={() => setEvent(null)} onSendEvent={() => { }} />
