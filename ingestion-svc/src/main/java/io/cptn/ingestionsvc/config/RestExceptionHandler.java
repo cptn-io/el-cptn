@@ -18,6 +18,6 @@ public class RestExceptionHandler extends CommonExceptionHandler {
         if (log.isDebugEnabled()) {
             log.debug(ex.getMessage(), ex);
         }
-        return super.handleException(ex, request);
+        return super.handleException(ex);
     }
 }

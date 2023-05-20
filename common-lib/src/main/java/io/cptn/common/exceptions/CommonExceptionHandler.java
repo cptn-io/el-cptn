@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.*;
 
@@ -18,7 +17,7 @@ import java.util.*;
 @Slf4j
 public class CommonExceptionHandler {
 
-    public ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {
+    public ResponseEntity<AppError> handleException(Exception ex) {
         AppError error = new AppError("There was an error processing your request");
         if (ex instanceof HttpMessageNotReadableException) {
             error.setMessage("Unable to process the payload sent");
