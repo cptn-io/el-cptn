@@ -79,7 +79,7 @@ public class UserService extends CommonService {
             }
         }
 
-        if (fieldErrorList.size() > 0) {
+        if (!fieldErrorList.isEmpty()) {
             throw new BadRequestException("Invalid data", fieldErrorList);
         }
     }
