@@ -125,10 +125,8 @@ public class SecurityConfig {
     }
 
     private OAuth2AuthorizationRequestResolver authorizationRequestResolver() {
-        DefaultOAuth2AuthorizationRequestResolver authorizationRequestResolver =
-                new DefaultOAuth2AuthorizationRequestResolver(
-                        oidcClientRegistrationProvider, "/oauth2/authorization");
-        return authorizationRequestResolver;
+        return new DefaultOAuth2AuthorizationRequestResolver(
+                oidcClientRegistrationProvider, "/oauth2/authorization");
     }
 
     private AuthenticationFailureHandler failureHandler() {

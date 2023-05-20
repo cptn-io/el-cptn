@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 /* @author: kc, created on 5/15/23 */
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SSOProfileServiceTests {
+class SSOProfileServiceTests {
 
     private SSOProfileService spy;
 
@@ -48,20 +48,20 @@ public class SSOProfileServiceTests {
     }
 
     @Test
-    public void getClientRegistrationNonOIDCTest() {
+    void getClientRegistrationNonOIDCTest() {
         ClientRegistration registration = spy.getClientRegistration("something");
         assertNull(registration);
     }
 
     @Test
-    public void noSSOProfileTest() {
+    void noSSOProfileTest() {
         when(spy.getSSOProfile()).thenReturn(null);
         ClientRegistration registration = spy.getClientRegistration("oidc");
         assertNull(registration);
     }
 
     @Test
-    public void inactiveSSOProfileTest() {
+    void inactiveSSOProfileTest() {
         SSOProfile ssoProfile = new SSOProfile();
         ssoProfile.setActive(false);
 
@@ -71,7 +71,7 @@ public class SSOProfileServiceTests {
     }
 
     @Test
-    public void validSSOProfileTest() {
+    void validSSOProfileTest() {
         SSOProfile ssoProfile = new SSOProfile();
         ssoProfile.setActive(true);
         ssoProfile.setClientSecret("secret");

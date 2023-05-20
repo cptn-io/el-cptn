@@ -13,9 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /* @author: kc, created on 4/3/23 */
-public class CommonServiceTests {
-
-
+class CommonServiceTests {
     @Test
     void getPageableTest1() {
         FakeService service = new FakeService();

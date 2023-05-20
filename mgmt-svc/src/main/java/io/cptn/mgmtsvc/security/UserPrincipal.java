@@ -63,6 +63,15 @@ public class UserPrincipal extends User implements OidcUser {
         return this.getUsername();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof UserPrincipal && this.getUsername().equals(((UserPrincipal) obj).getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getUsername().hashCode();
+    }
 
     public static class UserBuilder {
 

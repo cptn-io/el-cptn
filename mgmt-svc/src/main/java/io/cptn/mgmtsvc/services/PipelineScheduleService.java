@@ -79,7 +79,7 @@ public class PipelineScheduleService extends CommonService {
         }
 
 
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             throw new BadRequestException("Invalid data", errors);
         }
     }

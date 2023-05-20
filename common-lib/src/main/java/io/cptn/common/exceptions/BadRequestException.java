@@ -9,10 +9,11 @@ import java.util.List;
 
 public class BadRequestException extends WebApplicationException {
     @Getter
-    private List<FieldError> fieldErrors;
+    private final List<FieldError> fieldErrors;
 
     public BadRequestException(String message) {
         super(message);
+        this.fieldErrors = List.of();
     }
 
     public BadRequestException(String message, List<FieldError> fieldErrors) {

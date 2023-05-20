@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /* @author: kc, created on 2/7/23 */
-public class ExceptionTests {
+class ExceptionTests {
 
     private RestExceptionHandler exceptionHandler = new RestExceptionHandler();
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();

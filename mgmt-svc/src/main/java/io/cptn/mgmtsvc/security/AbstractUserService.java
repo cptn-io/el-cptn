@@ -24,7 +24,7 @@ public abstract class AbstractUserService extends OidcUserService {
     }
 
 
-    protected UserDetails loginForPreSetup(UserService userService, Boolean isUserLoggingInWithPassword) {
+    protected UserDetails loginForPreSetup(UserService userService, boolean isUserLoggingInWithPassword) {
 
         //check for user record count
         if (isUserLoggingInWithPassword && userService.count() > 0) {

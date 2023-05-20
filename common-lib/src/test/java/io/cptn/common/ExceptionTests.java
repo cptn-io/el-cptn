@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /* @author: kc, created on 4/2/23 */
-public class ExceptionTests {
+class ExceptionTests {
 
     private CommonExceptionHandler exceptionHandler = new CommonExceptionHandler();
 
