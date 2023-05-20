@@ -38,12 +38,14 @@ public abstract class CommonService {
     }
 
     public static class CoreEntities {
+
         public static final String PIPELINE = "pipeline";
         public static final String SOURCE = "source";
         public static final String DESTINATION = "destination";
-
         public static final String TRANSFORMATION = "transformation";
-
         public static final String PIPELINE_SCHEDULE = "pipelineSchedule";
+
+        private CoreEntities() {
+        }
     }
 }
