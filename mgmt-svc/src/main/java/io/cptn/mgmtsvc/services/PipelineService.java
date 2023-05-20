@@ -235,11 +235,11 @@ public class PipelineService extends CommonService {
     }
 
     public void addTransformations(Pipeline pipeline, List<TransformationDto> transformationDtoList) {
-
-        transformationDtoList.stream().forEach(transformationDto -> {
+        pipeline.getTransformations().clear();
+        for (TransformationDto transformationDto : transformationDtoList) {
             Transformation transformation = getTransformation(transformationDto.getId());
             pipeline.addTransformation(transformation);
-        });
+        }
     }
 
     private Transformation getTransformation(UUID id) {
