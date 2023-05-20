@@ -113,10 +113,9 @@ async function getValidDestination(pipelineSteps) {
     return destination;
 }
 
-async function runDestinationSetup(destinationWrappedObject, config, setupLogs) {
+async function runDestinationSetup(destinationWrappedObject, config) {
     if (destinationWrappedObject.setup && typeof destinationWrappedObject.setup === 'function') {
         await destinationWrappedObject.setup(config);
-        setupLogs = logs.join('\n');
     }
 }
 
@@ -199,7 +198,9 @@ async function processEventsInPipeline(pipeline, events, responses) {
     const destinationWrappedObject = await getDestinationWrappedObject(vm, destination);
 
     let setupLogs = null;
-    await runDestinationSetup(destinationWrappedObject, destination.config, setupLogs);
+    await runDestinationSetup(destinationWrappedObject, destination.config);
+    setupLogs = logs.join('\n');
+
     //flush logs before and after event processing - setup and teardown logs are appended to event logs
     logs.length = 0;
     for (const event of events) {
