@@ -6,6 +6,7 @@ import com.cronutils.model.definition.CronDefinition;
 import com.cronutils.model.definition.CronDefinitionBuilder;
 import com.cronutils.model.time.ExecutionTime;
 import com.cronutils.parser.CronParser;
+import io.cptn.common.exceptions.WebApplicationException;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -66,8 +67,12 @@ public class PipelineSchedule extends BaseEntity {
 
         ZonedDateTime timeNow = ZonedDateTime.now(ZoneId.of(this.getTimeZone()));
         ExecutionTime executionTime = ExecutionTime.forCron(cron);
-        Optional<ZonedDateTime> nextRunAt = executionTime.nextExecution(timeNow);
+        Optional<ZonedDateTime> nextExecution = executionTime.nextExecution(timeNow);
         this.setLastRunAt(this.getNextRunAt());
-        this.setNextRunAt(nextRunAt.get());
+        if (nextExecution.isEmpty()) {
+            throw new WebApplicationException("Unable to compute next run time. Ensure that the cron expression is " +
+                    "valid");
+        }
+        this.setNextRunAt(nextExecution.get());
     }
 }

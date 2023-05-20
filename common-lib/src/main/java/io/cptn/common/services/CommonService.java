@@ -14,6 +14,8 @@ import java.security.NoSuchAlgorithmException;
 
 @Slf4j
 public abstract class CommonService {
+
+
     protected Pageable getPageable(ListEntitiesParam param) {
         return PageRequest.of(param.getPage(), param.getSize(),
                 Sort.by(param.isSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC, param.getSortBy()));
@@ -32,6 +34,18 @@ public abstract class CommonService {
         } catch (NoSuchAlgorithmException e) {
             log.error(e.getMessage(), e);
             throw new WebApplicationException("Error hashing value");
+        }
+    }
+
+    public static class CoreEntities {
+
+        public static final String PIPELINE = "pipeline";
+        public static final String SOURCE = "source";
+        public static final String DESTINATION = "destination";
+        public static final String TRANSFORMATION = "transformation";
+        public static final String PIPELINE_SCHEDULE = "pipelineSchedule";
+
+        private CoreEntities() {
         }
     }
 }

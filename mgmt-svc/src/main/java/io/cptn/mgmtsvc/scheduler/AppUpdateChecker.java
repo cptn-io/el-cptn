@@ -31,7 +31,7 @@ public class AppUpdateChecker {
     public void run() {
         try {
             LockAssert.assertLocked();
-            log.info("Running App Update Checker");
+            log.info("App update checker started");
 
             Long interval = getAppCheckInterval();
 
@@ -57,14 +57,6 @@ public class AppUpdateChecker {
 
             runAppUpdateCheck();
             setNextRotationTimestamp(System.currentTimeMillis() + interval);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-
-
-        try {
-            log.info("Running App Update Checker");
-            appSynchronizer.syncWithRepository();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -99,7 +91,7 @@ public class AppUpdateChecker {
     }
 
     private void runAppUpdateCheck() {
-        log.info("Running App Update Checker");
+        log.info("Syncing apps with repository");
         appSynchronizer.syncWithRepository();
     }
 }

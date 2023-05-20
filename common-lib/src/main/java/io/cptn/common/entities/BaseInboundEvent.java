@@ -1,6 +1,7 @@
 package io.cptn.common.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.cptn.common.helpers.JsonHelper;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,11 +19,9 @@ public abstract class BaseInboundEvent extends BaseEntity {
     @Serial
     private static final long serialVersionUID = -7945377903306555486L;
 
-    @Getter
-    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private JsonNode payload;
+    @Column(columnDefinition = "jsonb", name = "payload")
+    private String payload;
 
     @Getter
     @Setter
@@ -35,4 +34,13 @@ public abstract class BaseInboundEvent extends BaseEntity {
     @Getter
     @Column(length = 25)
     private State state = State.QUEUED;
+
+
+    public JsonNode getPayload() {
+        return JsonHelper.deserializeJson(this.payload);
+    }
+
+    public void setPayload(JsonNode payload) {
+        this.payload = JsonHelper.serializeJson(payload);
+    }
 }

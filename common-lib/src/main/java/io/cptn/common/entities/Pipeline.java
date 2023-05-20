@@ -2,6 +2,7 @@ package io.cptn.common.entities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Sets;
+import io.cptn.common.helpers.JsonHelper;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -60,17 +61,13 @@ public class Pipeline extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "transformation_id"))
     private Set<Transformation> transformations = Sets.newHashSet(); //use Set for many-to-many for optimized deletes
 
-    @Getter
-    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private JsonNode transformationMap;
+    private String transformationMap;
 
-    @Getter
-    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private JsonNode route;
+    private String route;
 
     @Getter
     @Setter
@@ -83,5 +80,21 @@ public class Pipeline extends BaseEntity {
 
     public void addTransformation(Transformation transformation) {
         transformations.add(transformation);
+    }
+
+    public JsonNode getTransformationMap() {
+        return JsonHelper.deserializeJson(this.transformationMap);
+    }
+
+    public void setTransformationMap(JsonNode transformationMap) {
+        this.transformationMap = JsonHelper.serializeJson(transformationMap);
+    }
+
+    public JsonNode getRoute() {
+        return JsonHelper.deserializeJson(this.route);
+    }
+
+    public void setRoute(JsonNode route) {
+        this.route = JsonHelper.serializeJson(route);
     }
 }

@@ -52,5 +52,5 @@ public abstract class BaseEntity implements Serializable {
     @Setter
     @Column(length = 36)
     private String updatedBy;
-    
+
 }
