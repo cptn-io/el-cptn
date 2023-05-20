@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
 import com.querydsl.core.types.Predicate;
 import io.cptn.common.entities.*;
 import io.cptn.common.exceptions.BadRequestException;
@@ -117,58 +115,63 @@ public class PipelineService extends CommonService {
         pipelineTriggerRepository.save(pipelineTrigger);
     }
 
-
     private void validateAndComputeRoute(Pipeline pipeline) {
-        boolean isValid = false;
-        JsonNode transformationMap = pipeline.getTransformationMap();
-        ArrayNode edgeMap = (ArrayNode) transformationMap.get("edgeMap");
-        Map<String, String> edges = getEdges(edgeMap);
-        //start from source and ensure that route exists to destination
+        Map<String, String> edges = extractEdgesFromPipeline(pipeline);
+
         String source = pipeline.getSource().getId().toString();
         String destination = pipeline.getDestination().getId().toString();
 
+        ArrayNode route = computeRoute(pipeline, source, destination, edges);
+
+        pipeline.setRoute(route);
+    }
+
+    private Map<String, String> extractEdgesFromPipeline(Pipeline pipeline) {
+        JsonNode transformationMap = pipeline.getTransformationMap();
+        ArrayNode edgeMap = (ArrayNode) transformationMap.get("edgeMap");
+
+        return getEdges(edgeMap);
+    }
+
+    private ArrayNode computeRoute(Pipeline pipeline, String source, String destination, Map<String, String> edges) {
         ArrayNode route = mapper.createArrayNode();
         String currentNode = source;
 
-        HashSet<String> visited = Sets.newHashSet();
-        Queue<String> queue = Queues.newArrayDeque();
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new ArrayDeque<>();
         queue.add(currentNode);
 
         while (!queue.isEmpty()) {
             currentNode = queue.poll();
 
-            if (!currentNode.equals(source) && !currentNode.equals(destination)) {
-                //check if the transformation is valid
+            if (currentNode.equals(destination)) {
+                return route;
+            }
+
+            if (!currentNode.equals(source)) {
                 Transformation currentTransformation = new Transformation();
                 currentTransformation.setId(UUID.fromString(currentNode));
+
                 if (!pipeline.getTransformations().contains(currentTransformation)) {
                     throw new BadRequestException("Transformation reference is missing for " + currentNode);
                 }
                 route.add(currentNode);
             }
 
-            if (currentNode.equals(destination)) {
-                isValid = true;
-                break;
-            }
-
-            //there should not be duplicate nodes or loops in the pipeline
             if (visited.contains(currentNode)) {
                 throw new BadRequestException("A loop exists in the pipeline. Loops are not supported.");
             }
             visited.add(currentNode);
+
             String nextNode = edges.get(currentNode);
+
             if (nextNode == null) {
-                break;
+                throw new BadRequestException("The pipeline does not have a valid route from Source to Destination.");
             }
             queue.add(nextNode);
         }
 
-        pipeline.setRoute(route);
-
-        if (!isValid) {
-            throw new BadRequestException("A valid route doesn't exist from Source to Destination");
-        }
+        throw new BadRequestException("A valid route does not exist from Source to Destination.");
     }
 
     private Map<String, String> getEdges(ArrayNode edgeMap) {
@@ -199,12 +202,14 @@ public class PipelineService extends CommonService {
     private void validateSource(Pipeline pipeline, List<FieldError> fieldErrorList) {
         Source source = pipeline.getSource();
         if (source == null || source.getId() == null) {
-            fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.SOURCE, "Source is required"));
+            fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.SOURCE,
+                    "Source is required"));
         } else {
             Optional<Source> sourceOptional = sourceService.getById(source.getId());
 
             if (sourceOptional.isEmpty()) {
-                fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.SOURCE, "Source not found with provided ID"));
+                fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.SOURCE,
+                        "Source not found with provided ID"));
             } else {
                 pipeline.setSource(sourceOptional.get());
             }
@@ -215,13 +220,14 @@ public class PipelineService extends CommonService {
         Destination destination = pipeline.getDestination();
 
         if (destination == null || destination.getId() == null) {
-            fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.DESTINATION, "Destination is required"));
+            fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.DESTINATION,
+                    "Destination is required"));
         } else {
             Optional<Destination> destinationOptional = destinationService.getById(destination.getId());
 
             if (destinationOptional.isEmpty()) {
-                fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.DESTINATION, "Destination not found with provided" +
-                        " ID"));
+                fieldErrorList.add(new FieldError(CoreEntities.PIPELINE, CoreEntities.DESTINATION,
+                        "Destination not found with provided ID"));
             } else {
                 pipeline.setDestination(destinationOptional.get());
             }

@@ -19,7 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class OAuthUtils {
 
-    private final String OAUTH_COOKIE_NAME = "oauth_req";
+    private static final String OAUTH_COOKIE_NAME = "oauth_req";
     private final JwtUtil jwtUtil;
 
     public void setCookie(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
