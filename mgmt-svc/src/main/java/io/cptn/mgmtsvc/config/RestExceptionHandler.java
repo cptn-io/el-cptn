@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 /* @author: kc, created on 2/7/23 */
 
@@ -14,11 +13,12 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class RestExceptionHandler extends CommonExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<AppError> handleException(Exception ex, WebRequest request) {
+    @Override
+    public final ResponseEntity<AppError> handleException(Exception ex) {
         if (log.isDebugEnabled()) {
             log.debug(ex.getMessage(), ex);
         }
-        return super.handleException(ex, request);
+        return super.handleException(ex);
     }
 
 

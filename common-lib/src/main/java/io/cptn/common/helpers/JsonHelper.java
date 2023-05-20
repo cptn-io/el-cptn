@@ -10,6 +10,9 @@ public class JsonHelper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private JsonHelper() {
+    }
+
     public static ObjectMapper getMapper() {
         return MAPPER;
     }

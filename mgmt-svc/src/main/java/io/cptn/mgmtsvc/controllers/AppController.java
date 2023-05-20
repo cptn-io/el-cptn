@@ -1,5 +1,6 @@
 package io.cptn.mgmtsvc.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cptn.common.entities.App;
 import io.cptn.common.entities.ScriptedStep;
@@ -48,7 +49,7 @@ public class AppController {
     }
 
     @PostMapping("/api/app/{id}/use")
-    public ResponseEntity useApp(@PathVariable UUID id) {
+    public ResponseEntity<JsonNode> useApp(@PathVariable UUID id) {
         App app = appService.getAppById(id);
         ScriptedStep createdStep = appService.useApp(app);
         ObjectNode responseNode = JsonHelper.getMapper().createObjectNode();
@@ -58,7 +59,7 @@ public class AppController {
     }
 
     @PostMapping("/api/app/sync")
-    public ResponseEntity syncApps() {
+    public ResponseEntity<Void> syncApps() {
         try {
             appSynchronizer.syncWithRepository();
         } catch (Exception e) {

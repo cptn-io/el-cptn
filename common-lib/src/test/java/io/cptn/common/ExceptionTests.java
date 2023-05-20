@@ -6,11 +6,9 @@ import io.cptn.common.exceptions.NotFoundException;
 import io.cptn.common.exceptions.WebApplicationException;
 import io.cptn.common.exceptions.models.AppError;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 
@@ -21,13 +19,11 @@ public class ExceptionTests {
 
     private CommonExceptionHandler exceptionHandler = new CommonExceptionHandler();
 
-    private WebRequest webRequestMock = Mockito.mock(WebRequest.class);
-
     @Test
     void badRequestExceptionTest() {
         BadRequestException exception = new BadRequestException("Invalid data");
 
-        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception, webRequestMock);
+        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(exception.getMessage(), responseEntity.getBody().getMessage());
@@ -42,7 +38,7 @@ public class ExceptionTests {
 
         BadRequestException exception = new BadRequestException("Invalid data", List.of(fieldError1, fieldError2,
                 fieldError3));
-        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception, webRequestMock);
+        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(exception.getMessage(), responseEntity.getBody().getMessage());
@@ -62,7 +58,7 @@ public class ExceptionTests {
     @Test
     void NotFoundExceptionTest() {
         NotFoundException exception = new NotFoundException("Record not found");
-        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception, webRequestMock);
+        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals(exception.getMessage(), responseEntity.getBody().getMessage());
@@ -72,7 +68,7 @@ public class ExceptionTests {
     @Test
     void WebApplicationExceptionTest() {
         WebApplicationException exception = new WebApplicationException("Unknown error");
-        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception, webRequestMock);
+        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
         assertEquals(exception.getMessage(), responseEntity.getBody().getMessage());
@@ -82,7 +78,7 @@ public class ExceptionTests {
     @Test
     void RuntimeExceptionTest() {
         RuntimeException exception = new RuntimeException("Unknown error");
-        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception, webRequestMock);
+        ResponseEntity<AppError> responseEntity = exceptionHandler.handleException(exception);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
         assertEquals("There was an error processing your request", responseEntity.getBody().getMessage());

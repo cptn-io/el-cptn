@@ -85,7 +85,7 @@ public class TransformationController {
 
 
     @DeleteMapping("/api/transformation/{id}")
-    public ResponseEntity delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         Transformation transformation = getById(id);
         try {
             transformationService.delete(transformation);

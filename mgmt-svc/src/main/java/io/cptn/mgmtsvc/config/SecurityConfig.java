@@ -45,8 +45,8 @@ import java.util.Set;
 public class SecurityConfig {
 
     public static final String AUTH_COOKIE = "jwt";
-    public static final Set PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health",
-            "/error", "/oauth2/**", "/favicon.ico", "/api/checksso");
+    public static final Set<String> PUBLIC_PAGES = Set.of("/api/csrf", "/logout", "/login", "/actuator/health",
+            "/error", "/oauth2/**", "/favicon.ico", "/api/checksso", "/unknownError");
 
     private final JwtUtil jwtUtil;
 
@@ -59,7 +59,6 @@ public class SecurityConfig {
     private final OIDCClientRegistrationProvider oidcClientRegistrationProvider;
 
     private final CookieBasedAuthorizationRequestRepository cookieBasedAuthorizationRequestRepository;
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -83,14 +82,10 @@ public class SecurityConfig {
 
         //setup authentication
         http.authorizeHttpRequests(authz -> authz
-                .requestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI())).permitAll()
-                .anyRequest().authenticated()
-        );
-
-        //auth exception handling
-        http.exceptionHandling()
-                .defaultAuthenticationEntryPointFor(customAuthenticationEntryPoint, new AntPathRequestMatcher("/api" +
-                        "/**"));
+                        .requestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI())).permitAll()
+                        .anyRequest().authenticated()
+                ).exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint);
 
         //form login config
         http.formLogin().loginPage("/signin").loginProcessingUrl("/login")
@@ -109,13 +104,12 @@ public class SecurityConfig {
                 .invalidateHttpSession(true).permitAll();
 
         //http basic auth config
-        http.httpBasic().authenticationEntryPoint(customAuthenticationEntryPoint).and().addFilterBefore(
+        http.httpBasic().and().addFilterBefore(
                 jwtRequestFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
 
         http.requestCache().requestCache(new CookieRequestCache());
-
 
         //SSO OAuth/OIDC auth config
         http.oauth2Login().loginPage("/signin")

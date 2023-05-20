@@ -94,7 +94,7 @@ public class UserController {
 
 
     @GetMapping("/mgmt/myprofile")
-    public ResponseEntity myProfile() {
+    public ResponseEntity<Void> myProfile() {
         UserPrincipal
                 principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

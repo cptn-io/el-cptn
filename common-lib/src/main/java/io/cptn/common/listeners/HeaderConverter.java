@@ -3,6 +3,7 @@ package io.cptn.common.listeners;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.helpers.JsonHelper;
 import io.cptn.common.pojos.Header;
 import jakarta.persistence.AttributeConverter;
@@ -28,7 +29,7 @@ public class HeaderConverter implements AttributeConverter<List<Header>, JsonNod
             return JsonHelper.getMapper().valueToTree(headers);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new BadRequestException("Unable to convert headers to JSON");
         }
     }
 
@@ -43,7 +44,7 @@ public class HeaderConverter implements AttributeConverter<List<Header>, JsonNod
             });
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new BadRequestException("Unable to convert headers from JSON config");
         }
     }
 }

@@ -67,8 +67,8 @@ public class SSOProfileController {
     public ResponseEntity<JsonNode> checkIfSSOIsEnabled() {
         SSOProfile ssoProfile = ssoProfileService.getSSOProfile();
 
-        ObjectMapper mapper = JsonHelper.getMapper();
-        ObjectNode node = mapper.createObjectNode();
+        ObjectMapper objectMapper = JsonHelper.getMapper();
+        ObjectNode node = objectMapper.createObjectNode();
         if (ssoProfile == null || !ssoProfile.getActive()) {
             node.put("ssoEnabled", false);
         } else {

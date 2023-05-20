@@ -84,7 +84,7 @@ public class SourceController {
     }
 
     @DeleteMapping("/api/source/{id}")
-    public ResponseEntity delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         Source source = getById(id);
         try {
             sourceService.delete(source);

@@ -34,7 +34,7 @@ public class SettingsController {
     }
 
     @DeleteMapping("/api/settings/{key}")
-    public ResponseEntity deleteSettings(@PathVariable String key) {
+    public ResponseEntity<Void> deleteSettings(@PathVariable String key) {
         settingsService.delete(key);
         return ResponseEntity.notFound().build();
     }
