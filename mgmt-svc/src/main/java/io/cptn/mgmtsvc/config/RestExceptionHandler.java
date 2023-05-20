@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class RestExceptionHandler extends CommonExceptionHandler {
     @ExceptionHandler(Exception.class)
+    @Override
     public final ResponseEntity<AppError> handleException(Exception ex) {
         if (log.isDebugEnabled()) {
             log.debug(ex.getMessage(), ex);

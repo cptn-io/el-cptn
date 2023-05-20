@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.helpers.CryptoHelper;
 import io.cptn.common.helpers.JsonHelper;
 import io.cptn.common.pojos.ConfigItem;
@@ -48,7 +49,7 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItem>, Jso
             return configArray;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new BadRequestException("Unable to convert config to JSON");
         }
     }
 
@@ -73,7 +74,7 @@ public class ConfigConverter implements AttributeConverter<List<ConfigItem>, Jso
             });
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new BadRequestException("Unable to convert config from JSON");
         }
     }
 }

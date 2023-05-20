@@ -1,5 +1,6 @@
 package io.cptn.mgmtsvc.security;
 
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.User;
@@ -39,7 +40,7 @@ public class UserPrincipal extends User implements OidcUser {
 
     @Override
     public Map<String, Object> getClaims() {
-        return null;
+        return Maps.newHashMap();
     }
 
     @Override
@@ -54,7 +55,7 @@ public class UserPrincipal extends User implements OidcUser {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return Maps.newHashMap();
     }
 
     @Override

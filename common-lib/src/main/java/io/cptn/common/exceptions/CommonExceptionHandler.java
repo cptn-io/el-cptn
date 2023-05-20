@@ -50,9 +50,9 @@ public class CommonExceptionHandler {
         if (violations != null) {
             violations.stream().forEach(e -> {
                 String fieldName = null;
-                Iterator propertyPathIterator = e.getPropertyPath().iterator();
+                Iterator<Path.Node> propertyPathIterator = e.getPropertyPath().iterator();
                 while (propertyPathIterator.hasNext()) {
-                    fieldName = ((Path.Node) propertyPathIterator.next()).getName();
+                    fieldName = propertyPathIterator.next().getName();
                 }
                 List<String> errorList = errorDetails.getOrDefault(fieldName, new ArrayList<>());
                 errorList.add(e.getMessage());

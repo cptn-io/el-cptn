@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
 import io.cptn.common.entities.App;
+import io.cptn.common.exceptions.WebApplicationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
@@ -87,7 +88,7 @@ public class AppSynchronizer {
             }
         } catch (IOException e) {
             log.error("Error deleting local repository: " + e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new WebApplicationException("Error cleaning up before syncing remote repository");
         }
         this.cloneRepository();
         List<App> appContent = this.processAppContent();

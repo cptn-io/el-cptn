@@ -117,14 +117,14 @@ public class PipelineController {
     }
 
     @DeleteMapping("/api/pipeline/{id}")
-    public ResponseEntity delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         Pipeline pipeline = getById(id);
         pipelineService.delete(pipeline);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/api/pipeline/{id}/run")
-    public ResponseEntity triggerPipelineRun(@PathVariable UUID id) {
+    public ResponseEntity<Void> triggerPipelineRun(@PathVariable UUID id) {
         Pipeline pipeline = getById(id);
         pipelineService.runPipeline(pipeline);
         return ResponseEntity.noContent().build();

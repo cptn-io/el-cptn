@@ -30,8 +30,8 @@ public class ListEntitiesParam {
             this.size = 15;
         }
 
-        String sortBy = Optional.ofNullable(request.getParameter("sortBy")).orElse("createdAt");
-        this.sortBy = sortBy.split(",");
+        String sortOrder = Optional.ofNullable(request.getParameter("sortBy")).orElse("createdAt");
+        this.sortBy = sortOrder.split(",");
         this.sortAsc = Boolean.parseBoolean(request.getParameter("asc"));
     }
 }

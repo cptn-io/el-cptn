@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class CustomOidcIdTokenDecoderFactory implements JwtDecoderFactory<ClientRegistration> {
 
-    private final Map<String, JwtDecoder> jwtDecoders = new ConcurrentHashMap();
+    private final Map<String, JwtDecoder> jwtDecoders = new ConcurrentHashMap<>();
 
     @Override
     public JwtDecoder createDecoder(ClientRegistration context) {

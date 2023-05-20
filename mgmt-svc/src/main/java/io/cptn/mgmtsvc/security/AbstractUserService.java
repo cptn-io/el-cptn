@@ -19,7 +19,7 @@ public abstract class AbstractUserService extends OidcUserService {
     @Value("${setup.default.password:bar}")
     private String defaultPassword;
 
-    public AbstractUserService(PasswordEncoder passwordEncoder) {
+    protected AbstractUserService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 

@@ -83,7 +83,7 @@ public class DestinationController {
 
 
     @DeleteMapping("/api/destination/{id}")
-    public ResponseEntity delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         Destination destination = getById(id);
         try {
             destinationService.delete(destination);
