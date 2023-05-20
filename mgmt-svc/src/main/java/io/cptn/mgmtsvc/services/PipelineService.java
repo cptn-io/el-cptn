@@ -193,7 +193,7 @@ public class PipelineService extends CommonService {
         validateSource(pipeline, fieldErrorList);
         validateDestination(pipeline, fieldErrorList);
 
-        if (fieldErrorList.size() > 0) {
+        if (!fieldErrorList.isEmpty()) {
             throw new BadRequestException("Invalid data", fieldErrorList);
         }
     }

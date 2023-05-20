@@ -21,7 +21,7 @@ import java.util.Map;
 @Component
 public class JwtUtil implements InitializingBean {
 
-    private final int JWT_TOKEN_VALIDITY_HOURS = 12;
+    private static final int JWT_TOKEN_VALIDITY_HOURS = 12;
 
     @Value("${cptn.security.jwt.secret}")
     private String secret;
@@ -41,15 +41,16 @@ public class JwtUtil implements InitializingBean {
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8)).compact();
     }
 
-
     public boolean validateToken(String token, UserPrincipal userPrincipal) {
         Claims claims = parseToken(token);
+        Date expirationDate = claims.getExpiration();
+        String userId = userPrincipal.getId();
+        String subject = claims.getSubject();
 
-        if (claims.getExpiration().before(new Date()) || !userPrincipal.getId().equals(claims.getSubject())) {
-            return false;
-        }
+        boolean isExpired = expirationDate.before(new Date());
+        boolean isSubjectValid = userId.equals(subject);
 
-        return true;
+        return !isExpired && isSubjectValid;
     }
 
     public String extractSubject(String token) {
