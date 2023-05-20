@@ -9,7 +9,10 @@ let shouldStop = false;
 
 const pollQueued = async () => {
     logger.info('Starting event processor');
-    while (!shouldStop) {
+    while (true) {
+        if (shouldStop) {
+            break;
+        }
         try {
             await processQueuedEvents();
         } catch (err) {
@@ -21,7 +24,11 @@ const pollQueued = async () => {
 
 const pollScheduled = async () => {
     logger.info('Starting scheduled event processor');
-    while (!shouldStop) {
+    while (true) {
+        if (shouldStop) {
+            break;
+        }
+
         try {
             await processScheduledEvents();
         } catch (err) {

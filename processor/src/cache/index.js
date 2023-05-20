@@ -16,7 +16,7 @@ async function getClient() {
 
 async function set(key, value) {
     const client = await getClient();
-    client.set(key, JSON.stringify(value));
+    await client.set(key, JSON.stringify(value));
 }
 
 async function get(key) {

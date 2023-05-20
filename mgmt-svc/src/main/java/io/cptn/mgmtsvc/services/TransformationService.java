@@ -15,7 +15,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 2/16/23 */
 @Service
@@ -43,7 +42,7 @@ public class TransformationService extends CommonService {
 
     public List<Transformation> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return transformationRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return transformationRepository.findAll(pageable).stream().toList();
     }
 
     public long count() {

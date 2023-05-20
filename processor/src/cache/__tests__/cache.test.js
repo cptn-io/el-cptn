@@ -54,7 +54,7 @@ describe('cache', () => {
     });
 
     test('should get null for a key if not cached', async () => {
-        const client = await getClient();
+        await getClient();
         const key = 'non-existent-key';
         const cached = await get(key);
 

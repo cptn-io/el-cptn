@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 2/7/23 */
 
@@ -54,7 +53,7 @@ public class SourceService extends CommonService {
 
     public List<Source> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return sourceRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return sourceRepository.findAll(pageable).stream().toList();
     }
 
     public long count() {

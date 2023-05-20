@@ -6,6 +6,7 @@ const { runStep, getDestinationWrappedObject } = require('./stepRunner');
 const Transformation = require('./entities/Transformation');
 const getVM = require('./vm');
 const logger = require('./logger');
+const { run } = require('jest');
 
 async function getTransformation(transformationId) {
     const key = `transformation-proc::${transformationId}`;
@@ -70,10 +71,7 @@ async function resolveSteps(pipeline) {
     return { steps, destination };
 }
 
-async function processEvent(event) {
-    const results = await processEventBatch(event.pipelineId, [event]);
-    return results[0];
-}
+
 
 function setupConsoleLogRedirection(vm, logs) {
     const logLevels = ['log', 'error', 'warn', 'info'];
@@ -97,115 +95,143 @@ function prependSetupLogs(setupLogs, logs) {
     return logs;
 }
 
-async function processEventBatch(pipelineId, events) {
-    const responses = [];
+async function checkPipeline(pipelineId) {
+    const pipeline = await getPipeline(pipelineId);
+    if (!pipeline) {
+        throw new Error("Pipeline not found");
+    } else if (!pipeline.active) {
+        throw new Error("Pipeline is not active");
+    }
+    return pipeline;
+}
+
+async function getValidDestination(pipelineSteps) {
+    const destination = pipelineSteps.destination;
+    if (!destination || !destination.active) {
+        throw new Error("Destination is inactive or invalid");
+    }
+    return destination;
+}
+
+async function runDestinationSetup(destinationWrappedObject, config, setupLogs) {
+    if (destinationWrappedObject.setup && typeof destinationWrappedObject.setup === 'function') {
+        await destinationWrappedObject.setup(config);
+        setupLogs = logs.join('\n');
+    }
+}
+
+async function runSteps(vm, pipelineSteps, evt, ctx) {
+    for (const step of pipelineSteps.steps) {
+        if (!step.active) {
+            continue;
+        }
+        evt = await runStep(vm, step, evt, ctx);
+        if (!evt) {
+            //transformations must return processed event for continuing with next steps
+            break;
+        }
+    }
+    return evt;
+}
+
+async function handleEvent(event, pipelineSteps, destinationWrappedObject, destination, logs, setupLogs) {
+    const { id, payload } = event;
+    let ctx = {}, evt = { ...payload }, consoleLogs;
     try {
-        const pipeline = await getPipeline(pipelineId);
-        if (!pipeline) {
-            throw "Pipeline not found";
-        } else if (!pipeline.active) {
-            throw "Pipeline is not active";
-        }
-        let logs = [];
+        evt = runSteps(vm, pipelineSteps, evt, ctx);
 
-        const vm = getVM();
-
-        setupConsoleLogRedirection(vm, logs);
-
-        const pipelineSteps = await resolveSteps(pipeline);
-
-        const destination = pipelineSteps.destination;
-        if (!destination || !destination.active) {
-            logger.error("Invalid destination");
-            throw "Destination is inactive or invalid";
-        }
-        const destinationWrappedObject = await getDestinationWrappedObject(vm, destination);
-
-        let setupLogs;
-        if (destinationWrappedObject.setup && typeof destinationWrappedObject.setup === 'function') {
-            await destinationWrappedObject.setup(destination.config);
-            setupLogs = logs.join('\n');
+        if (evt && destinationWrappedObject.execute && typeof destinationWrappedObject.execute === 'function') {
+            await destinationWrappedObject.execute(evt, ctx, destination.config);
         }
 
-        //flush logs before and after event processing - setup and teardown logs are appended to event logs
-        logs.length = 0;
 
-        for (const event of events) {
-            const { id, payload } = event;
-            let ctx = {}, evt = { ...payload }, consoleLogs;
-            try {
-                for (const step of pipelineSteps.steps) {
-                    if (!step.active) {
-                        continue;
-                    }
-                    evt = await runStep(vm, step, evt, ctx);
-                    if (!evt) {
-                        //transformations must return processed event for continuing with next steps
-                        break;
-                    }
-                }
+        prependSetupLogs(setupLogs, logs);
+        consoleLogs = logs.join('\n').substring(0, 3999);
 
-                if (evt && destinationWrappedObject.execute && typeof destinationWrappedObject.execute === 'function') {
-                    await destinationWrappedObject.execute(evt, ctx, destination.config);
-                }
-
-
-                prependSetupLogs(setupLogs, logs);
-                consoleLogs = logs.join('\n').substring(0, 3999);
-
-                responses.push({ id, success: true, consoleLogs });
-            } catch (error) {
-                if (typeof error === 'string') {
-                    logs.push(`ERROR: ${error} (error while processing event)`);
-                } else {
-                    logs.push(`ERROR: ${error.message} (error while processing event)`);
-                }
-                prependSetupLogs(setupLogs, logs);
-                consoleLogs = logs.join('\n').substring(0, 3999);
-
-                responses.push({ id, success: false, consoleLogs });
-            } finally {
-                logs.length = 0;
-            }
-        }
-
-        logs.length = 0;
-
-
-        if (destinationWrappedObject.teardown && typeof destinationWrappedObject.teardown === 'function') {
-            await destinationWrappedObject.teardown(destination.config);
-            if (logs.length > 0) {
-                //append teardown logs to all responses
-                for (const response of responses) {
-                    response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + logs.join('\n') : logs.join('\n')).substring(0, 3999);
-                }
-            }
-        }
+        return { id, success: true, consoleLogs };
     } catch (error) {
-        let currentError = error;
-        if (!currentError) {
-            currentError = new Error("Unknown error while processing event");
-        } else if (typeof currentError === 'string') {
-            currentError = new Error(currentError);
-        }
+        const errorMessage = typeof error === 'string' ? error : error.message;
+        logs.push(`ERROR: ${errorMessage} (error while processing event)`);
 
-        logger.error("Error while processing event", currentError, currentError.message);
+        prependSetupLogs(setupLogs, logs);
+        consoleLogs = logs.join('\n').substring(0, 3999);
 
-        if (responses.length === 0) {
-            //if no events were processed, return error for all events
-            for (const event of events) {
-                responses.push({ id: event.id, success: false, consoleLogs: currentError.message });
-            }
-        } else {
-            //if some events were processed, append error to all responses
+        return { id, success: false, consoleLogs };
+    } finally {
+        logs.length = 0;
+    }
+}
+
+async function runDestinationTeardown(destinationWrappedObject, config, logs, responses) {
+    if (destinationWrappedObject.teardown && typeof destinationWrappedObject.teardown === 'function') {
+        await destinationWrappedObject.teardown(config);
+        if (logs.length > 0) {
+            //append teardown logs to all responses
             for (const response of responses) {
-                response.success = false;
-                response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + currentError.message : currentError.message).substring(0, 3999);
+                response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + logs.join('\n') : logs.join('\n')).substring(0, 3999);
             }
         }
     }
+}
+
+function populateResponses(responses, events, currentError) {
+    if (responses.length === 0) {
+        //if no events were processed, return error for all events
+        for (const event of events) {
+            responses.push({ id: event.id, success: false, consoleLogs: currentError.message });
+        }
+    } else {
+        //if some events were processed, append error to all responses
+        for (const response of responses) {
+            response.success = false;
+            response.consoleLogs = (response.consoleLogs ? response.consoleLogs + "\n" + currentError.message : currentError.message).substring(0, 3999);
+        }
+    }
+}
+
+async function processEventsInPipeline(pipeline, events, responses) {
+    let logs = [];
+    const vm = getVM();
+    setupConsoleLogRedirection(vm, logs);
+
+    const pipelineSteps = await resolveSteps(pipeline);
+    const destination = await getValidDestination(pipelineSteps);
+    const destinationWrappedObject = await getDestinationWrappedObject(vm, destination);
+
+    let setupLogs = null;
+    await runDestinationSetup(destinationWrappedObject, destination.config, setupLogs);
+    //flush logs before and after event processing - setup and teardown logs are appended to event logs
+    logs.length = 0;
+    for (const event of events) {
+        const result = await handleEvent(event, pipelineSteps, destinationWrappedObject, destination, logs, setupLogs);
+        responses.push(result);
+    }
+
+    logs.length = 0;
+    await runDestinationTeardown(destinationWrappedObject, destination.config, logs, responses);
+}
+
+async function processEvent(event) {
+    const results = await processEventBatch(event.pipelineId, [event]);
+    return results[0];
+}
+
+async function processEventBatch(pipelineId, events) {
+    const responses = [];
+    try {
+        const pipeline = await checkPipeline(pipelineId);
+        await processEventsInPipeline(pipeline, events, responses);
+    } catch (error) {
+        let currentError = error || new Error("Unknown error while processing event");
+        if (typeof currentError === 'string') {
+            currentError = new Error(currentError);
+        }
+        logger.error("Error while processing event", currentError, currentError.message);
+        populateResponses(responses, events, currentError);
+    }
     return responses;
 }
+
 module.exports = {
     processEvent,
     processEventBatch
