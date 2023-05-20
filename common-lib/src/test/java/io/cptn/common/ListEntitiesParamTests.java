@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /* @author: kc, created on 4/3/23 */
 @ExtendWith(MockitoExtension.class)
-public class ListEntitiesParamTests {
+class ListEntitiesParamTests {
 
     @Mock
     HttpServletRequest request;

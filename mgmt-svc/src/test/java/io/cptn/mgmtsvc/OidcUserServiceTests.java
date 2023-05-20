@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 /* @author: kc, created on 5/15/23 */
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class OidcUserServiceTests {
+class OidcUserServiceTests {
 
     private final String DEMO_USER_EMAIL = "foo@example.com";
 
@@ -69,7 +69,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void noSubjectInClaimsTest() {
+    void noSubjectInClaimsTest() {
         when(oidcUser.getClaims()).thenReturn(new HashMap<>());
         assertThrows(UsernameNotFoundException.class, () -> {
             spy.loadUser(oidcUserRequest);
@@ -77,7 +77,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void demoUserNotAllowedForOIDCTest() {
+    void demoUserNotAllowedForOIDCTest() {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", DEMO_USER_EMAIL);
         when(oidcUser.getClaims()).thenReturn(claims);
@@ -88,7 +88,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void nonExistentUserWithNoSSOProfileTest() {
+    void nonExistentUserWithNoSSOProfileTest() {
 
         String userEmail = "nonexistant@gmail.com";
         Map<String, Object> claims = new HashMap<>();
@@ -103,7 +103,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void nonExistentUserWithInactiveSSOProfileTest() {
+    void nonExistentUserWithInactiveSSOProfileTest() {
 
         String userEmail = "nonexistant@gmail.com";
         Map<String, Object> claims = new HashMap<>();
@@ -121,7 +121,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void nonExistentUserWithNoUserCreationSSOProfileTest() {
+    void nonExistentUserWithNoUserCreationSSOProfileTest() {
 
         String userEmail = "nonexistant@gmail.com";
         Map<String, Object> claims = new HashMap<>();
@@ -140,7 +140,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void createUserAndReturnUserPrincipalTest() {
+    void createUserAndReturnUserPrincipalTest() {
 
         String userEmail = "nonexistant@gmail.com";
         Map<String, Object> claims = new HashMap<>();
@@ -173,7 +173,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void validUserAuthTest() {
+    void validUserAuthTest() {
         String userEmail = "currentUser@gmail.com";
 
         User user = getUser(userEmail);
@@ -197,7 +197,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void validUserLockedOutAuthTest() {
+    void validUserLockedOutAuthTest() {
         String userEmail = "currentUser@gmail.com";
 
         User user = getUser(userEmail);
@@ -216,7 +216,7 @@ public class OidcUserServiceTests {
     }
 
     @Test
-    public void validUserDisabledAuthTest() {
+    void validUserDisabledAuthTest() {
         String userEmail = "currentUser@gmail.com";
 
         User user = getUser(userEmail);

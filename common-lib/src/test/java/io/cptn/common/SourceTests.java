@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /* @author: kc, created on 2/7/23 */
-public class SourceTests {
-
-
+class SourceTests {
     @Test
     void setupKeysTest() {
         Source source = new Source();
