@@ -46,7 +46,8 @@ const SignIn = () => {
     }, []);
 
     const setToken = (e) => {
-        setCsrf(document.cookie.match(/XSRF-TOKEN=(.*)/)?.[1]);
+        const match = /XSRF-TOKEN=(.*)/.exec(document.cookie);
+        setCsrf(match?.[1]);
     }
     return <div className="w-4/5 mx-auto bg-base-300 rounded-lg overflow-hidden md:w-2/4 lg:w-1/4">
         <Helmet>

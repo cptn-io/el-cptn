@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 4/10/23 */
 @Service
@@ -49,7 +48,7 @@ public class UserService extends CommonService {
 
     public List<User> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return userRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return userRepository.findAll(pageable).stream().toList();
     }
 
     @CacheEvict(value = "users", key = "#user.id")

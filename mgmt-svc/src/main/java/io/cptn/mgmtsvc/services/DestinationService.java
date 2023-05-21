@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DestinationService extends CommonService {
-    
+
     private final DestinationRepository destinationRepository;
     @PersistenceContext
     private final EntityManager entityManager;
@@ -56,7 +56,7 @@ public class DestinationService extends CommonService {
 
     public List<DestinationView> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return destinationRepository.findAllProjectedBy(pageable).stream().collect(Collectors.toList());
+        return destinationRepository.findAllProjectedBy(pageable).stream().toList();
     }
 
     public long count() {

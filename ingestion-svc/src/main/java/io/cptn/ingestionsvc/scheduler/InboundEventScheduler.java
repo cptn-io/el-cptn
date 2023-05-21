@@ -35,11 +35,7 @@ public class InboundEventScheduler {
     @Transactional
     public void processRecords() {
         try (Stream<InboundEvent> eventStream = eventRepository.fetchEventsForProcessing()) {
-            eventStream.forEach(event -> {
-                forkJoinPool.submit(() -> {
-                    inboundEventProcessor.processEvent(event);
-                });
-            });
+            eventStream.forEach(event -> forkJoinPool.submit(() -> inboundEventProcessor.processEvent(event)));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

@@ -30,7 +30,7 @@ public class CronExpressionValidator implements ConstraintValidator<CronExpressi
             cron.validate();
             FieldExpression minutePart = cron.retrieve(CronFieldName.MINUTE).getExpression();
 
-            if (minutePart instanceof Always || (minutePart instanceof Every && ((Every) minutePart).getPeriod().getValue() < 5)) {
+            if (minutePart instanceof Always || (minutePart instanceof Every every && every.getPeriod().getValue() < 5)) {
                 throw new BadRequestException("Invalid cron expression. Minimum interval must be 5 minutes");
             }
         } catch (Exception e) {

@@ -69,10 +69,8 @@ public class SecurityConfig {
 
         //csrf config
         http.csrf((csrf) -> csrf
-                .ignoringRequestMatchers(request -> {
-                    //ignore csrf for public pages or non-browser clients
-                    return PUBLIC_PAGES.contains(request.getRequestURI()) || request.getHeader("Authorization") != null;
-                })
+                .ignoringRequestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI()) ||
+                        request.getHeader("Authorization") != null)
                 .csrfTokenRepository(tokenRepository)
                 .csrfTokenRequestHandler(requestHandler)
                 .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())

@@ -1,5 +1,5 @@
 import LeftNav from "..";
-import { fireEvent, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { MemoryRouter } from 'react-router-dom'
 
 jest.mock("react-router-dom", () => ({

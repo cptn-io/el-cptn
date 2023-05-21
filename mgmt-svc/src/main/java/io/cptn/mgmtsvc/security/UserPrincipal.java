@@ -65,7 +65,7 @@ public class UserPrincipal extends User implements OidcUser {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof UserPrincipal && this.getUsername().equals(((UserPrincipal) obj).getUsername());
+        return obj instanceof UserPrincipal principal && this.getUsername().equals(principal.getUsername());
     }
 
     @Override

@@ -45,7 +45,7 @@ public class InboundWriteEventController {
         }
 
         Source source = sourceOptional.get();
-        if (!source.getActive()) {
+        if (!Boolean.TRUE.equals(source.getActive())) {
             throw new NotFoundException("Source not active");
         }
 
@@ -59,17 +59,17 @@ public class InboundWriteEventController {
         HttpHeaders httpHeaders = new HttpHeaders();
 
         List<Header> headerList = Optional.ofNullable(source.getHeaders()).orElse(List.of());
-        headerList.forEach(header -> {
-            httpHeaders.add(header.getKey(), header.getValue());
-        });
+        headerList.forEach(header -> httpHeaders.add(header.getKey(), header.getValue()));
 
         return ResponseEntity.ok().headers(httpHeaders).body(convert(inboundEventService.create(event)));
     }
 
     public void verifySecurity(Source source, HttpServletRequest request) {
-        if (!source.getSecured()) {
+
+        if (Boolean.FALSE.equals(source.getSecured())) {
             return;
         }
+
         String authHeader = request.getHeader("Authorization");
         String token = request.getParameter("token");
         if (source.getPrimaryKey().equals(authHeader) || source.getPrimaryKey().equals(token)) {

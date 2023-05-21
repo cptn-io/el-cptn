@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 4/3/23 */
 @Service
@@ -28,12 +27,12 @@ public class InboundEventService extends CommonService {
 
     public List<InboundEvent> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return inboundEventRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return inboundEventRepository.findAll(pageable).stream().toList();
     }
 
     public List<InboundEvent> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
-        return inboundEventRepository.findAll(predicate, pageable).stream().collect(Collectors.toList());
+        return inboundEventRepository.findAll(predicate, pageable).stream().toList();
     }
 
     public Optional<InboundEvent> getById(UUID id) {

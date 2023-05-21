@@ -53,9 +53,7 @@ export default function App() {
     axios.defaults.xsrfCookieName = "XSRF-TOKEN"
     axios.defaults.xsrfHeaderName = "X-XSRF-TOKEN"
 
-    axios.get("/api/csrf").then((response) => {
-      //axios.defaults.headers.common['X-XSRF-TOKEN'] = response.data.token;
-    }).catch((error) => {
+    axios.get("/api/csrf").catch((error) => {
       window.location.href = "/signin?error=csrf";
     }).finally(() => {
       setLoading(false);

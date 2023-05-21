@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 4/25/23 */
 @Service
@@ -56,7 +55,7 @@ public class AppService extends CommonService {
     public List<App> getAll(ListEntitiesParam param) {
         Pageable pageable = PageRequest.of(param.getPage(), param.getSize(),
                 Sort.by(Sort.Direction.ASC, "orderIndex").and(Sort.by(Sort.Direction.DESC, "createdAt")));
-        return appRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return appRepository.findAll(pageable).stream().toList();
     }
 
     public long count() {

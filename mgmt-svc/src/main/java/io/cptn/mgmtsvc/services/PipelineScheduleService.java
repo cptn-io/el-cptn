@@ -71,7 +71,7 @@ public class PipelineScheduleService extends CommonService {
                 errors.add(new FieldError(CoreEntities.PIPELINE_SCHEDULE, CoreEntities.PIPELINE, "Pipeline not found with provided ID"));
             } else {
                 pipeline = pipelineOptional.get();
-                if (!pipeline.getBatchProcess()) {
+                if (!Boolean.TRUE.equals(pipeline.getBatchProcess())) {
                     errors.add(new FieldError(CoreEntities.PIPELINE_SCHEDULE, CoreEntities.PIPELINE, "Pipeline does not support batch processing"));
                 }
 

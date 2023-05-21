@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 3/7/23 */
 @Service
@@ -51,9 +50,9 @@ public class PipelineService extends CommonService {
         ObjectNode positions = mapper.createObjectNode();
 
         ObjectNode transformationMap = mapper.createObjectNode();
-        transformationMap.put("positions", positions);
-        transformationMap.put("edgeMap", edges);
-        transformationMap.put("route", mapper.createArrayNode());
+        transformationMap.putIfAbsent("positions", positions);
+        transformationMap.putIfAbsent("edgeMap", edges);
+        transformationMap.putIfAbsent("route", mapper.createArrayNode());
         pipeline.setTransformationMap(transformationMap);
         return save(pipeline);
     }
@@ -64,13 +63,13 @@ public class PipelineService extends CommonService {
 
     public List<Pipeline> getAll(ListEntitiesParam param) {
         Pageable pageable = getPageable(param);
-        return pipelineRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return pipelineRepository.findAll(pageable).stream().toList();
     }
 
     public List<Pipeline> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
 
-        return pipelineRepository.findAll(predicate, pageable).stream().collect(Collectors.toList());
+        return pipelineRepository.findAll(predicate, pageable).stream().toList();
     }
 
     @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
