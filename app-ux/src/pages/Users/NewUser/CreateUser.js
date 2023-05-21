@@ -4,8 +4,7 @@ import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
 import { renderErrors } from "../../../common/formHelpers";
 import { extractNameFromEmail } from "../helpers";
-import { IconEye } from "@tabler/icons-react";
-import { IconEyeOff } from "@tabler/icons-react";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
 
 const CreateUser = (props) => {
     const { onCancel, onSuccess, noShadow = false } = props;

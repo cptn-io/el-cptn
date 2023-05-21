@@ -34,9 +34,9 @@ public class EntityListener {
 
     private String getCurrentUser() {
         if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null
-                && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
+                && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails userDetails) {
 
-            return ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+            return userDetails.getUsername();
         } else {
             return "system";
         }

@@ -50,9 +50,9 @@ public class PipelineService extends CommonService {
         ObjectNode positions = mapper.createObjectNode();
 
         ObjectNode transformationMap = mapper.createObjectNode();
-        transformationMap.put("positions", positions);
-        transformationMap.put("edgeMap", edges);
-        transformationMap.put("route", mapper.createArrayNode());
+        transformationMap.putIfAbsent("positions", positions);
+        transformationMap.putIfAbsent("edgeMap", edges);
+        transformationMap.putIfAbsent("route", mapper.createArrayNode());
         pipeline.setTransformationMap(transformationMap);
         return save(pipeline);
     }

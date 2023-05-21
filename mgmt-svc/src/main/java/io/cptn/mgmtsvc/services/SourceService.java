@@ -26,7 +26,7 @@ public class SourceService extends CommonService {
     @CachePut(value = "sources", key = "#source.id")
     public Source create(Source source) {
 
-        if (source.getSecured()) {
+        if (Boolean.TRUE.equals(source.getSecured())) {
             source.setupNewKeys();
         }
         return sourceRepository.save(source);
@@ -39,7 +39,7 @@ public class SourceService extends CommonService {
 
     @CachePut(value = "sources", key = "#source.id")
     public Source update(Source source) {
-        if (source.getSecured() && !source.hasAnyKeysSetup()) {
+        if (Boolean.TRUE.equals(source.getSecured()) && !source.hasAnyKeysSetup()) {
             source.setupNewKeys();
         }
         return sourceRepository.save(source);

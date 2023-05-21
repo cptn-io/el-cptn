@@ -22,14 +22,14 @@ public class CommonExceptionHandler {
         if (ex instanceof HttpMessageNotReadableException) {
             error.setMessage("Unable to process the payload sent");
             return ResponseEntity.unprocessableEntity().body(error);
-        } else if (ex instanceof ConstraintViolationException) {
+        } else if (ex instanceof ConstraintViolationException constraintViolationException) {
             error.setMessage("Invalid data");
-            error.setFieldErrors(processConstraintViolations((ConstraintViolationException) ex));
+            error.setFieldErrors(processConstraintViolations(constraintViolationException));
             return ResponseEntity.badRequest().body(error);
         } else if (ex instanceof WebApplicationException) {
             error.setMessage(ex.getMessage());
-            if (ex instanceof BadRequestException) {
-                error.setFieldErrors(processFieldErrors((BadRequestException) ex));
+            if (ex instanceof BadRequestException badRequestException) {
+                error.setFieldErrors(processFieldErrors(badRequestException));
                 return ResponseEntity.badRequest().body(error);
             } else if (ex instanceof NotFoundException) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);

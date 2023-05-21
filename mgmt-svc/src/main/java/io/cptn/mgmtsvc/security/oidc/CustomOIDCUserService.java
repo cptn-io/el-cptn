@@ -61,7 +61,7 @@ public class CustomOIDCUserService extends AbstractUserService {
         if (user == null) {
 
             SSOProfile ssoProfile = ssoProfileService.getSSOProfile();
-            if (ssoProfile == null || !ssoProfile.getActive() || !ssoProfile.getEnableCreateUser()) {
+            if (ssoProfile == null || !Boolean.TRUE.equals(ssoProfile.getActive()) || !Boolean.TRUE.equals(ssoProfile.getEnableCreateUser())) {
                 throw new UsernameNotFoundException("User not found");
             }
 
