@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -57,7 +56,7 @@ public class PipelineController {
     public ResponseEntity<List<PipelineDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
         List<PipelineDto> sourceList = pipelineService.getAll(listParam).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
         long count = pipelineService.count(null);
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
     }
@@ -91,7 +90,7 @@ public class PipelineController {
 
 
         List<PipelineDto> sourceList = pipelineService.getAll(listParam, predicate).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
 
         long count = pipelineService.count(predicate);
 

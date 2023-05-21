@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 2/16/23 */
 @RestController
@@ -57,7 +56,7 @@ public class TransformationController {
     public ResponseEntity<List<TransformationDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
         List<TransformationDto> transformationDtoList = transformationService.getAll(listParam).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
         long count = transformationService.count();
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(transformationDtoList);
     }

@@ -23,7 +23,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 4/10/23 */
 @RestController
@@ -64,7 +63,7 @@ public class UserController {
 
 
         List<UserDto> userList = userService.getAll(listParam).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
         long count = userService.count();
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(userList);
 

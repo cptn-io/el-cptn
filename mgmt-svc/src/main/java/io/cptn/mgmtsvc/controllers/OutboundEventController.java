@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 4/4/23 */
 @RestController
@@ -40,7 +39,7 @@ public class OutboundEventController {
     public ResponseEntity<List<OutboundEventDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
         List<OutboundEventDto> outboundEventDtoList = outboundEventService.getAll(listParam).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
         long count = outboundEventService.count();
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(outboundEventDtoList);
     }
@@ -52,7 +51,7 @@ public class OutboundEventController {
         BooleanExpression predicate = QOutboundEvent.outboundEvent.pipeline().eq(new Pipeline(id));
 
         List<OutboundEventDto> outboundEventDtoList = outboundEventService.getAll(listParam, predicate).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
 
         long count = outboundEventService.count(predicate);
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(outboundEventDtoList);

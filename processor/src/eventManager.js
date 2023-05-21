@@ -42,7 +42,7 @@ async function processEvents(client, rows, batchMode = false) {
         statuses = await processEventBatch(pipelineId, events);
     }
 
-    statuses.forEach(async (eventStatus) => {
+    statuses.forEach((eventStatus) => {
         if (!eventStatus) {
             logger.error('eventStatus is invalid. Pipeline may stop processing');
         }

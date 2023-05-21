@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 2/7/23 */
 
@@ -56,7 +55,7 @@ public class SourceController {
     public ResponseEntity<List<SourceDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
         List<SourceDto> sourceList = sourceService.getAll(listParam).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
         long count = sourceService.count();
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
     }

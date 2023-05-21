@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 4/25/23 */
 @RestController
@@ -42,7 +41,7 @@ public class AppController {
     public ResponseEntity<List<AppDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
         List<AppDto> appList = appService.getAll(listParam).stream()
-                .map(this::convert).collect(Collectors.toList());
+                .map(this::convert).toList();
 
         long count = appService.count();
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(appList);

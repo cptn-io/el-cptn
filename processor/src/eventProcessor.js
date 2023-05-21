@@ -106,7 +106,7 @@ async function checkPipeline(pipelineId) {
 
 async function getValidDestination(pipelineSteps) {
     const destination = pipelineSteps.destination;
-    if (!destination || !destination.active) {
+    if (!destination?.active) {
         throw new Error("Destination is inactive or invalid");
     }
     return destination;

@@ -20,7 +20,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /* @author: kc, created on 2/16/23 */
 @Service
@@ -79,7 +78,7 @@ public class DestinationService extends CommonService {
             configItems = configItems.stream().map(configItem -> {
                 configItem.setValue("");
                 return configItem;
-            }).collect(Collectors.toList());
+            }).toList();
         } else {
             configItems = List.of();
         }
