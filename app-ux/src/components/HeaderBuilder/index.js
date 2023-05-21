@@ -35,7 +35,7 @@ const HeaderBuilder = (props) => {
 
     return <div>
         {headers.map((item, i) => {
-            return <div className="flex flex-wrap -mx-3 mb-3" key={i}>
+            return <div className="flex flex-wrap -mx-3 mb-3" key={item.key + item.value}>
                 <div className="w-1/2 md:w-2/5 px-3">
                     <input readOnly={readOnly} value={item.key} name="key" onChange={(e) => changeHeader(e, i)} className="input input-bordered w-full" type="text" placeholder="Key" />
                 </div>

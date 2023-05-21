@@ -26,11 +26,17 @@ const PipelineDetailsCard = (props) => {
     const [showSecondary, setShowSecondary] = useState(false);
 
     const copyToClipboard = (key, message) => {
-        navigator.clipboard.writeText(key)
-        addNotification({
-            message,
-            type: 'info'
-        })
+
+        navigator.clipboard.writeText(key).then(() => {
+            addNotification({
+                message,
+                type: 'info'
+            })
+        }).catch((error) => {
+            addNotification({
+                message: "Error writing to clipboard"
+            })
+        });
     }
 
     const saveChanges = (e) => {

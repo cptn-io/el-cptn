@@ -1,5 +1,5 @@
 export const renderErrors = (errors, field) => {
-    if (!errors || !errors.fieldErrors || !errors.fieldErrors[field] || errors.fieldErrors[field].length === 0) {
+    if (!errors?.fieldErrors?.[field] || errors.fieldErrors[field].length === 0) {
         return null;
     } else {
         return errors.fieldErrors[field].map(msg => <label key={`${msg}`} className="label">

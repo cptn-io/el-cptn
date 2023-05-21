@@ -25,11 +25,16 @@ const SSO = () => {
 
     const copyToClipboard = (e, key, message) => {
         e.preventDefault();
-        navigator.clipboard.writeText(key)
-        addNotification({
-            message,
-            type: 'info'
-        })
+        navigator.clipboard.writeText(key).then(() => {
+            addNotification({
+                message,
+                type: 'info'
+            })
+        }).catch((error) => {
+            addNotification({
+                message: "Error writing to clipboard"
+            })
+        });
     }
 
     useEffect(() => {
@@ -56,7 +61,7 @@ const SSO = () => {
         });
     }, [addNotification]);
 
-    const submit = async (e) => {
+    const submit = (e) => {
         e.preventDefault();
         clearErrors();
         setExecuting(true);
@@ -70,13 +75,12 @@ const SSO = () => {
             enableCreateUser
         };
 
-        axios.post('/api/ssoProfile', payload).then(response => {
+        axios.post('/api/ssoProfile', payload).then(() => {
             addNotification({
                 message: 'SSO configuration has been saved.',
                 type: 'success'
             });
         }).catch(err => {
-
             addNotification({
                 message: get(err, 'response.data.message', 'An error occurred while saving SSO Configuration'),
                 type: 'error'

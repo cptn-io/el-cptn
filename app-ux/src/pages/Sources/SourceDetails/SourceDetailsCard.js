@@ -29,11 +29,16 @@ const SourceDetailsCard = (props) => {
     const [headerChanges, setHeaderChanges] = useState(headers || []);
 
     const copyToClipboard = (key, message) => {
-        navigator.clipboard.writeText(key)
-        addNotification({
-            message,
-            type: 'info'
-        })
+        navigator.clipboard.writeText(key).then(() => {
+            addNotification({
+                message,
+                type: 'info'
+            })
+        }).catch((error) => {
+            addNotification({
+                message: "Error writing to clipboard"
+            })
+        });
     }
 
     useEffect(() => {
