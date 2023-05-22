@@ -68,7 +68,7 @@ public class SecurityConfig {
         CsrfTokenRequestHandler requestHandler = delegate::handle;
 
         //csrf config
-        http.csrf((csrf) -> csrf
+        http.csrf(csrf -> csrf
                 .ignoringRequestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI()) ||
                         request.getHeader("Authorization") != null)
                 .csrfTokenRepository(tokenRepository)
