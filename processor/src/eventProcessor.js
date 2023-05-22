@@ -120,7 +120,7 @@ async function runDestinationSetup(destinationWrappedObject, config) {
 
 async function runSteps(vm, pipelineSteps, evt, ctx) {
     for (const step of pipelineSteps.steps) {
-        if (!step.active) {
+        if (!step?.active) {
             continue;
         }
         evt = await runStep(vm, step, evt, ctx);
@@ -132,11 +132,11 @@ async function runSteps(vm, pipelineSteps, evt, ctx) {
     return evt;
 }
 
-async function handleEvent(event, pipelineSteps, destinationWrappedObject, destination, logs, setupLogs) {
+async function handleEvent(vm, event, pipelineSteps, destinationWrappedObject, destination, logs, setupLogs) {
     const { id, payload } = event;
     let ctx = {}, evt = { ...payload }, consoleLogs;
     try {
-        evt = runSteps(vm, pipelineSteps, evt, ctx);
+        evt = await runSteps(vm, pipelineSteps, evt, ctx);
 
         if (evt && destinationWrappedObject.execute && typeof destinationWrappedObject.execute === 'function') {
             await destinationWrappedObject.execute(evt, ctx, destination.config);
@@ -203,7 +203,7 @@ async function processEventsInPipeline(pipeline, events, responses) {
     //flush logs before and after event processing - setup and teardown logs are appended to event logs
     logs.length = 0;
     for (const event of events) {
-        const result = await handleEvent(event, pipelineSteps, destinationWrappedObject, destination, logs, setupLogs);
+        const result = await handleEvent(vm, event, pipelineSteps, destinationWrappedObject, destination, logs, setupLogs);
         responses.push(result);
     }
 
