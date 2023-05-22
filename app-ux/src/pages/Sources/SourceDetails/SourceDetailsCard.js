@@ -1,5 +1,5 @@
 import { IconCheck, IconClipboard, IconEye, IconEyeOff, IconX } from '@tabler/icons-react';
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";
 import keys from 'lodash/keys';
@@ -13,6 +13,7 @@ import axios from 'axios';
 import ConfirmModal from '../../../components/ConfirmModal';
 import { useNavigate } from 'react-router-dom';
 import HeaderBuilder from '../../../components/HeaderBuilder';
+import cloneDeep from 'lodash/cloneDeep';
 
 const SourceDetailsCard = (props) => {
     const { data: { id, name, secured, active, primaryKey, secondaryKey, headers }, onUpdate = () => { }, readOnly = false } = props;
@@ -26,7 +27,7 @@ const SourceDetailsCard = (props) => {
     const [executing, setExecuting] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [headerChanges, setHeaderChanges] = useState(headers || []);
+    const [headerChanges, setHeaderChanges] = useState(headers ? cloneDeep(headers) : []);
 
     const copyToClipboard = (key, message) => {
         navigator.clipboard.writeText(key).then(() => {
@@ -124,71 +125,25 @@ const SourceDetailsCard = (props) => {
     const cancelChanges = (e) => {
         e.preventDefault();
         setChanges({});
+        setHeaderChanges(headers ? cloneDeep(headers) : []);
         setEditMode(false);
     }
 
     const cancelDialog = useCallback(() => {
         setShowConfirmation(false)
-    }, [])
+    }, []);
 
-    return <div className="card bg-base-100 mb-4">
-        <div className="card-body p-4">
-            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Source Details</div>
-            <div className="form-control w-full">
-                <label className="label">
-                    <span className="label-text">Source Name</span>
-                </label>
-                {editMode ? <Fragment><input type="text" placeholder="Provide a name for the Source" defaultValue={name}
-                    className="input input-bordered w-full"
-                    onChange={e => setChanges(current => ({
-                        ...current,
-                        name: e.target.value
-                    }))} />
-                    {renderErrors(error, 'name')}</Fragment> : <div className="p-1 text-lg">{name}</div>}
+    const renderCommonDetails = () => {
+        return <><div className="form-control w-full">
+            <label className="label">
+                <span className="label-text">Event URL</span>
+            </label>
+            <div className="p-1 break-all">{`${window.location.origin}/event/source/${id}`}
+                <button title="Copy to Clipboard" className="ml-2 btn btn-ghost btn-xs"
+                    onClick={() => copyToClipboard(`${window.location.origin}/event/source/${id}`, "URL has been copied to Clipboard")}>
+                    <IconClipboard size={16} /></button>
             </div>
-            <div className="form-control w-full">
-                <label className="label">
-                    <span className="label-text">Response Headers</span>
-                </label>
-                <HeaderBuilder headers={headerChanges} setHeaders={setHeaderChanges} readOnly={!editMode} />
-                {renderErrors(error, 'headers')}
-            </div>
-            <div className="flex">
-                <div className="form-control w-6/12">
-                    <label className="label">
-                        <span className="label-text">Secured</span>
-                    </label>
-                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${secured ? 'toggle-success' : ''}`} defaultChecked={secured}
-                        onChange={e => setChanges(current => ({
-                            ...current,
-                            secured: e.target.checked
-                        }))} />
-                        {renderErrors(error, 'secured')}</Fragment> :
-                        <div className="p-1">{secured ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>}
-                </div>
-                <div className="form-control w-6/12">
-                    <label className="label">
-                        <span className="label-text">Active</span>
-                    </label>
-                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${(changes.active || active) ? 'toggle-success' : ''}`} defaultChecked={active}
-                        onChange={e => setChanges(current => ({
-                            ...current,
-                            active: e.target.checked
-                        }))} />
-                        {renderErrors(error, 'active')}</Fragment> :
-                        <div className="p-1">{active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>}
-                </div>
-            </div>
-            <div className="form-control w-full">
-                <label className="label">
-                    <span className="label-text">Event URL</span>
-                </label>
-                <div className="p-1 break-all">{`${window.location.origin}/event/source/${id}`}
-                    <button title="Copy to Clipboard" className="ml-2 btn btn-ghost btn-xs"
-                        onClick={() => copyToClipboard(`${window.location.origin}/event/source/${id}`, "URL has been copied to Clipboard")}>
-                        <IconClipboard size={16} /></button>
-                </div>
-            </div>
+        </div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Primary key</span>
@@ -220,18 +175,115 @@ const SourceDetailsCard = (props) => {
                     </div>
                         : <div>Disabled</div>}
                 </div>
+            </div></>
+    };
+
+    const renderEditableForm = () => {
+        return <>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Source Name</span>
+                </label>
+                <input type="text" placeholder="Provide a name for the Source" defaultValue={name}
+                    className="input input-bordered w-full"
+                    onChange={e => setChanges(current => ({
+                        ...current,
+                        name: e.target.value
+                    }))} />
+                {renderErrors(error, 'name')}
             </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Response Headers</span>
+                </label>
+                <HeaderBuilder headers={headerChanges} setHeaders={setHeaderChanges} readOnly={false} />
+                {renderErrors(error, 'headers')}
+            </div>
+            <div className="flex">
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Secured</span>
+                    </label>
+                    <input type="checkbox" className={`toggle toggle-lg ${secured ? 'toggle-success' : ''}`} defaultChecked={secured}
+                        onChange={e => setChanges(current => ({
+                            ...current,
+                            secured: e.target.checked
+                        }))} />
+                    {renderErrors(error, 'secured')}
+                </div>
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Active</span>
+                    </label>
+                    <input type="checkbox" className={`toggle toggle-lg ${(changes.active || active) ? 'toggle-success' : ''}`} defaultChecked={active}
+                        onChange={e => setChanges(current => ({
+                            ...current,
+                            active: e.target.checked
+                        }))} />
+                    {renderErrors(error, 'active')}
+                </div>
+            </div>
+            {renderCommonDetails()}
             {!readOnly && <div className="card-actions mt-2 justify-between">
-                <div>{editMode && <button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button>}</div>
+                <div><button className="btn btn-error" type="button" disabled={executing} onClick={() => setShowDeleteConfirmation(true)}>Delete</button></div>
                 <div className="flex justify-end">
-                    {!editMode && <button disabled={!secured || executing} className="btn btn-warning mr-2"
-                        onClick={() => setShowConfirmation(true)}>Rotate keys</button>}
-                    {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit Source</button>}
-                    {editMode && <button className="btn mr-2" onClick={cancelChanges}>Cancel</button>}
-                    {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                        Changes</button>}
+
+                    <button className="btn mr-2" onClick={cancelChanges}>Cancel</button>
+                    <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
+                        Changes</button>
                 </div>
             </div>}
+
+        </>
+    }
+
+    const renderReadOnlyForm = () => {
+
+        return <>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Source Name</span>
+                </label>
+                <div className="p-1 text-lg">{name}</div>
+            </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Response Headers</span>
+                </label>
+                <HeaderBuilder headers={headerChanges} setHeaders={setHeaderChanges} readOnly={true} />
+            </div>
+            <div className="flex">
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Secured</span>
+                    </label>
+
+                    <div className="p-1">{secured ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>
+                </div>
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Active</span>
+                    </label>
+
+                    <div className="p-1">{active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>
+                </div>
+            </div>
+            {renderCommonDetails()}
+            {!readOnly && <div className="card-actions mt-2 justify-between">
+                <div></div>
+                <div className="flex justify-end">
+                    <button disabled={!secured || executing} className="btn btn-warning mr-2"
+                        onClick={() => setShowConfirmation(true)}>Rotate keys</button>
+                    <button className="btn" onClick={() => setEditMode(true)}>Edit Source</button>
+                </div>
+            </div>}
+        </>
+    }
+
+    return <div className="card bg-base-100 mb-4">
+        <div className="card-body p-4">
+            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Source Details</div>
+            {editMode ? renderEditableForm() : renderReadOnlyForm()}
         </div>
         {showConfirmation && <ConfirmModal title="Are you sure?"
             message="This destination will generate a new primary key and sets current primary key as secondary key. The current secondary key will no longer work once the keys are rotated. This destination cannot be reversed once confirmed."

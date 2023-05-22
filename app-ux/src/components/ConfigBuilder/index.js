@@ -47,7 +47,7 @@ const ConfigBuilder = (props) => {
 
     return <div>
         {config.map((item, i) => {
-            return <div className="flex flex-wrap -mx-3 mb-3" key={item.key + item.value}>
+            return <div className="flex flex-wrap -mx-3 mb-3" key={i}>
                 <div className="w-1/2 md:w-2/5 px-3">
                     <input readOnly={readOnly} value={item.key} name="key" onChange={(e) => changeConfig(e, i)} className="input input-bordered w-full" type="text" placeholder="Key" />
                 </div>

@@ -15,6 +15,7 @@ import filter from 'lodash/filter';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../../../components/ConfirmModal';
 import Modal from '../../../components/Modal';
+import cloneDeep from 'lodash/cloneDeep';
 
 const DestinationDetailsCard = (props) => {
     const { data: { id, name, script, active, config }, onUpdate = () => { }, readOnly = false } = props;
@@ -25,7 +26,7 @@ const DestinationDetailsCard = (props) => {
     const [error, setError] = useState({ message: null, details: [] });
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
-    const [configChanges, setConfigChanges] = useState(config);
+    const [configChanges, setConfigChanges] = useState(config ? cloneDeep(config) : []);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [expandEditor, setExpandEditor] = useState(false);
 
@@ -114,6 +115,7 @@ const DestinationDetailsCard = (props) => {
     const cancelChanges = (e) => {
         e.preventDefault();
         setChanges({});
+        setConfigChanges(config ? cloneDeep(config) : []);
         setEditMode(false);
     }
 
