@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";
 import keys from 'lodash/keys';
@@ -19,7 +19,9 @@ const UserDetailsCard = (props) => {
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
 
-
+    const clearErrors = () => {
+        setError({ message: null, details: [] });
+    }
 
     const saveChanges = (e) => {
         e.preventDefault();
@@ -29,6 +31,7 @@ const UserDetailsCard = (props) => {
             setEditMode(false);
             return;
         }
+        clearErrors();
         setExecuting(true);
         axios.put(`/api/user/${id}`, payload).then(response => {
             onUpdate(response.data);
@@ -53,72 +56,70 @@ const UserDetailsCard = (props) => {
     const cancelChanges = (e) => {
         e.preventDefault();
         setChanges({});
+        clearErrors();
         setEditMode(false);
     }
 
-    return <div className="card bg-base-100 mb-4">
-        <div className="card-body p-0">
-            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">User Details</div>
+    const renderEditableForm = () => {
+        return <>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Email Address</span>
                 </label>
-                {editMode ? <Fragment><input autoComplete="email" type="email" placeholder="Email address" defaultValue={email}
+                <input autoComplete="email" type="email" placeholder="Email address" defaultValue={email}
                     className="input input-bordered w-full"
                     onChange={e => setChanges(current => ({
                         ...current,
                         email: e.target.value
                     }))} />
-                    {renderErrors(error, 'email')}</Fragment> : <div className="p-1 text-lg">{email}</div>}
+                {renderErrors(error, 'email')}
             </div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">First Name</span>
                 </label>
-                {editMode ? <Fragment><input autoComplete="given-name" type="text" placeholder="First Name" defaultValue={firstName}
+                <input autoComplete="given-name" type="text" placeholder="First Name" defaultValue={firstName}
                     className="input input-bordered w-full"
                     onChange={e => setChanges(current => ({
                         ...current,
                         firstName: e.target.value
                     }))} />
-                    {renderErrors(error, 'firstName')}</Fragment> : <div className="p-1 text-lg">{firstName}</div>}
+                {renderErrors(error, 'firstName')}
             </div>
             <div className="form-control w-full">
                 <label className="label">
                     <span className="label-text">Last Name</span>
                 </label>
-                {editMode ? <Fragment><input type="text" autoComplete="family-name" placeholder="Last Name" defaultValue={lastName}
+                <input type="text" autoComplete="family-name" placeholder="Last Name" defaultValue={lastName}
                     className="input input-bordered w-full"
                     onChange={e => setChanges(current => ({
                         ...current,
                         lastName: e.target.value
                     }))} />
-                    {renderErrors(error, 'lastName')}</Fragment> : <div className="p-1 text-lg">{lastName}</div>}
+                {renderErrors(error, 'lastName')}
             </div>
             <div className="flex">
                 <div className="form-control w-6/12">
                     <label className="label">
                         <span className="label-text">Disabled</span>
                     </label>
-                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${(changes.disabled || disabled) ? 'toggle-error' : ''}`} defaultChecked={disabled}
+                    <input type="checkbox" className={`toggle toggle-lg ${(changes.disabled || disabled) ? 'toggle-error' : ''}`} defaultChecked={disabled}
                         onChange={e => setChanges(current => ({
                             ...current,
                             disabled: e.target.checked
                         }))} />
-                        {renderErrors(error, 'disabled')}</Fragment> :
-                        <div className="p-1">{disabled ? 'Yes' : 'No'}</div>}
+                    {renderErrors(error, 'disabled')}
                 </div>
                 <div className="form-control w-6/12">
                     <label className="label">
                         <span className="label-text">Locked Out</span>
                     </label>
-                    {editMode ? <Fragment><input type="checkbox" className={`toggle toggle-lg ${(changes.lockedOut || lockedOut) ? 'toggle-error' : ''}`} defaultChecked={lockedOut}
+                    <input type="checkbox" className={`toggle toggle-lg ${(changes.lockedOut || lockedOut) ? 'toggle-error' : ''}`} defaultChecked={lockedOut}
                         onChange={e => setChanges(current => ({
                             ...current,
                             lockedOut: e.target.checked
                         }))} />
-                        {renderErrors(error, 'lockedOut')}</Fragment> :
-                        <div className="p-1">{lockedOut ? 'Yes' : 'No'}</div>}
+                    {renderErrors(error, 'lockedOut')}
                 </div>
             </div>
             <div className="form-control w-full">
@@ -129,11 +130,65 @@ const UserDetailsCard = (props) => {
             </div>
 
             <div className="card-actions justify-end">
-                {!editMode && <button className="btn" onClick={() => setEditMode(true)}>Edit User</button>}
-                {editMode && <button className="btn" onClick={cancelChanges}>Cancel</button>}
-                {editMode && <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
-                    Changes</button>}
+                <button className="btn" onClick={cancelChanges}>Cancel</button>
+                <button className="btn btn-primary" disabled={executing} onClick={saveChanges}>Save
+                    Changes</button>
             </div>
+        </>
+    }
+
+    const renderReadOnlyForm = () => {
+        return <><div className="form-control w-full">
+            <label className="label">
+                <span className="label-text">Email Address</span>
+            </label>
+            <div className="p-1 text-lg">{email}</div>
+        </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">First Name</span>
+                </label>
+                <div className="p-1 text-lg">{firstName}</div>
+            </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Last Name</span>
+                </label>
+                <div className="p-1 text-lg">{lastName}</div>
+            </div>
+            <div className="flex">
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Disabled</span>
+                    </label>
+
+                    <div className="p-1">{disabled ? 'Yes' : 'No'}</div>
+                </div>
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Locked Out</span>
+                    </label>
+
+                    <div className="p-1">{lockedOut ? 'Yes' : 'No'}</div>
+                </div>
+            </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Last Login at</span>
+                </label>
+                <div className="p-1 text-lg">{lastLoginAt ? moment(lastLoginAt).format('LLLL') : 'Never'}</div>
+            </div>
+
+            <div className="card-actions justify-end">
+                <button className="btn" onClick={() => setEditMode(true)}>Edit User</button>
+            </div>
+        </>
+    }
+
+    return <div className="card bg-base-100 mb-4">
+        <div className="card-body p-0">
+            <div className="text-lg font-bold bg-base-200 p-2 rounded-md">User Details</div>
+            {editMode ? renderEditableForm() : renderReadOnlyForm()}
         </div>
     </div>
 }
