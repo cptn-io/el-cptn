@@ -3,7 +3,6 @@
 cptn.io is an open source platform that helps develop and deploy integrations and data pipelines quickly and easily.
 
 ![GitHub](https://img.shields.io/github/license/cptn-io/el-cptn)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cptn-io_el-cptn&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cptn-io_el-cptn)
 [![](https://dcbadge.vercel.app/api/server/ZGFyzhDjZ2)](https://discord.gg/ZGFyzhDjZ2)
 
 ## Getting Started
