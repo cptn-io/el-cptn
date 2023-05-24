@@ -14,7 +14,7 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "memfs": "^3.5.1",
-    "pg": "^8.10.0",
+    "pg": "^8.11.0",
     "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.18",
     "winston": "^3.8.2",
