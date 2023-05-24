@@ -64,7 +64,7 @@ public class InboundWriteEventController {
         return ResponseEntity.ok().headers(httpHeaders).body(convert(inboundEventService.create(event)));
     }
 
-    public void verifySecurity(Source source, HttpServletRequest request) {
+    private void verifySecurity(Source source, HttpServletRequest request) {
 
         if (Boolean.FALSE.equals(source.getSecured())) {
             return;
