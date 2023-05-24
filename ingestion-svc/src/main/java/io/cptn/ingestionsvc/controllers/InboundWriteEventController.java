@@ -1,6 +1,7 @@
 package io.cptn.ingestionsvc.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.cptn.common.entities.InboundWriteEvent;
 import io.cptn.common.entities.Source;
 import io.cptn.common.exceptions.NotFoundException;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,6 +41,47 @@ public class InboundWriteEventController {
     @PostMapping("/event/source/{sourceId}")
     public ResponseEntity<InboundWriteEventDto> createEvent(@PathVariable UUID sourceId,
                                                             @RequestBody JsonNode jsonPayload, HttpServletRequest request) {
+        Source source = getSource(sourceId);
+
+        verifySecurity(source, request);
+
+
+        InboundWriteEvent event = new InboundWriteEvent();
+        event.setPayload(jsonPayload);
+        event.setSource(source);
+
+        HttpHeaders httpHeaders = getHttpHeaders(source);
+
+        return ResponseEntity.ok().headers(httpHeaders).body(convert(inboundEventService.create(event)));
+    }
+
+    @PostMapping("/event/source/{sourceId}/batch")
+    public ResponseEntity<List<InboundWriteEventDto>> processEventBatch(@PathVariable UUID sourceId,
+                                                                        @RequestBody ArrayNode jsonArray,
+                                                                        HttpServletRequest request) {
+        Source source = getSource(sourceId);
+        verifySecurity(source, request);
+
+        List<InboundWriteEventDto> eventDtoList = new ArrayList<>();
+        jsonArray.forEach(jsonNode -> {
+            InboundWriteEvent event = new InboundWriteEvent();
+            event.setPayload(jsonNode);
+            event.setSource(source);
+            eventDtoList.add(convert(inboundEventService.create(event)));
+        });
+        HttpHeaders httpHeaders = getHttpHeaders(source);
+
+        return ResponseEntity.ok().headers(httpHeaders).body(eventDtoList);
+    }
+
+    private HttpHeaders getHttpHeaders(Source source) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        List<Header> headerList = Optional.ofNullable(source.getHeaders()).orElse(List.of());
+        headerList.forEach(header -> httpHeaders.add(header.getKey(), header.getValue()));
+        return httpHeaders;
+    }
+
+    private Source getSource(UUID sourceId) {
         Optional<Source> sourceOptional = sourceService.getById(sourceId);
         if (sourceOptional.isEmpty()) {
             throw new NotFoundException("Source not found with passed ID");
@@ -48,20 +91,7 @@ public class InboundWriteEventController {
         if (!Boolean.TRUE.equals(source.getActive())) {
             throw new NotFoundException("Source not active");
         }
-
-        verifySecurity(source, request);
-
-
-        InboundWriteEvent event = new InboundWriteEvent();
-        event.setPayload(jsonPayload);
-        event.setSource(source);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-
-        List<Header> headerList = Optional.ofNullable(source.getHeaders()).orElse(List.of());
-        headerList.forEach(header -> httpHeaders.add(header.getKey(), header.getValue()));
-
-        return ResponseEntity.ok().headers(httpHeaders).body(convert(inboundEventService.create(event)));
+        return source;
     }
 
     private void verifySecurity(Source source, HttpServletRequest request) {

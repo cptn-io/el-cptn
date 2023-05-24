@@ -1,7 +1,7 @@
 package io.cptn.ingestionsvc;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cptn.common.entities.InboundWriteEvent;
 import io.cptn.common.entities.Source;
@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,7 +38,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class InboundEventControllerTests {
+class InboundEventControllerBatchTests {
 
     private InboundWriteEventController controller;
     @Mock
@@ -61,7 +62,7 @@ class InboundEventControllerTests {
 
         UUID sourceId = UUID.randomUUID();
         when(sourceService.getById(sourceId)).thenReturn(Optional.empty());
-        NotFoundException e = assertThrows(NotFoundException.class, () -> controller.createEvent(sourceId, null, null));
+        NotFoundException e = assertThrows(NotFoundException.class, () -> controller.processEventBatch(sourceId, null, null));
         assertEquals("Source not found with passed ID", e.getMessage());
     }
 
@@ -71,7 +72,7 @@ class InboundEventControllerTests {
         source.setActive(false);
         UUID sourceId = source.getId();
         when(sourceService.getById(sourceId)).thenReturn(Optional.of(source));
-        NotFoundException e = assertThrows(NotFoundException.class, () -> controller.createEvent(sourceId, null, null));
+        NotFoundException e = assertThrows(NotFoundException.class, () -> controller.processEventBatch(sourceId, null, null));
         assertEquals("Source not active", e.getMessage());
     }
 
@@ -84,7 +85,7 @@ class InboundEventControllerTests {
         when(request.getHeader("Authorization")).thenReturn("invalid");
         when(request.getParameter("token")).thenReturn(null);
 
-        UnauthorizedException e = assertThrows(UnauthorizedException.class, () -> controller.createEvent(sourceId,
+        UnauthorizedException e = assertThrows(UnauthorizedException.class, () -> controller.processEventBatch(sourceId,
                 null, request));
         assertEquals("Unauthorized", e.getMessage());
     }
@@ -98,7 +99,7 @@ class InboundEventControllerTests {
         when(request.getHeader("Authorization")).thenReturn(null);
         when(request.getParameter("token")).thenReturn("invalid");
 
-        UnauthorizedException e = assertThrows(UnauthorizedException.class, () -> controller.createEvent(sourceId,
+        UnauthorizedException e = assertThrows(UnauthorizedException.class, () -> controller.processEventBatch(sourceId,
                 null, request));
         assertEquals("Unauthorized", e.getMessage());
     }
@@ -108,15 +109,14 @@ class InboundEventControllerTests {
         Source source = getSource();
         source.setSecured(false);
         UUID sourceId = source.getId();
-        JsonNode payload = getPayload();
+        ArrayNode arrayEvents = getPayload();
 
         when(sourceService.getById(sourceId)).thenReturn(Optional.of(source));
 
-        UUID eventId = setupEvent(payload, source);
+        List<UUID> eventIds = setupEvents(arrayEvents, source);
 
-        ResponseEntity<InboundWriteEventDto> response = controller.createEvent(sourceId, payload, request);
-
-        performAssertions(response, sourceId, eventId);
+        ResponseEntity<List<InboundWriteEventDto>> response = controller.processEventBatch(sourceId, arrayEvents, request);
+        performAssertions(response, sourceId, eventIds);
     }
 
     @Test
@@ -126,23 +126,23 @@ class InboundEventControllerTests {
         source.setupNewKeys();
 
         UUID sourceId = source.getId();
-        JsonNode payload = getPayload();
+        ArrayNode arrayEvents = getPayload();
 
         when(sourceService.getById(sourceId)).thenReturn(Optional.of(source));
         when(request.getHeader("Authorization")).thenReturn(source.getPrimaryKey());
 
-        UUID eventId = setupEvent(payload, source);
+
+        List<UUID> eventIds = setupEvents(arrayEvents, source);
 
         //try with primary key
-        ResponseEntity<InboundWriteEventDto> response = controller.createEvent(sourceId, payload, request);
+        ResponseEntity<List<InboundWriteEventDto>> response = controller.processEventBatch(sourceId, arrayEvents, request);
+        performAssertions(response, sourceId, eventIds);
 
-        performAssertions(response, sourceId, eventId);
 
         //try with secondary key
         when(request.getHeader("Authorization")).thenReturn(source.getSecondaryKey());
-        response = controller.createEvent(sourceId, payload, request);
-
-        performAssertions(response, sourceId, eventId);
+        response = controller.processEventBatch(sourceId, arrayEvents, request);
+        performAssertions(response, sourceId, eventIds);
     }
 
     @Test
@@ -152,48 +152,62 @@ class InboundEventControllerTests {
         source.setupNewKeys();
 
         UUID sourceId = source.getId();
-        JsonNode payload = getPayload();
+        ArrayNode arrayEvents = getPayload();
 
         when(sourceService.getById(sourceId)).thenReturn(Optional.of(source));
         when(request.getHeader("Authorization")).thenReturn(null);
         when(request.getParameter("token")).thenReturn(source.getPrimaryKey());
 
-        UUID eventId = setupEvent(payload, source);
+        List<UUID> eventIds = setupEvents(arrayEvents, source);
 
-        //try with primary key
-        ResponseEntity<InboundWriteEventDto> response = controller.createEvent(sourceId, payload, request);
+        //try with primary key as token
+        ResponseEntity<List<InboundWriteEventDto>> response = controller.processEventBatch(sourceId, arrayEvents, request);
+        performAssertions(response, sourceId, eventIds);
 
-        performAssertions(response, sourceId, eventId);
-
-        //try with secondary key
+        //try with secondary key as token
         when(request.getParameter("token")).thenReturn(source.getSecondaryKey());
-        response = controller.createEvent(sourceId, payload, request);
-
-        performAssertions(response, sourceId, eventId);
+        response = controller.processEventBatch(sourceId, arrayEvents, request);
+        performAssertions(response, sourceId, eventIds);
     }
 
-    private void performAssertions(ResponseEntity<InboundWriteEventDto> response, UUID sourceId, UUID eventId) {
+    private void performAssertions(ResponseEntity<List<InboundWriteEventDto>> response, UUID sourceId, List<UUID> eventIds) {
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals(sourceId, response.getBody().getSourceId());
-        assertEquals(eventId, response.getBody().getId());
+        assertEquals(2, response.getBody().size());
+        assertEquals(sourceId, response.getBody().get(0).getSourceId());
+        assertEquals(eventIds.get(0), response.getBody().get(0).getId());
+        assertEquals(sourceId, response.getBody().get(1).getSourceId());
+        assertEquals(eventIds.get(1), response.getBody().get(1).getId());
+
         assertEquals(List.of("bar-value"), response.getHeaders().get("x-foo"));
     }
 
-    private UUID setupEvent(JsonNode payload, Source source) {
-        InboundWriteEvent event = new InboundWriteEvent();
-        event.setPayload(payload);
-        event.setSource(source);
+    private List<UUID> setupEvents(ArrayNode arrayEvents, Source source) {
+        List<InboundWriteEvent> inboundEvents = new ArrayList<>();
+        List<UUID> eventIds = new ArrayList<>();
 
-        UUID eventId = UUID.randomUUID();
-        when(inboundWriteEventService.create(event)).thenAnswer(
-                invocation -> {
-                    InboundWriteEvent e = invocation.getArgument(0);
-                    e.setId(eventId);
-                    return e;
-                }
-        );
-        return eventId;
+        arrayEvents.forEach(payload -> {
+            InboundWriteEvent event = new InboundWriteEvent();
+            event.setPayload(payload);
+            event.setSource(source);
+            inboundEvents.add(event);
+        });
+
+        for (int i = 0; i < inboundEvents.size(); i++) {
+            InboundWriteEvent event = inboundEvents.get(i);
+            UUID eventId = UUID.randomUUID();
+            eventIds.add(eventId);
+
+            when(inboundWriteEventService.create(event)).thenAnswer(
+                    invocation -> {
+                        InboundWriteEvent e = invocation.getArgument(0);
+                        e.setId(eventId);
+                        return e;
+                    }
+            );
+        }
+        return eventIds;
     }
+
 
     private Source getSource() {
         Header header = new Header();
@@ -208,11 +222,19 @@ class InboundEventControllerTests {
         return source;
     }
 
-    private JsonNode getPayload() {
+    private ArrayNode getPayload() {
         ObjectMapper objectMapper = JsonHelper.getMapper();
-        ObjectNode objectNode = objectMapper.createObjectNode();
-        objectNode.put("foo", "bar");
+        ArrayNode objectArray = objectMapper.createArrayNode();
 
-        return objectNode;
+        ObjectNode objectNode1 = objectMapper.createObjectNode();
+        objectNode1.put("foo", "bar");
+
+        ObjectNode objectNode2 = objectMapper.createObjectNode();
+        objectNode2.put("bar", "baz");
+
+        objectArray.add(objectNode1);
+        objectArray.add(objectNode2);
+
+        return objectArray;
     }
 }

@@ -21,6 +21,7 @@ public abstract class BaseInboundEvent extends BaseEntity {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb", name = "payload")
+    @EqualsAndHashCode.Include
     private String payload;
 
     @Getter
