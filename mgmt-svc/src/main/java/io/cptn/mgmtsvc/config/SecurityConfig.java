@@ -118,9 +118,9 @@ public class SecurityConfig {
                 .authorizationEndpoint(subconfig -> {
                     subconfig.authorizationRequestResolver(authorizationRequestResolver());
                     subconfig.authorizationRequestRepository(cookieBasedAuthorizationRequestRepository);
-                }).userInfoEndpoint(userInfoEndpointConfig -> {
-                    userInfoEndpointConfig.oidcUserService(customOIDCUserService);
-                }).failureHandler(failureHandler())
+                }).userInfoEndpoint(userInfoEndpointConfig ->
+                        userInfoEndpointConfig.oidcUserService(customOIDCUserService)
+                ).failureHandler(failureHandler())
                 .successHandler(successHandler()).permitAll()
         );
 
