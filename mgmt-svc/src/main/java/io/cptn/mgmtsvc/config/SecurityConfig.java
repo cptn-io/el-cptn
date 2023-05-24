@@ -76,47 +76,53 @@ public class SecurityConfig {
                 .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
         );
         //session management
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         //setup authentication
         http.authorizeHttpRequests(authz -> authz
-                        .requestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI())).permitAll()
-                        .anyRequest().authenticated()
-                ).exceptionHandling()
-                .authenticationEntryPoint(customAuthenticationEntryPoint);
+                .requestMatchers(request -> PUBLIC_PAGES.contains(request.getRequestURI())).permitAll()
+                .anyRequest().authenticated()
+        ).exceptionHandling(customizer -> customizer.authenticationEntryPoint(customAuthenticationEntryPoint));
 
         //form login config
-        http.formLogin().loginPage("/signin").loginProcessingUrl("/login")
+        http.formLogin(customizer -> customizer.loginPage("/signin").loginProcessingUrl("/login")
                 .defaultSuccessUrl("/app", true)
                 .successHandler(successHandler())
-                .failureHandler(failureHandler());
+                .failureHandler(failureHandler())
+        );
 
         //form logout config
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+        http.logout(customizer -> customizer.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .logoutSuccessHandler((request, response, authentication) -> {
                     String reason = Optional.ofNullable(request.getParameter("reason")).orElse("user");
                     response.sendRedirect("/signin?logout=" + reason);
                 })
                 .deleteCookies("JSESSIONID", "XSRF-TOKEN", AUTH_COOKIE)
                 .clearAuthentication(true)
-                .invalidateHttpSession(true).permitAll();
+                .invalidateHttpSession(true).permitAll()
+        );
+
 
         //http basic auth config
-        http.httpBasic().and().addFilterBefore(
+        http.httpBasic(customizer -> customizer.authenticationEntryPoint(customAuthenticationEntryPoint));
+
+        http.addFilterBefore(
                 jwtRequestFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
 
-        http.requestCache().requestCache(new CookieRequestCache());
+        http.requestCache(customizer -> customizer.requestCache(new CookieRequestCache()));
 
         //SSO OAuth/OIDC auth config
-        http.oauth2Login().loginPage("/signin")
+        http.oauth2Login(customizer -> customizer.loginPage("/signin")
                 .authorizationEndpoint(subconfig -> {
                     subconfig.authorizationRequestResolver(authorizationRequestResolver());
                     subconfig.authorizationRequestRepository(cookieBasedAuthorizationRequestRepository);
-                }).userInfoEndpoint().oidcUserService(customOIDCUserService)
-                .and().failureHandler(failureHandler())
-                .successHandler(successHandler()).permitAll();
+                }).userInfoEndpoint(userInfoEndpointConfig ->
+                        userInfoEndpointConfig.oidcUserService(customOIDCUserService)
+                ).failureHandler(failureHandler())
+                .successHandler(successHandler()).permitAll()
+        );
 
 
         return http.build();
