@@ -10,6 +10,7 @@ import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import ConfirmModal from "../../../../components/ConfirmModal";
+import ListFilter from "./ListFilter";
 
 export const resolveState = (state) => {
     switch (state) {
@@ -32,17 +33,35 @@ const OutboundEventList = ({ pipelineId }) => {
     const [event, setEvent] = useState(null);
     const [executing, setExecuting] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [status, setStatus] = useState(searchParams.has('status') ? searchParams.get('status') : null);
     const [page, setPage] = useState(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
     const [showRequeueAllConfirmation, setShowRequeueAllConfirmation] = useState(false);
 
     useEffect(() => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
+        setStatus(searchParams.has('status') ? searchParams.get('status') : null);
     }, [searchParams]);
+
+
+    useEffect(() => {
+        if (status) {
+            searchParams.set("status", status);
+        } else {
+            searchParams.delete("status");
+        }
+        setSearchParams(searchParams);
+    }, [status, searchParams, setSearchParams, setStatus]);
+
 
     const refreshList = useCallback(() => {
         setExecuting(true);
-        axios.get(`/api/pipeline/${pipelineId}/outbound_event?page=${page}`)
+        const filters = [];
+        filters.push(`pipelineId:eq:${pipelineId}`);
+        if (status) {
+            filters.push(`state:eq:${status}`);
+        }
+        axios.get(`/api/outbound_event?filters=${filters.join()}&page=${page}`)
             .then(res => {
                 setTotalCount((res.headers['x-total-count'] || 0) * 1);
                 setData(res.data);
@@ -55,7 +74,7 @@ const OutboundEventList = ({ pipelineId }) => {
                 setExecuting(false)
                 setLoading(false);
             });
-    }, [pipelineId, page, addNotification]);
+    }, [pipelineId, page, status, addNotification]);
 
     useEffect(() => {
         refreshList();
@@ -145,6 +164,7 @@ const OutboundEventList = ({ pipelineId }) => {
                 </button>
             </span>
         </div>
+        <ListFilter status={status} setStatus={setStatus} />
         <div className="table-container">
             <table className="table data-table table-zebra w-full">
                 <thead>

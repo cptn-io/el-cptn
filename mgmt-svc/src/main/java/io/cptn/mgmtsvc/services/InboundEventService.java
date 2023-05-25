@@ -23,17 +23,16 @@ public class InboundEventService extends CommonService {
     private final InboundEventRepository inboundEventRepository;
 
     private final InboundWriteEventRepository inboundWriteEventRepository;
-
-
-    public List<InboundEvent> getAll(ListEntitiesParam param) {
-        Pageable pageable = getPageable(param);
-        return inboundEventRepository.findAll(pageable).stream().toList();
-    }
-
+    
     public List<InboundEvent> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
-        return inboundEventRepository.findAll(predicate, pageable).stream().toList();
+        if (predicate == null) {
+            return inboundEventRepository.findAll(pageable).stream().toList();
+        } else {
+            return inboundEventRepository.findAll(predicate, pageable).stream().toList();
+        }
     }
+
 
     public Optional<InboundEvent> getById(UUID id) {
         return inboundEventRepository.findById(id);

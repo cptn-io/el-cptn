@@ -1,11 +1,10 @@
 package io.cptn.mgmtsvc.controllers;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import io.cptn.common.entities.InboundEvent;
-import io.cptn.common.entities.InboundWriteEvent;
-import io.cptn.common.entities.QInboundEvent;
-import io.cptn.common.entities.Source;
+import io.cptn.common.entities.*;
 import io.cptn.common.exceptions.NotFoundException;
+import io.cptn.common.helpers.FilterParser;
 import io.cptn.common.web.ListEntitiesParam;
 import io.cptn.mgmtsvc.dto.InboundEventDto;
 import io.cptn.mgmtsvc.mappers.InboundEventMapper;
@@ -38,9 +37,11 @@ public class InboundEventController {
     @GetMapping("/api/inbound_event")
     public ResponseEntity<List<InboundEventDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
-        List<InboundEventDto> inboundEventDtoList = inboundEventService.getAll(listParam).stream()
+        Predicate predicate = getPredicate(listParam);
+
+        List<InboundEventDto> inboundEventDtoList = inboundEventService.getAll(listParam, predicate).stream()
                 .map(this::convert).toList();
-        long count = inboundEventService.count();
+        long count = inboundEventService.count(predicate);
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(inboundEventDtoList);
     }
 
@@ -85,5 +86,30 @@ public class InboundEventController {
 
     private InboundEventDto convert(InboundWriteEvent inboundEvent) {
         return mapper.toDto(inboundEvent);
+    }
+
+    private Predicate getPredicate(ListEntitiesParam param) {
+        List<FilterParser.FilterItem> filterItemList = param.getFilters();
+
+        if (filterItemList == null || filterItemList.isEmpty()) {
+            return null;
+        }
+
+        QInboundEvent qInboundEvent = QInboundEvent.inboundEvent;
+        BooleanExpression predicate = qInboundEvent.id.isNotNull();
+        for (FilterParser.FilterItem filterItem : filterItemList) {
+            if (filterItem.getField().equals("sourceId")) {
+                predicate =
+                        predicate.and(qInboundEvent.source().id.eq(UUID.fromString(filterItem.getValue())));
+                //we only support EQ for now
+            } else if (filterItem.getField().equals("state")) {
+                try {
+                    predicate = predicate.and(qInboundEvent.state.eq(State.valueOf(filterItem.getValue())));
+                } catch (IllegalArgumentException e) {
+                    log.warn("Invalid state value passed in QInboundEvent filter: {}", filterItem.getValue());
+                }
+            }
+        }
+        return predicate;
     }
 }

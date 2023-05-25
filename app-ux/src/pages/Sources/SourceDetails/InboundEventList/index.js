@@ -9,6 +9,7 @@ import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
+import ListFilter from "./ListFilter";
 
 export const resolveState = (state) => {
     switch (state) {
@@ -31,16 +32,33 @@ const InboundEventList = ({ sourceId }) => {
     const [event, setEvent] = useState(null);
     const [executing, setExecuting] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [page, setPage] = useState(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
+    const [status, setStatus] = useState(searchParams.has('status') ? searchParams.get('status') : null);
 
     useEffect(() => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
+        setStatus(searchParams.has('status') ? searchParams.get('status') : null);
     }, [searchParams]);
+
+    useEffect(() => {
+        if (status) {
+            searchParams.set("status", status);
+        } else {
+            searchParams.delete("status");
+        }
+        setSearchParams(searchParams);
+    }, [status, searchParams, setSearchParams, setStatus]);
 
     const refreshList = useCallback(() => {
         setExecuting(true);
-        axios.get(`/api/source/${sourceId}/inbound_event?page=${page}`)
+
+        const filters = [];
+        filters.push(`sourceId:eq:${sourceId}`);
+        if (status) {
+            filters.push(`state:eq:${status}`);
+        }
+        axios.get(`/api/inbound_event?filters=${filters.join()}&page=${page}`)
             .then(res => {
                 setTotalCount((res.headers['x-total-count'] || 0) * 1);
                 setData(res.data);
@@ -53,7 +71,7 @@ const InboundEventList = ({ sourceId }) => {
                 setExecuting(false)
                 setLoading(false);
             });
-    }, [sourceId, page, addNotification]);
+    }, [sourceId, page, status, addNotification]);
 
     useEffect(() => {
         refreshList();
@@ -119,6 +137,7 @@ const InboundEventList = ({ sourceId }) => {
                 </button>
             </span>
         </div>
+        <ListFilter status={status} setStatus={setStatus} />
         <div className="table-container">
             <table className="table data-table table-zebra w-full">
                 <thead>

@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.cptn.common.dto.BaseDto;
 import io.cptn.common.entities.State;
 import io.cptn.common.helpers.JsonHelper;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /* @author: kc, created on 4/3/23 */
 @Data
@@ -15,8 +18,6 @@ public class InboundEventDto extends BaseDto {
 
     private String payload;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
     private State state = State.QUEUED;
 
     public JsonNode getPayload() {
