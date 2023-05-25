@@ -61,15 +61,14 @@ public class PipelineService extends CommonService {
         return pipelineRepository.findById(id);
     }
 
-    public List<Pipeline> getAll(ListEntitiesParam param) {
-        Pageable pageable = getPageable(param);
-        return pipelineRepository.findAll(pageable).stream().toList();
-    }
-
     public List<Pipeline> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
 
-        return pipelineRepository.findAll(predicate, pageable).stream().toList();
+        if (predicate == null) {
+            return pipelineRepository.findAll(pageable).stream().toList();
+        } else {
+            return pipelineRepository.findAll(predicate, pageable).stream().toList();
+        }
     }
 
     @CacheEvict(value = "pipeline-proc", key = "#pipeline.id")
@@ -248,5 +247,4 @@ public class PipelineService extends CommonService {
         }
         return transformationOptional.get();
     }
-
 }
