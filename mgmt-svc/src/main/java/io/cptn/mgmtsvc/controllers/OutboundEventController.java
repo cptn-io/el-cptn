@@ -48,7 +48,7 @@ public class OutboundEventController {
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(outboundEventDtoList);
     }
 
-    @Deprecated
+    @Deprecated(forRemoval = true, since = "0.2.0")
     @GetMapping("/api/pipeline/{id}/outbound_event")
     public ResponseEntity<List<OutboundEventDto>> list(HttpServletRequest request, @PathVariable UUID id) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);

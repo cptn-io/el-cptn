@@ -27,17 +27,17 @@ Object {
             <button
               class="btn btn-ghost btn-xs "
             >
-              Queued
+              Queued events
             </button>
             <button
               class="btn btn-ghost btn-xs "
             >
-              Sent to Pipelines
+              Completed events
             </button>
             <button
               class="btn btn-ghost btn-xs "
             >
-              Failed
+              Failed events
             </button>
           </div>
         </div>
@@ -67,17 +67,17 @@ Object {
           <button
             class="btn btn-ghost btn-xs "
           >
-            Queued
+            Queued events
           </button>
           <button
             class="btn btn-ghost btn-xs "
           >
-            Sent to Pipelines
+            Completed events
           </button>
           <button
             class="btn btn-ghost btn-xs "
           >
-            Failed
+            Failed events
           </button>
         </div>
       </div>

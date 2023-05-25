@@ -6,7 +6,7 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="flex flex-row-reverse"
+        class="flex flex-row-reverse mb-1"
       >
         <div
           class="flex items-center"
@@ -20,7 +20,7 @@ Object {
             class="ml-2 btn-group"
           >
             <button
-              class="btn btn-ghost btn-xs text-primary"
+              class="btn btn-ghost btn-xs text-secondary"
             >
               None
             </button>
@@ -46,7 +46,7 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="flex flex-row-reverse"
+      class="flex flex-row-reverse mb-1"
     >
       <div
         class="flex items-center"
@@ -60,7 +60,7 @@ Object {
           class="ml-2 btn-group"
         >
           <button
-            class="btn btn-ghost btn-xs text-primary"
+            class="btn btn-ghost btn-xs text-secondary"
           >
             None
           </button>

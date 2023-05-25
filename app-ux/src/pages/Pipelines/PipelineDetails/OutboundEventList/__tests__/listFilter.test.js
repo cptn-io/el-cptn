@@ -9,12 +9,12 @@ describe("ListFilter", () => {
 
     it("None should be shown active", () => {
         const wrapper = render(<ListFilter status={null} setStatus={() => { }} />);
-        expect(wrapper.getByText("None")).toHaveClass("text-primary");
+        expect(wrapper.getByText("None")).toHaveClass("text-secondary");
     });
 
     it("Passed filter should be shown active", () => {
         const wrapper = render(<ListFilter status={'COMPLETED'} setStatus={() => { }} />);
-        expect(wrapper.getByText("Completed")).toHaveClass("text-primary");
+        expect(wrapper.getByText("Completed")).toHaveClass("text-secondary");
     });
 
     it("should call setStatus on click", () => {

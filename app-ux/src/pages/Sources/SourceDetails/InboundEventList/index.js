@@ -10,6 +10,7 @@ import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import InboundEventFilter from "./InboundEventFilter";
+import useStatusFilter from "../../../../hooks/useStatusFilter";
 
 export const resolveState = (state) => {
     switch (state) {
@@ -40,7 +41,7 @@ const InboundEventList = ({ sourceId }) => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
     }, [searchParams]);
 
-    useSearchParams({ status });
+    useStatusFilter({ status });
 
     const refreshList = useCallback(() => {
         setExecuting(true);

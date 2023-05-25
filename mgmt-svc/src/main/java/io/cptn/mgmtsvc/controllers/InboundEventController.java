@@ -45,7 +45,7 @@ public class InboundEventController {
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(inboundEventDtoList);
     }
 
-    @Deprecated
+    @Deprecated(forRemoval = true, since = "0.2.0")
     @GetMapping("/api/source/{id}/inbound_event")
     public ResponseEntity<List<InboundEventDto>> list(HttpServletRequest request, @PathVariable UUID id) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
