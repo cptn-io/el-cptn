@@ -9,7 +9,6 @@ import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
-import ListFilter from "./InboundEventFilter";
 import InboundEventFilter from "./InboundEventFilter";
 
 export const resolveState = (state) => {
