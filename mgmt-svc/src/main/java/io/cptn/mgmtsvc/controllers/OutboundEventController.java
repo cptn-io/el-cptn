@@ -1,11 +1,13 @@
 package io.cptn.mgmtsvc.controllers;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import io.cptn.common.entities.OutboundEvent;
 import io.cptn.common.entities.Pipeline;
 import io.cptn.common.entities.QOutboundEvent;
 import io.cptn.common.entities.State;
 import io.cptn.common.exceptions.NotFoundException;
+import io.cptn.common.helpers.FilterParser;
 import io.cptn.common.web.ListEntitiesParam;
 import io.cptn.mgmtsvc.dto.OutboundEventDto;
 import io.cptn.mgmtsvc.mappers.OutboundEventMapper;
@@ -38,9 +40,11 @@ public class OutboundEventController {
     @GetMapping("/api/outbound_event")
     public ResponseEntity<List<OutboundEventDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
-        List<OutboundEventDto> outboundEventDtoList = outboundEventService.getAll(listParam).stream()
+
+        Predicate predicate = getPredicate(listParam);
+        List<OutboundEventDto> outboundEventDtoList = outboundEventService.getAll(listParam, predicate).stream()
                 .map(this::convert).toList();
-        long count = outboundEventService.count();
+        long count = outboundEventService.count(predicate);
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(outboundEventDtoList);
     }
 
@@ -88,5 +92,28 @@ public class OutboundEventController {
 
     private OutboundEventDto convert(OutboundEvent outboundEvent) {
         return mapper.toDto(outboundEvent);
+    }
+
+    private Predicate getPredicate(ListEntitiesParam param) {
+        List<FilterParser.FilterItem> filterItemList = param.getFilters();
+
+        if (filterItemList == null || filterItemList.isEmpty()) {
+            return null;
+        }
+        QOutboundEvent qOutboundEvent = QOutboundEvent.outboundEvent;
+        BooleanExpression predicate = qOutboundEvent.id.isNotNull();
+        for (FilterParser.FilterItem filterItem : filterItemList) {
+            if (filterItem.getField().equals("pipelineId")) {
+                predicate = predicate.and(qOutboundEvent.pipeline().id.eq(UUID.fromString(filterItem.getValue())));
+                //we only support EQ for now
+            } else if (filterItem.getField().equals("state")) {
+                try {
+                    predicate = predicate.and(qOutboundEvent.state.eq(State.valueOf(filterItem.getValue())));
+                } catch (IllegalArgumentException e) {
+                    log.warn("Invalid state value passed in OutboundEvent filter: {}", filterItem.getValue());
+                }
+            }
+        }
+        return predicate;
     }
 }

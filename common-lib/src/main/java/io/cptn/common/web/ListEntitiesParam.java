@@ -1,10 +1,12 @@
 package io.cptn.common.web;
 
 import com.google.common.primitives.Ints;
+import io.cptn.common.helpers.FilterParser;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.List;
 import java.util.Optional;
 
 /* @author: kc, created on 2/7/23 */
@@ -15,6 +17,8 @@ public class ListEntitiesParam {
     private int size;
     private String[] sortBy;
     private boolean sortAsc;
+
+    private List<FilterParser.FilterItem> filters;
 
     public ListEntitiesParam(@NonNull HttpServletRequest request) {
         this.page = Optional.ofNullable(Ints.tryParse(Optional.ofNullable(request.getParameter("page"))
@@ -33,5 +37,8 @@ public class ListEntitiesParam {
         String sortOrder = Optional.ofNullable(request.getParameter("sortBy")).orElse("createdAt");
         this.sortBy = sortOrder.split(",");
         this.sortAsc = Boolean.parseBoolean(request.getParameter("asc"));
+
+        String filterVal = Optional.ofNullable(request.getParameter("filters")).orElse("");
+        this.filters = FilterParser.parse(filterVal.split(","));
     }
 }

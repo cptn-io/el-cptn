@@ -20,14 +20,13 @@ public class OutboundEventService extends CommonService {
 
     private final OutboundEventRepository outboundEventRepository;
 
-    public List<OutboundEvent> getAll(ListEntitiesParam param) {
-        Pageable pageable = getPageable(param);
-        return outboundEventRepository.findAll(pageable).stream().toList();
-    }
-
     public List<OutboundEvent> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
-        return outboundEventRepository.findAll(predicate, pageable).stream().toList();
+        if (predicate == null) {
+            return outboundEventRepository.findAll(pageable).stream().toList();
+        } else {
+            return outboundEventRepository.findAll(predicate, pageable).stream().toList();
+        }
     }
 
     public Optional<OutboundEvent> getById(UUID id) {
@@ -53,4 +52,6 @@ public class OutboundEventService extends CommonService {
     public void requeueFailedEventsInPipeline(UUID pipelineId) {
         outboundEventRepository.requeueFailedEvents(pipelineId);
     }
+
+
 }

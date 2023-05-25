@@ -4,6 +4,7 @@ import io.cptn.common.entities.InboundEvent;
 import io.cptn.common.entities.InboundWriteEvent;
 import io.cptn.mgmtsvc.dto.InboundEventDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
@@ -13,6 +14,7 @@ public interface InboundEventMapper {
 
     InboundEventDto toDto(InboundEvent event);
 
+    @Mapping(target = "state", source = "state", defaultValue = "QUEUED")
     InboundEventDto toDto(InboundWriteEvent event);
 
 }
