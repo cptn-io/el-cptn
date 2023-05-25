@@ -32,23 +32,15 @@ const InboundEventList = ({ sourceId }) => {
     const [event, setEvent] = useState(null);
     const [executing, setExecuting] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [page, setPage] = useState(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
     const [status, setStatus] = useState(searchParams.has('status') ? searchParams.get('status') : null);
 
     useEffect(() => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
-        setStatus(searchParams.has('status') ? searchParams.get('status') : null);
     }, [searchParams]);
 
-    useEffect(() => {
-        if (status) {
-            searchParams.set("status", status);
-        } else {
-            searchParams.delete("status");
-        }
-        setSearchParams(searchParams);
-    }, [status, searchParams, setSearchParams, setStatus]);
+    useSearchParams({ status });
 
     const refreshList = useCallback(() => {
         setExecuting(true);
