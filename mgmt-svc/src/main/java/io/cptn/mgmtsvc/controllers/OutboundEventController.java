@@ -48,6 +48,10 @@ public class OutboundEventController {
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(outboundEventDtoList);
     }
 
+    /**
+     * @deprecated No longer needed as list() is now enhanced to support generic filtering
+     */
+    @Deprecated(forRemoval = true, since = "0.2.0")
     @GetMapping("/api/pipeline/{id}/outbound_event")
     public ResponseEntity<List<OutboundEventDto>> list(HttpServletRequest request, @PathVariable UUID id) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);

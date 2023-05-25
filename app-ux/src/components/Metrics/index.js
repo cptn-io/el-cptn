@@ -2,6 +2,7 @@ import { IconCircleCheck, IconTimelineEventExclamation, IconTimelineEventPlus } 
 import pluralize from "pluralize";
 import { parseInterval } from "../IntervalSelector";
 import { Refreshing } from "../Loading";
+import { Link } from "react-router-dom";
 
 export const SourceMetricsRenderer = (props) => {
     const { metrics = {}, interval, refreshing } = props;
@@ -69,13 +70,13 @@ export const PipelineMetricsRenderer = (props) => {
             <div className="stat-value text-base-content">{refreshing ? <Refreshing /> : `${metrics.outboundPercentComplete || 0}%`}</div>
             <div className="stat-desc">{!refreshing ? `${pluralize('event', ((metrics.outboundTotal || 0) - (metrics.outboundProcessed || 0)), true)} remaining` : ''}</div>
         </div>
-        <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
+        <Link to="/pipelines?page=0&status=FAILED"><div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
             <div className="stat-figure text-error hidden xl:block">
                 <IconTimelineEventExclamation size={64} />
             </div>
             <div className="stat-title">Events Failed</div>
             <div className="stat-value text-base-content">{refreshing ? <Refreshing /> : metrics.outboundFailed || 0}</div>
             <div className="stat-desc">{parseInterval(interval)}</div>
-        </div>
+        </div></Link>
     </div >
 }

@@ -2,10 +2,13 @@ package io.cptn.mgmtsvc.controllers;
 
 /* @author: kc, created on 3/7/23 */
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import io.cptn.common.entities.*;
 import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.exceptions.NotFoundException;
+import io.cptn.common.helpers.FilterParser;
 import io.cptn.common.validation.OnCreate;
 import io.cptn.common.validation.OnUpdate;
 import io.cptn.common.web.ListEntitiesParam;
@@ -32,8 +35,7 @@ public class PipelineController {
 
     private final PipelineService pipelineService;
     private final PipelineMapper mapper;
-
-
+    
     @PostMapping("/api/pipeline")
     public ResponseEntity<PipelineDto> create(@Validated(OnCreate.class) @RequestBody PipelineDto pipelineDto,
                                               BindingResult bindingResult) {
@@ -42,7 +44,6 @@ public class PipelineController {
         }
 
         Pipeline pipeline = convert(pipelineDto);
-
         return ResponseEntity.ok(convert(pipelineService.create(pipeline)));
     }
 
@@ -55,9 +56,12 @@ public class PipelineController {
     @GetMapping("/api/pipeline")
     public ResponseEntity<List<PipelineDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
-        List<PipelineDto> sourceList = pipelineService.getAll(listParam).stream()
+
+        Predicate predicate = getPredicate(listParam);
+
+        List<PipelineDto> sourceList = pipelineService.getAll(listParam, predicate).stream()
                 .map(this::convert).toList();
-        long count = pipelineService.count(null);
+        long count = pipelineService.count(predicate);
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
     }
 
@@ -71,7 +75,6 @@ public class PipelineController {
         QPipeline pipeline = QPipeline.pipeline;
         switch (entity) {
             case "destination":
-
                 predicate = pipeline.destination().eq(new Destination(id));
                 break;
             case "source":
@@ -145,5 +148,26 @@ public class PipelineController {
 
     private PipelineDto convert(Pipeline pipeline) {
         return mapper.toDto(pipeline);
+    }
+
+    private Predicate getPredicate(ListEntitiesParam param) {
+        List<FilterParser.FilterItem> filterItemList = param.getFilters();
+
+        if (filterItemList == null || filterItemList.isEmpty()) {
+            return null;
+        }
+
+        QPipeline qPipeline = QPipeline.pipeline;
+        BooleanExpression predicate = qPipeline.id.isNotNull();
+        for (FilterParser.FilterItem filterItem : filterItemList) {
+            if (filterItem.getField().equals("state")) {
+                predicate = predicate.and(QPipeline.pipeline.id.in(
+                        JPAExpressions.select(QOutboundEvent.outboundEvent.pipeline().id)
+                                .from(QOutboundEvent.outboundEvent)
+                                .where(QOutboundEvent.outboundEvent.state.eq(State.valueOf(filterItem.getValue())))));
+
+            }
+        }
+        return predicate;
     }
 }

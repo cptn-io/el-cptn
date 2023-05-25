@@ -10,8 +10,8 @@ import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import ConfirmModal from "../../../../components/ConfirmModal";
-import ListFilter from "./OutboundEventFilter";
 import useStatusFilter from "../../../../hooks/useStatusFilter";
+import OutboundEventFilter from "./OutboundEventFilter";
 
 export const resolveState = (state) => {
     switch (state) {
@@ -157,7 +157,7 @@ const OutboundEventList = ({ pipelineId }) => {
                 </button>
             </span>
         </div>
-        <ListFilter status={status} setStatus={setStatus} />
+        <OutboundEventFilter status={status} setStatus={setStatus} />
         <div className="table-container">
             <table className="table data-table table-zebra w-full">
                 <thead>
