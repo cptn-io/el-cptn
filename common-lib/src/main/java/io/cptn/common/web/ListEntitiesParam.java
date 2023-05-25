@@ -38,7 +38,7 @@ public class ListEntitiesParam {
         this.sortBy = sortOrder.split(",");
         this.sortAsc = Boolean.parseBoolean(request.getParameter("asc"));
 
-        String filters = Optional.ofNullable(request.getParameter("filters")).orElse("");
-        this.filters = FilterParser.parse(filters.split(","));
+        String filterVal = Optional.ofNullable(request.getParameter("filters")).orElse("");
+        this.filters = FilterParser.parse(filterVal.split(","));
     }
 }

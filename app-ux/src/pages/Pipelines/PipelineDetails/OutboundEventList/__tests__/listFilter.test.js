@@ -1,4 +1,4 @@
-import ListFilter from "../ListFilter";
+import ListFilter from "../OutboundEventFilter";
 import { render } from "@testing-library/react";
 
 describe("ListFilter", () => {

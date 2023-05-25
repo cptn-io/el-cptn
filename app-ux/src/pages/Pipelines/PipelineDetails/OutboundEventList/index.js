@@ -10,7 +10,7 @@ import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import ConfirmModal from "../../../../components/ConfirmModal";
-import ListFilter from "./ListFilter";
+import ListFilter from "./OutboundEventFilter";
 
 export const resolveState = (state) => {
     switch (state) {

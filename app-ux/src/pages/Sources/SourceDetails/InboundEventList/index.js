@@ -9,7 +9,8 @@ import Modal from "../../../../components/Modal";
 import EventDetails from "./EventDetails";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
-import ListFilter from "./ListFilter";
+import ListFilter from "./InboundEventFilter";
+import InboundEventFilter from "./InboundEventFilter";
 
 export const resolveState = (state) => {
     switch (state) {
@@ -137,7 +138,7 @@ const InboundEventList = ({ sourceId }) => {
                 </button>
             </span>
         </div>
-        <ListFilter status={status} setStatus={setStatus} />
+        <InboundEventFilter status={status} setStatus={setStatus} />
         <div className="table-container">
             <table className="table data-table table-zebra w-full">
                 <thead>

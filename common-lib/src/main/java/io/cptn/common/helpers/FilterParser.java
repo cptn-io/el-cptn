@@ -8,6 +8,10 @@ import java.util.List;
 
 /* @author: kc, created on 5/18/23 */
 public class FilterParser {
+
+    private FilterParser() {
+    }
+
     public static List<FilterItem> parse(String[] filters) {
 
         List<FilterItem> filterItemList = new ArrayList<>();
