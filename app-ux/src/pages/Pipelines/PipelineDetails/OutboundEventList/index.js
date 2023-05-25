@@ -11,6 +11,7 @@ import Pagination from "../../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import ConfirmModal from "../../../../components/ConfirmModal";
 import ListFilter from "./OutboundEventFilter";
+import useStatusFilter from "../../../../hooks/useStatusFilter";
 
 export const resolveState = (state) => {
     switch (state) {
@@ -33,25 +34,17 @@ const OutboundEventList = ({ pipelineId }) => {
     const [event, setEvent] = useState(null);
     const [executing, setExecuting] = useState(false);
     const [totalCount, setTotalCount] = useState(0);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [status, setStatus] = useState(searchParams.has('status') ? searchParams.get('status') : null);
     const [page, setPage] = useState(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
     const [showRequeueAllConfirmation, setShowRequeueAllConfirmation] = useState(false);
 
     useEffect(() => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
-        setStatus(searchParams.has('status') ? searchParams.get('status') : null);
     }, [searchParams]);
 
 
-    useEffect(() => {
-        if (status) {
-            searchParams.set("status", status);
-        } else {
-            searchParams.delete("status");
-        }
-        setSearchParams(searchParams);
-    }, [status, searchParams, setSearchParams, setStatus]);
+    useStatusFilter({ status });
 
 
     const refreshList = useCallback(() => {
