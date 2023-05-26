@@ -7,23 +7,39 @@ import get from "lodash/get";
 import useNotifications from "../../hooks/useNotifications";
 import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
+import SourceFilter from "./SourceFilter";
+import useStatusFilter from "../../hooks/useStatusFilter";
 
 
 const Sources = () => {
     const { addNotification } = useNotifications();
     const [searchParams] = useSearchParams();
     const [page, setPage] = useState(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
+    const [status, setStatus] = useState(searchParams.has('status') ? searchParams.get('status') : null);
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
 
+
     useEffect(() => {
         setPage(searchParams.has('page') ? searchParams.get('page') * 1 : 0);
     }, [searchParams]);
 
+    useStatusFilter({ status });
+
     useEffect(() => {
-        axios.get(`/api/source?page=${page}`).then(response => {
+        let url = `/api/source?page=${page}`;
+        const filters = [];
+        if (status) {
+            filters.push(`state:eq:${status}`);
+        }
+
+        if (filters.length > 0) {
+            url += `&filters=${filters.join()}`;
+        }
+
+        axios.get(url).then(response => {
             setTotalCount(response.headers['x-total-count'] || 0);
             setData(response.data);
         }).catch(err => {
@@ -34,13 +50,14 @@ const Sources = () => {
         }).finally(() => {
             setLoading(false);
         });
-    }, [page, addNotification]);
+    }, [page, status, addNotification]);
 
     return <Fragment>
         <PageTitle itemKey="sources">
             <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" />New Source</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
+            <SourceFilter status={status} setStatus={setStatus} />
             <div className="table-container">
                 {totalCount > 0 ? <table className="table data-table table-zebra w-full">
                     <thead>

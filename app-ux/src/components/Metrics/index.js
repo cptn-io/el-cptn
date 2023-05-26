@@ -31,14 +31,14 @@ export const SourceMetricsRenderer = (props) => {
             <div className="stat-value text-base-content">{refreshing ? <Refreshing /> : `${metrics.inboundPercentComplete || 0}%`}</div>
             <div className="stat-desc">{!refreshing ? `${pluralize('event', ((metrics.inboundTotal || 0) - (metrics.inboundProcessed || 0)), true)} remaining` : ''}</div>
         </div>
-        <div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
+        <Link to="/sources?page=0&status=FAILED"><div className="stat bg-base-100 shadow col-span-2 md:col-span-1 rounded-2xl">
             <div className="stat-figure text-error hidden xl:block">
                 <IconTimelineEventExclamation size={64} />
             </div>
             <div className="stat-title">Events Failed</div>
             <div className="stat-value text-base-content">{refreshing ? <Refreshing /> : metrics.inboundFailed || 0}</div>
             <div className="stat-desc">{parseInterval(interval)}</div>
-        </div>
+        </div></Link>
     </div>
 }
 

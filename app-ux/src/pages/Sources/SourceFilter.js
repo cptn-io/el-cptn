@@ -1,6 +1,6 @@
 import ListFilter from "../../components/ListFilter";
 
-export const outboundEventStatusList = [
+export const inboundEventStatusList = [
     {
         label: 'None',
         value: null
@@ -10,7 +10,7 @@ export const outboundEventStatusList = [
         value: 'QUEUED'
     },
     {
-        label: 'Completed',
+        label: 'Sent to Pipelines',
         value: 'COMPLETED'
     },
     {
@@ -20,8 +20,8 @@ export const outboundEventStatusList = [
 ]
 
 
-const PipelineFilter = (props) => {
-    return <ListFilter {...props} label="Filter by event status:" statusList={outboundEventStatusList} />
+const SourceFilter = (props) => {
+    return <ListFilter {...props} label="Filter by event status:" statusList={inboundEventStatusList} />
 }
 
-export default PipelineFilter;
+export default SourceFilter;
