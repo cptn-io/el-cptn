@@ -1,5 +1,6 @@
 package io.cptn.mgmtsvc.services;
 
+import com.querydsl.core.types.Predicate;
 import io.cptn.common.entities.Source;
 import io.cptn.common.repositories.SourceRepository;
 import io.cptn.common.services.CommonService;
@@ -51,9 +52,14 @@ public class SourceService extends CommonService {
         return sourceRepository.save(source);
     }
 
-    public List<Source> getAll(ListEntitiesParam param) {
+    public List<Source> getAll(ListEntitiesParam param, Predicate predicate) {
         Pageable pageable = getPageable(param);
-        return sourceRepository.findAll(pageable).stream().toList();
+
+        if (predicate == null) {
+            return sourceRepository.findAll(pageable).stream().toList();
+        } else {
+            return sourceRepository.findAll(predicate, pageable).stream().toList();
+        }
     }
 
     public long count() {

@@ -32,7 +32,7 @@ Object {
             <button
               class="btn btn-ghost btn-xs "
             >
-              Completed
+              Sent to Pipelines
             </button>
             <button
               class="btn btn-ghost btn-xs "
@@ -72,7 +72,7 @@ Object {
           <button
             class="btn btn-ghost btn-xs "
           >
-            Completed
+            Sent to Pipelines
           </button>
           <button
             class="btn btn-ghost btn-xs "

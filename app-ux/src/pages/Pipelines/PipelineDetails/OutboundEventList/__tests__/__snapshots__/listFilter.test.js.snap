@@ -14,7 +14,7 @@ Object {
           <div
             class="font-bold"
           >
-            Filters:
+            Filters
           </div>
           <div
             class="ml-2 btn-group"
@@ -54,7 +54,7 @@ Object {
         <div
           class="font-bold"
         >
-          Filters:
+          Filters
         </div>
         <div
           class="ml-2 btn-group"

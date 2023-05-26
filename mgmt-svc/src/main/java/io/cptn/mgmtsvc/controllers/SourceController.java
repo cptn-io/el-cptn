@@ -1,8 +1,15 @@
 package io.cptn.mgmtsvc.controllers;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import io.cptn.common.entities.QInboundEvent;
+import io.cptn.common.entities.QSource;
 import io.cptn.common.entities.Source;
+import io.cptn.common.entities.State;
 import io.cptn.common.exceptions.BadRequestException;
 import io.cptn.common.exceptions.NotFoundException;
+import io.cptn.common.helpers.FilterParser;
 import io.cptn.common.validation.OnCreate;
 import io.cptn.common.validation.OnUpdate;
 import io.cptn.common.web.ListEntitiesParam;
@@ -54,7 +61,9 @@ public class SourceController {
     @GetMapping("/api/source")
     public ResponseEntity<List<SourceDto>> list(HttpServletRequest request) {
         ListEntitiesParam listParam = new ListEntitiesParam(request);
-        List<SourceDto> sourceList = sourceService.getAll(listParam).stream()
+        Predicate predicate = getPredicate(listParam);
+
+        List<SourceDto> sourceList = sourceService.getAll(listParam, predicate).stream()
                 .map(this::convert).toList();
         long count = sourceService.count();
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
@@ -108,5 +117,25 @@ public class SourceController {
 
     private SourceDto convert(Source source) {
         return mapper.toDto(source);
+    }
+
+    private Predicate getPredicate(ListEntitiesParam param) {
+        List<FilterParser.FilterItem> filterItemList = param.getFilters();
+
+        if (filterItemList == null || filterItemList.isEmpty()) {
+            return null;
+        }
+
+        QSource qSource = QSource.source;
+        BooleanExpression predicate = qSource.id.isNotNull();
+        for (FilterParser.FilterItem filterItem : filterItemList) {
+            if (filterItem.getField().equals("state")) {
+                predicate = predicate.and(QSource.source.id.in(
+                        JPAExpressions.select(QInboundEvent.inboundEvent.source().id)
+                                .from(QInboundEvent.inboundEvent)
+                                .where(QInboundEvent.inboundEvent.state.eq(State.valueOf(filterItem.getValue())))));
+            }
+        }
+        return predicate;
     }
 }
