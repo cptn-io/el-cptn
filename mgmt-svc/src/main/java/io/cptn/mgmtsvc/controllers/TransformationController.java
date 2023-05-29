@@ -79,7 +79,8 @@ public class TransformationController {
         Transformation transformation = getById(id);
         mapper.partialUpdate(transformationDto, transformation);
 
-        return ResponseEntity.ok(convert(transformationService.update(transformation)));
+        return ResponseEntity.ok(convert(transformationService.update(transformation,
+                transformationDto.getConfig() != null)));
     }
 
 

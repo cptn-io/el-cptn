@@ -1,6 +1,8 @@
 package io.cptn.common.services;
 
+import io.cptn.common.entities.ScriptedStep;
 import io.cptn.common.exceptions.WebApplicationException;
+import io.cptn.common.pojos.ConfigItem;
 import io.cptn.common.web.ListEntitiesParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Sort;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /* @author: kc, created on 2/7/23 */
 
@@ -35,6 +38,21 @@ public abstract class CommonService {
             log.error(e.getMessage(), e);
             throw new WebApplicationException("Error hashing value");
         }
+    }
+
+    protected List<ConfigItem> getConfig(ScriptedStep step) {
+        List<ConfigItem> configItems = step.getConfig();
+        if (configItems != null) {
+            configItems = configItems.stream().map(configItem -> {
+                configItem.setValue("");
+                return configItem;
+            }).toList();
+        } else {
+            configItems = List.of();
+        }
+
+        return configItems;
+
     }
 
     public static class CoreEntities {

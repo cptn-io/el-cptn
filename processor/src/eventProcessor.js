@@ -14,7 +14,7 @@ async function getTransformation(transformationId) {
         return new Transformation(cached);
     }
 
-    const result = await pgPool.query('SELECT t.id, t.script, t.version, t.active FROM transformation t WHERE t.id=$1', [transformationId]);
+    const result = await pgPool.query('SELECT t.id, t.script, t.version, t.active, t.config FROM transformation t WHERE t.id=$1', [transformationId]);
     const row = result.rows?.[0];
     if (row) {
         await cache.set(key, row);

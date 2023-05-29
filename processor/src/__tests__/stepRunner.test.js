@@ -183,7 +183,7 @@ describe('runStep', () => {
 
         await runStep(vm, transformation, {}, {});
         expect(vm.run).toHaveBeenCalledWith(step.script, './script.js');
-        expect(vmRun).toHaveBeenCalledWith({}, {}, undefined); //transformations don't have config, so it's always undefined
+        expect(vmRun).toHaveBeenCalledWith({}, {}, {});
     });
 
     test('should not execute step if step is a Destination', async () => {
@@ -219,7 +219,7 @@ describe('runStep', () => {
         const context = { bar: 'baz' };
 
         await runStep(vm, transformation, input, context);
-        expect(vmRun).toHaveBeenCalledWith(input, context, undefined);
+        expect(vmRun).toHaveBeenCalledWith(input, context, {});
     });
 
     test('show log error if unable to install missing modules', async () => {

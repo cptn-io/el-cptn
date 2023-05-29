@@ -1,5 +1,5 @@
 import { IconArrowsMaximize, IconCheck, IconX } from '@tabler/icons-react';
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useEffect } from "react";
 import useNotifications from '../../../hooks/useNotifications';
 import { renderErrors } from "../../../common/formHelpers";
 import keys from 'lodash/keys';
@@ -13,9 +13,12 @@ import Editor from '@monaco-editor/react';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../../../components/ConfirmModal';
 import Modal from '../../../components/Modal';
+import ConfigBuilder from '../../../components/ConfigBuilder';
+import cloneDeep from 'lodash/cloneDeep';
+import filter from 'lodash/filter';
 
 const TransformationDetailsCard = (props) => {
-    const { data: { id, name, script, active }, onUpdate } = props;
+    const { data: { id, name, script, active, config }, onUpdate } = props;
     const navigate = useNavigate();
     const editorRef = useRef(null);
     const { addNotification } = useNotifications();
@@ -23,6 +26,7 @@ const TransformationDetailsCard = (props) => {
     const [error, setError] = useState({ message: null, details: [] });
     const [changes, setChanges] = useState({});
     const [executing, setExecuting] = useState(false);
+    const [configChanges, setConfigChanges] = useState(config ? cloneDeep(config) : []);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [expandEditor, setExpandEditor] = useState(false);
 
@@ -99,6 +103,13 @@ const TransformationDetailsCard = (props) => {
         })
     }
 
+    useEffect(() => {
+        setChanges(current => ({
+            ...current,
+            config: filter(configChanges, item => item.key)
+        }));
+    }, [configChanges]);
+
     const cancelChanges = (e) => {
         e.preventDefault();
         setChanges({});
@@ -119,6 +130,13 @@ const TransformationDetailsCard = (props) => {
                         name: e.target.value
                     }))} />
                     {renderErrors(error, 'name')}</Fragment> : <div className="p-1 text-lg">{name}</div>}
+            </div>
+            <div className="form-control w-full">
+                <label className="label">
+                    <span className="label-text">Configuration</span>
+                </label>
+                <ConfigBuilder config={configChanges} setConfig={setConfigChanges} readOnly={!editMode} />
+                {renderErrors(error, 'config')}
             </div>
             <div className="form-control w-full">
                 <div className="flex justify-between items-center">

@@ -6,7 +6,10 @@ import io.cptn.common.entities.Transformation;
 import io.cptn.common.repositories.TransformationRepository;
 import io.cptn.common.services.CommonService;
 import io.cptn.common.web.ListEntitiesParam;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,12 +25,20 @@ import java.util.UUID;
 public class TransformationService extends CommonService {
     private final TransformationRepository transformationRepository;
 
+    @PersistenceContext
+    private final EntityManager entityManager;
+
     public Transformation create(Transformation transformation) {
         return save(transformation);
     }
 
     @CacheEvict(value = "transformation-proc", key = "#transformation.id")
-    public Transformation update(Transformation transformation) {
+    public Transformation update(Transformation transformation, boolean forceUpdate) {
+        if (forceUpdate) {
+            //force update if there are updates to config. JPA doesn't detect object changes within a list
+            Session session = (Session) entityManager.getDelegate();
+            session.evict(transformation);
+        }
         return save(transformation);
     }
 
@@ -61,6 +72,7 @@ public class TransformationService extends CommonService {
         app.setConfig(List.of());
         app.setLogoUrl(null);
         app.setKey(key);
+        app.setConfig(getConfig(transformation));
         app.setHash(hash(key + Instant.now().toString()));
         app.setScript(transformation.getScript());
         app.setType(AppType.TRANSFORMATION);
