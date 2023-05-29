@@ -1,6 +1,9 @@
 package io.cptn.common.entities;
 
+import io.cptn.common.listeners.ConfigConverter;
+import io.cptn.common.pojos.ConfigItem;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.MappedSuperclass;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,6 +12,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
+import java.util.List;
 
 /* @author: kc, created on 3/17/23 */
 @MappedSuperclass
@@ -31,6 +35,14 @@ public class ScriptedStep extends BaseEntity {
     @Getter
     @Setter
     private Boolean active = true;
+
+    @Getter
+    @Setter
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    @Convert(converter = ConfigConverter.class)
+    @EqualsAndHashCode.Include
+    private List<ConfigItem> config;
 
 
 }

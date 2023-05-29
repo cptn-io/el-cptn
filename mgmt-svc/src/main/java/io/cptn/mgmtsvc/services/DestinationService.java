@@ -3,7 +3,6 @@ package io.cptn.mgmtsvc.services;
 import io.cptn.common.entities.App;
 import io.cptn.common.entities.AppType;
 import io.cptn.common.entities.Destination;
-import io.cptn.common.pojos.ConfigItem;
 import io.cptn.common.projections.DestinationView;
 import io.cptn.common.repositories.DestinationRepository;
 import io.cptn.common.services.CommonService;
@@ -72,18 +71,7 @@ public class DestinationService extends CommonService {
         String key = hash(destination.getId().toString());
         App app = new App();
         app.setName(destination.getName());
-
-        List<ConfigItem> configItems = destination.getConfig();
-        if (configItems != null) {
-            configItems = configItems.stream().map(configItem -> {
-                configItem.setValue("");
-                return configItem;
-            }).toList();
-        } else {
-            configItems = List.of();
-        }
-
-        app.setConfig(configItems);
+        app.setConfig(getConfig(destination));
         app.setLogoUrl(null);
         app.setKey(key);
         app.setHash(hash(key + Instant.now().toString()));

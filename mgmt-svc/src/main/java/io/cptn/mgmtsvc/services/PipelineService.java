@@ -147,10 +147,8 @@ public class PipelineService extends CommonService {
             }
 
             if (!currentNode.equals(source)) {
-                Transformation currentTransformation = new Transformation();
-                currentTransformation.setId(UUID.fromString(currentNode));
-
-                if (!pipeline.getTransformations().contains(currentTransformation)) {
+                if (!pipeline.getTransformations().stream()
+                        .map(transformation -> transformation.getId().toString()).toList().contains(currentNode)) {
                     throw new BadRequestException("Transformation reference is missing for " + currentNode);
                 }
                 route.add(currentNode);

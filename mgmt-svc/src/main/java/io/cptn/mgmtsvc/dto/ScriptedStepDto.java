@@ -1,7 +1,9 @@
 package io.cptn.mgmtsvc.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.cptn.common.dto.BaseDto;
 import io.cptn.common.validation.OnCreate;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /* @author: kc, created on 3/17/23 */
 @Data
@@ -25,4 +29,9 @@ public abstract class ScriptedStepDto extends BaseDto {
     private String script;
 
     private Boolean active;
+
+    @Valid
+    @NotNull(groups = OnCreate.class)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ConfigItemDto> config;
 }

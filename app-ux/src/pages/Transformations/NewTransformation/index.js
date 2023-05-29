@@ -10,8 +10,10 @@ import { breadcrumbs } from "..";
 import ContextHelp from "../../../components/ContextHelp";
 import Modal from "../../../components/Modal";
 import { IconArrowsMaximize } from "@tabler/icons-react";
+import { filter } from "lodash";
+import ConfigBuilder from "../../../components/ConfigBuilder";
 
-const scriptTemplate = `module.exports = function (event, ctx) {
+const scriptTemplate = `module.exports = function (event, ctx, config) {
     //add your script here to transform or enrich the event
 
     //remember to return the transformed event object for the pipeline to continue processing the event
@@ -25,6 +27,7 @@ const NewTransformation = () => {
     const [name, setName] = useState('');
     const [script, setScript] = useState(scriptTemplate);
     const [active, setActive] = useState(true);
+    const [config, setConfig] = useState([{ key: "", value: "", secret: false }]);
     const [executing, setExecuting] = useState(false);
     const [error, setError] = useState({ message: null, details: [] });
     const [expandEditor, setExpandEditor] = useState(false);
@@ -69,7 +72,8 @@ const NewTransformation = () => {
         const payload = {
             name,
             script,
-            active
+            active,
+            config: filter(config, item => item.key)
         };
         axios.post('/api/transformation', payload).then(response => {
             resetAll();
@@ -103,6 +107,14 @@ const NewTransformation = () => {
                                 </label>
                                 <input type="text" placeholder="Provide a name for the Transformation" value={name} className="input input-bordered w-full" onChange={e => setName(e.target.value)} />
                                 {renderErrors(error, 'name')}
+                            </div>
+
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text">Configuration</span>
+                                </label>
+                                <ConfigBuilder config={config} setConfig={setConfig} />
+                                {renderErrors(error, 'config')}
                             </div>
 
                             <div className="form-control w-full">
