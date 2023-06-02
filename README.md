@@ -97,7 +97,7 @@ But milestone releases which include new features are named after places in alph
 Following are the upcoming releases:
 
 - Alameda ✅
-- Belmont
+- Belmont ✅
 - Cupertino
 - Dublin
 
