@@ -65,7 +65,7 @@ public class SourceController {
 
         List<SourceDto> sourceList = sourceService.getAll(listParam, predicate).stream()
                 .map(this::convert).toList();
-        long count = sourceService.count();
+        long count = sourceService.count(predicate);
         return ResponseEntity.ok().header("x-total-count", String.valueOf(count)).body(sourceList);
     }
 

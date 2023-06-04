@@ -66,6 +66,14 @@ public class SourceService extends CommonService {
         return sourceRepository.count();
     }
 
+    public long count(Predicate predicate) {
+        if (predicate == null) {
+            return count();
+        } else {
+            return sourceRepository.count(predicate);
+        }
+    }
+
     @CacheEvict(value = "sources", key = "#source.id")
     public void delete(Source source) {
         sourceRepository.delete(source);

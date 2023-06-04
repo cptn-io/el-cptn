@@ -74,7 +74,7 @@ const Sources = () => {
                             <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
                         </tr>)}
                     </tbody>
-                </table> : renderNoSources()}
+                </table> : status ? renderNoRecords() : renderNoSources()}
             </div>
             {totalCount > 0 && <Pagination totalCount={totalCount} />}
         </div>
@@ -92,6 +92,17 @@ const renderNoSources = () => {
         </div>
         <div className="flex justify-center">
             <Link to="/sources/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New Source</Link>
+        </div>
+    </div>
+}
+
+const renderNoRecords = () => {
+    return <div className="flex flex-col justify-center my-5">
+        <div className="flex justify-center mb-4 text-primary">
+            <img alt="No matched event" src="/undraw/void.svg" className="w-3/6 max-w-3/5" />
+        </div>
+        <div className="flex justify-center mb-4 text-center">
+            There are no events matching status.
         </div>
     </div>
 }
