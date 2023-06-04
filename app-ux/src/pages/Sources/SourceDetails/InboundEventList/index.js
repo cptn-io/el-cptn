@@ -117,6 +117,14 @@ const InboundEventList = ({ sourceId }) => {
             });
     }
 
+    const renderNoRecordsToShow = () => {
+        if (status) {
+            return <tr><td colSpan={4} className="text-center">No events found matching the current filter</td></tr>
+        }
+
+        return <tr><td colSpan={4} className="text-center">No events found associated with the Source.</td></tr>
+    }
+
     if (loading) {
         return <Loading />
     }
@@ -154,7 +162,7 @@ const InboundEventList = ({ sourceId }) => {
                             </div>
                         </td>
                     </tr>)}
-                    {totalCount === 0 && <tr><td colSpan={4} className="text-center">No events found for this Source.</td></tr>}
+                    {totalCount === 0 && renderNoRecordsToShow()}
                 </tbody>
             </table>
         </div>

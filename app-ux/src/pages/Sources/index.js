@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import PageTitle from "../../components/Nav/PageTitle";
-import { IconCirclePlus, IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconCirclePlus, IconX } from '@tabler/icons-react';
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import get from "lodash/get";
@@ -9,6 +9,7 @@ import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
 import SourceFilter from "./SourceFilter";
 import useStatusFilter from "../../hooks/useStatusFilter";
+import { renderNoMatchingRecordsWithFilter } from "../../common/tableHelpers";
 
 
 const Sources = () => {
@@ -52,9 +53,18 @@ const Sources = () => {
         });
     }, [page, status, addNotification]);
 
+    const renderNoRecordsToShow = () => {
+        if (status) {
+            return renderNoMatchingRecordsWithFilter('Source');
+        }
+        return renderNoSources();
+    }
+
     return <Fragment>
         <PageTitle itemKey="sources">
-            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" />New Source</Link>
+            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24}
+                className="mr-2" />New
+                Source</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <SourceFilter status={status} setStatus={setStatus} />
@@ -69,12 +79,22 @@ const Sources = () => {
                     </thead>
                     <tbody style={{ maxHeight: '600px' }}>
                         {data.map(source => <tr key={source.id}>
-                            <td className="whitespace-pre-wrap break-words"><Link className="link link-hover" to={`/sources/${source.id}`}>{source.name}</Link></td>
-                            <td className="text-center"><div className="flex justify-center">{source.secured ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
-                            <td className="text-center"><div className="flex justify-center">{source.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
+                            <td className="whitespace-pre-wrap break-words"><Link className="link link-hover"
+                                to={`/sources/${source.id}`}>{source.name}</Link>
+                            </td>
+                            <td className="text-center">
+                                <div className="flex justify-center">{source.secured ?
+                                    <IconCheck className="text-success" size={24} /> :
+                                    <IconX className="text-error" size={24} />}</div>
+                            </td>
+                            <td className="text-center">
+                                <div className="flex justify-center">{source.active ?
+                                    <IconCheck className="text-success" size={24} /> :
+                                    <IconX className="text-error" size={24} />}</div>
+                            </td>
                         </tr>)}
                     </tbody>
-                </table> : status ? renderNoRecords() : renderNoSources()}
+                </table> : renderNoRecordsToShow()}
             </div>
             {totalCount > 0 && <Pagination totalCount={totalCount} />}
         </div>
@@ -91,18 +111,8 @@ const renderNoSources = () => {
             There are no Sources. Click the button below to add a new Data Source
         </div>
         <div className="flex justify-center">
-            <Link to="/sources/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New Source</Link>
-        </div>
-    </div>
-}
-
-const renderNoRecords = () => {
-    return <div className="flex flex-col justify-center my-5">
-        <div className="flex justify-center mb-4 text-primary">
-            <img alt="No matched event" src="/undraw/void.svg" className="w-3/6 max-w-3/5" />
-        </div>
-        <div className="flex justify-center mb-4 text-center">
-            There are no events matching status.
+            <Link to="/sources/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New
+                Source</Link>
         </div>
     </div>
 }
