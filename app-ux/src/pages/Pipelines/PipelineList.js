@@ -1,6 +1,7 @@
 import Pagination from "../../components/Pagination";
 import { IconCheck, IconCirclePlus, IconX } from '@tabler/icons-react';
 import { Link } from "react-router-dom";
+import { renderNoMatchingRecordsWithFilter } from "../../common/tableHelpers";
 
 const renderNoPipelines = (isRelatedList) => {
     return <div className="flex flex-col justify-center my-5">
@@ -16,7 +17,18 @@ const renderNoPipelines = (isRelatedList) => {
     </div>
 }
 const PipelineList = (props) => {
-    const { data, totalCount, isRelatedList = false } = props;
+    const { data, totalCount, isRelatedList = false, status } = props;
+
+    const renderNoRecordsToShow = () => {
+        if (isRelatedList) {
+            return renderNoPipelines(true);
+        }
+
+        if (status) {
+            return renderNoMatchingRecordsWithFilter('Pipeline');
+        }
+        return renderNoPipelines();
+    }
 
     return <>
         <div className="table-container">
@@ -40,7 +52,7 @@ const PipelineList = (props) => {
                             <td className="text-center"><div className="flex justify-center">{pipeline.active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div></td>
                         </tr>)}
                     </tbody>
-                </table> : renderNoPipelines(isRelatedList)}
+                </table> : renderNoRecordsToShow()}
         </div>
         {totalCount > 0 && <Pagination totalCount={totalCount} />}
     </>

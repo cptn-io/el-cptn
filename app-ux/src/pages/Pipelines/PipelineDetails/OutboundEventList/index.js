@@ -140,6 +140,14 @@ const OutboundEventList = ({ pipelineId }) => {
             });
     }
 
+    const renderNoRecordsToShow = () => {
+        if (status) {
+            return <tr><td colSpan={4} className="text-center">No events found matching the current filter</td></tr>
+        }
+
+        return <tr><td colSpan={4} className="text-center">No events found associated with the Pipeline.</td></tr>
+    }
+
 
     if (loading) {
         return <Loading />
@@ -181,7 +189,7 @@ const OutboundEventList = ({ pipelineId }) => {
                             </div>
                         </td>
                     </tr>)}
-                    {totalCount === 0 && <tr><td colSpan={4} className="text-center">No events found associated with the Pipeline.</td></tr>}
+                    {totalCount === 0 && renderNoRecordsToShow()}
                 </tbody>
             </table>
         </div>

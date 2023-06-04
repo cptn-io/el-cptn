@@ -58,7 +58,7 @@ const Pipelines = () => {
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <PipelineFilter status={status} setStatus={setStatus} />
-            <PipelineList data={data} totalCount={totalCount} />
+            <PipelineList data={data} totalCount={totalCount} status={status} />
         </div>
         }
     </Fragment>
