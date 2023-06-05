@@ -1,4 +1,6 @@
-# cptn.io - Open Source Integration and Data Platform
+![Logo](./logos/og-image.png)
+
+# cptn.io - Open-source Integration and Data Platform
 
 cptn.io is an open-source self-hostable platform that helps develop and deploy integrations and data pipelines quickly and easily.
 
