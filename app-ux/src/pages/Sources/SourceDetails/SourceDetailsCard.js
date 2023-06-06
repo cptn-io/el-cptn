@@ -146,6 +146,16 @@ const SourceDetailsCard = (props) => {
         </div>
             <div className="form-control w-full">
                 <label className="label">
+                    <span className="label-text">Batch Event URL</span>
+                </label>
+                <div className="p-1 break-all">{`${window.location.origin}/event/source/${id}/batch`}
+                    <button title="Copy to Clipboard" className="ml-2 btn btn-ghost btn-xs"
+                        onClick={() => copyToClipboard(`${window.location.origin}/event/source/${id}/batch`, "URL has been copied to Clipboard")}>
+                        <IconClipboard size={16} /></button>
+                </div>
+            </div>
+            <div className="form-control w-full">
+                <label className="label">
                     <span className="label-text">Primary key</span>
                 </label>
                 <div className="p-1">

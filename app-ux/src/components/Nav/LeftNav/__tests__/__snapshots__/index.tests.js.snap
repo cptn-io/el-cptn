@@ -24,21 +24,11 @@ Object {
               class="flex-0 btn btn-ghost px-2 undefined"
               href="/"
             >
-              <div
-                class="font-title text-primary inline-flex text-3xl"
-              >
-                <span
-                  class="lowercase"
-                >
-                  CPTN
-                </span>
-                 
-                <span
-                  class="text-base-content lowercase"
-                >
-                  .io
-                </span>
-              </div>
+              <img
+                alt="Logo"
+                class="nav-logo"
+                src="/logo.svg"
+              />
             </a>
           </div>
           <ul
@@ -352,21 +342,11 @@ Object {
             class="flex-0 btn btn-ghost px-2 undefined"
             href="/"
           >
-            <div
-              class="font-title text-primary inline-flex text-3xl"
-            >
-              <span
-                class="lowercase"
-              >
-                CPTN
-              </span>
-               
-              <span
-                class="text-base-content lowercase"
-              >
-                .io
-              </span>
-            </div>
+            <img
+              alt="Logo"
+              class="nav-logo"
+              src="/logo.svg"
+            />
           </a>
         </div>
         <ul
