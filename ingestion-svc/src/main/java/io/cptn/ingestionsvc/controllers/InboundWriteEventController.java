@@ -84,7 +84,7 @@ public class InboundWriteEventController {
     private void addRemoteIp(JsonNode jsonPayload, HttpServletRequest request) {
         ObjectNode cptnNode = JsonHelper.getMapper().createObjectNode();
         cptnNode.put("remote_ip", request.getRemoteAddr());
-        ((ObjectNode) jsonPayload).put("cptn", cptnNode);
+        ((ObjectNode) jsonPayload).putIfAbsent("cptn", cptnNode);
     }
 
     private HttpHeaders getHttpHeaders(Source source) {
