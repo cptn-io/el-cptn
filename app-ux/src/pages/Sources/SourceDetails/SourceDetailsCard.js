@@ -16,7 +16,7 @@ import HeaderBuilder from '../../../components/HeaderBuilder';
 import cloneDeep from 'lodash/cloneDeep';
 
 const SourceDetailsCard = (props) => {
-    const { data: { id, name, secured, active, primaryKey, secondaryKey, headers }, onUpdate = () => { }, readOnly = false } = props;
+    const { data: { id, name, secured, active, primaryKey, secondaryKey, headers, captureRemoteIP }, onUpdate = () => { }, readOnly = false } = props;
     const navigate = useNavigate();
     const [showPrimary, setShowPrimary] = useState(false);
     const [showSecondary, setShowSecondary] = useState(false);
@@ -222,6 +222,18 @@ const SourceDetailsCard = (props) => {
                         }))} />
                     {renderErrors(error, 'active')}
                 </div>
+
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Capture Remote IP</span>
+                    </label>
+                    <input type="checkbox" className={`toggle toggle-lg ${(changes.captureRemoteIP || captureRemoteIP) ? 'toggle-success' : ''}`} defaultChecked={captureRemoteIP}
+                        onChange={e => setChanges(current => ({
+                            ...current,
+                            captureRemoteIP: e.target.checked
+                        }))} />
+                    {renderErrors(error, 'captureRemoteIP')}
+                </div>
             </div>
             {renderCommonDetails()}
             {!readOnly && <div className="card-actions mt-2 justify-between">
@@ -266,6 +278,13 @@ const SourceDetailsCard = (props) => {
                     </label>
 
                     <div className="p-1">{active ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>
+                </div>
+                <div className="form-control w-6/12">
+                    <label className="label">
+                        <span className="label-text">Capture Remote IP</span>
+                    </label>
+
+                    <div className="p-1">{captureRemoteIP ? <IconCheck className="text-success" size={24} /> : <IconX className="text-error" size={24} />}</div>
                 </div>
             </div>
             {renderCommonDetails()}

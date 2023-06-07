@@ -2,10 +2,12 @@ package io.cptn.ingestionsvc.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cptn.common.entities.InboundWriteEvent;
 import io.cptn.common.entities.Source;
 import io.cptn.common.exceptions.NotFoundException;
 import io.cptn.common.exceptions.UnauthorizedException;
+import io.cptn.common.helpers.JsonHelper;
 import io.cptn.common.pojos.Header;
 import io.cptn.ingestionsvc.dto.InboundWriteEventDto;
 import io.cptn.ingestionsvc.mappers.InboundWriteEventMapper;
@@ -45,7 +47,9 @@ public class InboundWriteEventController {
 
         verifySecurity(source, request);
 
-
+        if (Boolean.TRUE.equals(source.getCaptureRemoteIP())) {
+            this.addRemoteIp(jsonPayload, request);
+        }
         InboundWriteEvent event = new InboundWriteEvent();
         event.setPayload(jsonPayload);
         event.setSource(source);
@@ -64,6 +68,9 @@ public class InboundWriteEventController {
 
         List<InboundWriteEventDto> eventDtoList = new ArrayList<>();
         jsonArray.forEach(jsonNode -> {
+            if (Boolean.TRUE.equals(source.getCaptureRemoteIP())) {
+                this.addRemoteIp(jsonNode, request);
+            }
             InboundWriteEvent event = new InboundWriteEvent();
             event.setPayload(jsonNode);
             event.setSource(source);
@@ -72,6 +79,12 @@ public class InboundWriteEventController {
         HttpHeaders httpHeaders = getHttpHeaders(source);
 
         return ResponseEntity.ok().headers(httpHeaders).body(eventDtoList);
+    }
+
+    private void addRemoteIp(JsonNode jsonPayload, HttpServletRequest request) {
+        ObjectNode cptnNode = JsonHelper.getMapper().createObjectNode();
+        cptnNode.put("remote_ip", request.getRemoteAddr());
+        ((ObjectNode) jsonPayload).put("cptn", cptnNode);
     }
 
     private HttpHeaders getHttpHeaders(Source source) {

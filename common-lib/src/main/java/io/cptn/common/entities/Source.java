@@ -60,6 +60,11 @@ public class Source extends BaseEntity {
     @EqualsAndHashCode.Include //this is required to trigger update of headers
     private List<Header> headers;
 
+    @Getter
+    @Setter
+    @Column(name = "capture_remote_ip", columnDefinition = "boolean default false")
+    private Boolean captureRemoteIP = false;
+
     public Source(UUID id) {
         this.setId(id);
     }

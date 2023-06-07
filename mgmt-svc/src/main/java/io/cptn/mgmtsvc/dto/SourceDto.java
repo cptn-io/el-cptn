@@ -50,4 +50,6 @@ public class SourceDto extends BaseDto {
     @Valid
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<HeaderDto> headers;
+    
+    private Boolean captureRemoteIP;
 }

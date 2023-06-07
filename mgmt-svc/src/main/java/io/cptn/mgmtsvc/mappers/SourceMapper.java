@@ -16,6 +16,7 @@ public interface SourceMapper {
     @Mapping(ignore = true, target = "id")
     @Mapping(source = "secured", target = "secured", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(source = "active", target = "active", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mapping(source = "captureRemoteIP", target = "captureRemoteIP", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     Source toEntity(SourceDto sourceDto);
 
     @Mapping(ignore = true, target = "createdAt")

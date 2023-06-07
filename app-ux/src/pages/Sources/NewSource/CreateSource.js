@@ -16,12 +16,15 @@ const CreateSource = (props) => {
     const [executing, setExecuting] = useState(false);
     const [error, setError] = useState({ message: null, details: [] });
     const [headers, setHeaders] = useState([{ key: "", value: "" }]);
+    const [captureRemoteIP, setCaptureRemoteIP] = useState(false);
 
     const resetAll = () => {
         setName('');
         setSecured(true);
         setActive(true);
         clearErrors();
+        setHeaders([{ key: "", value: "" }]);
+        setCaptureRemoteIP(false);
     }
 
     const clearErrors = () => {
@@ -38,7 +41,8 @@ const CreateSource = (props) => {
             name,
             secured,
             active,
-            headers: filter(headers, item => item.key)
+            headers: filter(headers, item => item.key),
+            captureRemoteIP
         };
         axios.post('/api/source', payload).then(response => {
             resetAll();
@@ -89,6 +93,13 @@ const CreateSource = (props) => {
                     </label>
                     <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={active} onChange={(e) => setActive(e.target.checked)} />
                     {renderErrors(error, 'active')}
+                </div>
+                <div className="form-control w-full">
+                    <label className="label">
+                        <span className="label-text">Capture Remote IP</span>
+                    </label>
+                    <input type="checkbox" className={`toggle toggle-lg ${active ? 'toggle-success' : ''}`} checked={captureRemoteIP} onChange={(e) => setCaptureRemoteIP(e.target.checked)} />
+                    {renderErrors(error, 'captureRemoteIP')}
                 </div>
 
             </div>
