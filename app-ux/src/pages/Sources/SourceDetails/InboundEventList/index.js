@@ -155,10 +155,10 @@ const InboundEventList = ({ sourceId }) => {
                         <td className="text-center"><div className="flex justify-center">{moment(event.createdAt).format('LLL')}</div></td>
                         <td className="text-center"><div className="flex justify-center">{resolveState(event.state)}</div></td>
                         <td className="text-center">
-                            <div className="btn-group">
-                                <button onClick={() => showDetails(event)} className="btn btn-sm btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
-                                <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
-                                <button disabled={executing} onClick={() => resendEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Resend Event"><IconSend size={24} /></button>
+                            <div className="join">
+                                <button onClick={() => showDetails(event)} className="btn join-item btn-sm btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
+                                <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn join-item btn-sm btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
+                                <button disabled={executing} onClick={() => resendEvent(event.id)} className="btn join-item btn-sm btn-ghost tooltip" data-tip="Resend Event"><IconSend size={24} /></button>
                             </div>
                         </td>
                     </tr>)}

@@ -17,25 +17,25 @@ Object {
             Filters
           </div>
           <div
-            class="ml-2 btn-group"
+            class="ml-2 join"
           >
             <button
-              class="btn btn-ghost btn-xs text-secondary"
+              class="btn btn-ghost join-item btn-xs text-secondary"
             >
               None
             </button>
             <button
-              class="btn btn-ghost btn-xs "
+              class="btn btn-ghost join-item btn-xs "
             >
               Queued
             </button>
             <button
-              class="btn btn-ghost btn-xs "
+              class="btn btn-ghost join-item btn-xs "
             >
               Completed
             </button>
             <button
-              class="btn btn-ghost btn-xs "
+              class="btn btn-ghost join-item btn-xs "
             >
               Failed
             </button>
@@ -57,25 +57,25 @@ Object {
           Filters
         </div>
         <div
-          class="ml-2 btn-group"
+          class="ml-2 join"
         >
           <button
-            class="btn btn-ghost btn-xs text-secondary"
+            class="btn btn-ghost join-item btn-xs text-secondary"
           >
             None
           </button>
           <button
-            class="btn btn-ghost btn-xs "
+            class="btn btn-ghost join-item btn-xs "
           >
             Queued
           </button>
           <button
-            class="btn btn-ghost btn-xs "
+            class="btn btn-ghost join-item btn-xs "
           >
             Completed
           </button>
           <button
-            class="btn btn-ghost btn-xs "
+            class="btn btn-ghost join-item btn-xs "
           >
             Failed
           </button>

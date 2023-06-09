@@ -26,11 +26,11 @@ const Pagination = (props) => {
                 : <Fragment>No Records</Fragment>
             }
         </div>
-        <div className="btn-group">
-            <button disabled={page === 0} onClick={() => setPage(0)} className="btn btn-sm"><IconChevronsLeft size={24} /></button>
-            <button disabled={page === 0} onClick={() => setPage(page => page - 1)} className="btn btn-sm"><IconChevronLeft size={24} /></button>
-            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(page => page + 1)} className="btn btn-sm"><IconChevronRight size={24} /></button>
-            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(Math.floor(totalCount / pageSize))} className="btn btn-sm"><IconChevronsRight size={24} /></button>
+        <div className="join">
+            <button disabled={page === 0} onClick={() => setPage(0)} className="btn join-item btn-sm"><IconChevronsLeft size={24} /></button>
+            <button disabled={page === 0} onClick={() => setPage(page => page - 1)} className="btn join-item btn-sm"><IconChevronLeft size={24} /></button>
+            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(page => page + 1)} className="btn btn-sm join-item"><IconChevronRight size={24} /></button>
+            <button disabled={(totalCount / pageSize - 1) <= page} onClick={() => setPage(Math.floor(totalCount / pageSize))} className="btn btn-sm join-item"><IconChevronsRight size={24} /></button>
         </div>
     </div>
 }

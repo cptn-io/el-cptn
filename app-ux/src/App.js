@@ -68,7 +68,7 @@ export default function App() {
   return (
     <ThemeContextProvider>
       <NotificationContextProvider>
-        <div className="drawer drawer-mobile">
+        <div className="drawer drawer-mobile lg:drawer-open">
           <input id="page-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
             <NavBar />
