@@ -54,7 +54,7 @@ const Pipelines = () => {
 
     return <Fragment>
         <PageTitle itemKey="pipelines">
-            <Link to="/pipelines/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" />New Pipeline</Link>
+            <Link to="/pipelines/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} />New Pipeline</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <PipelineFilter status={status} setStatus={setStatus} />

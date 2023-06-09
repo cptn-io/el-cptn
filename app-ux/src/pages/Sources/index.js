@@ -62,9 +62,7 @@ const Sources = () => {
 
     return <Fragment>
         <PageTitle itemKey="sources">
-            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24}
-                className="mr-2" />New
-                Source</Link>
+            <Link to="/sources/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} />New Source</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <SourceFilter status={status} setStatus={setStatus} />
@@ -111,7 +109,7 @@ const renderNoSources = () => {
             There are no Sources. Click the button below to add a new Data Source
         </div>
         <div className="flex justify-center">
-            <Link to="/sources/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New
+            <Link to="/sources/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} />New
                 Source</Link>
         </div>
     </div>

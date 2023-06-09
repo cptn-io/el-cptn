@@ -38,7 +38,7 @@ const Users = () => {
 
     return <>
         <PageTitle itemKey="users">
-            <Link to="/users/new" className="btn btn-primary btn-sm md:btn-md"><IconUserPlus size={24} className="mr-2" />New User</Link>
+            <Link to="/users/new" className="btn btn-primary btn-sm md:btn-md"><IconUserPlus size={24} />New User</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
@@ -81,7 +81,7 @@ const renderNoUsers = () => {
             There are no Users. Click the button below to add a new User
         </div>
         <div className="flex justify-center">
-            <Link to="/users/new" className="btn btn-md md:btn-lg"><IconUserPlus size={36} className="mr-2" />New User</Link>
+            <Link to="/users/new" className="btn btn-md md:btn-lg"><IconUserPlus size={36} />New User</Link>
         </div>
     </div>
 }

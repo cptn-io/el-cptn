@@ -192,7 +192,7 @@ const NoApps = ({ refreshApps }) => {
             There are no Appps. Please wait until the instance syncs with the server to load available apps.
         </div>
         <div className="flex justify-center">
-            <button disabled={executing} className="btn btn-primary btn-sm md:btn-md" onClick={syncApps}><IconRefresh size={24} className="mr-2" />Force Sync Apps</button>
+            <button disabled={executing} className="btn btn-primary btn-sm md:btn-md" onClick={syncApps}><IconRefresh size={24} />Force Sync Apps</button>
         </div>
     </div>
 
