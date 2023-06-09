@@ -29,6 +29,11 @@ Object {
                 class="nav-logo"
                 src="/logo.svg"
               />
+              <img
+                alt="Logo"
+                class="nav-logo darkbg"
+                src="/logo-darkbg.svg"
+              />
             </a>
           </div>
           <ul
@@ -346,6 +351,11 @@ Object {
               alt="Logo"
               class="nav-logo"
               src="/logo.svg"
+            />
+            <img
+              alt="Logo"
+              class="nav-logo darkbg"
+              src="/logo-darkbg.svg"
             />
           </a>
         </div>
