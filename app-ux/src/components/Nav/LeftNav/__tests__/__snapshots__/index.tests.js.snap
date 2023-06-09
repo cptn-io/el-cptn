@@ -21,7 +21,7 @@ Object {
             <a
               aria-current="page"
               aria-label="Homepage"
-              class="flex-0 btn btn-ghost px-2 undefined"
+              class="flex-0 btn btn-ghost px-2 "
               href="/"
             >
               <img
@@ -339,7 +339,7 @@ Object {
           <a
             aria-current="page"
             aria-label="Homepage"
-            class="flex-0 btn btn-ghost px-2 undefined"
+            class="flex-0 btn btn-ghost px-2 "
             href="/"
           >
             <img
