@@ -37,7 +37,7 @@ const Transformations = () => {
 
     return <Fragment>
         <PageTitle itemKey="transformations">
-            <Link to="/transformations/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" />New Transformation</Link>
+            <Link to="/transformations/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} />New Transformation</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
@@ -71,7 +71,7 @@ const renderNoTransformations = () => {
             There are no Transformations. Click the button below to add a new Transformation
         </div>
         <div className="flex justify-center">
-            <Link to="/transformations/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New Transformation</Link>
+            <Link to="/transformations/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} />New Transformation</Link>
         </div>
     </div>
 }

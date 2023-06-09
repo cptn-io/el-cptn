@@ -13,7 +13,7 @@ Object {
           for="page-drawer"
         />
         <aside
-          class="bg-base-200 w-80 hidden md:block"
+          class="bg-base-200 w-80 h-full hidden md:block"
         >
           <div
             class="z-20 backdrop-blur sticky top-0 items-center gap-2 px-4 py-2 hidden lg:flex "
@@ -21,7 +21,7 @@ Object {
             <a
               aria-current="page"
               aria-label="Homepage"
-              class="flex-0 btn btn-ghost px-2 undefined"
+              class="flex-0 btn btn-ghost px-2 "
               href="/"
             >
               <img
@@ -331,7 +331,7 @@ Object {
         for="page-drawer"
       />
       <aside
-        class="bg-base-200 w-80 hidden md:block"
+        class="bg-base-200 w-80 h-full hidden md:block"
       >
         <div
           class="z-20 backdrop-blur sticky top-0 items-center gap-2 px-4 py-2 hidden lg:flex "
@@ -339,7 +339,7 @@ Object {
           <a
             aria-current="page"
             aria-label="Homepage"
-            class="flex-0 btn btn-ghost px-2 undefined"
+            class="flex-0 btn btn-ghost px-2 "
             href="/"
           >
             <img

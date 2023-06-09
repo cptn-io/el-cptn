@@ -56,12 +56,12 @@ const SignIn = () => {
         <div className="p-5">
             {logout &&
                 <div className="my-2 alert alert-success">
-                    <span><IconCircleCheck className="mr-2" size={24} />{logout === 'idle' ? 'You have been logged out for inactivity.' : 'You are now logged out.'}</span>
+                    <IconCircleCheck size={24} /><span>{logout === 'idle' ? 'You have been logged out for inactivity.' : 'You are now logged out.'}</span>
                 </div>
             }
             {error &&
                 <div className="my-2 alert alert-error">
-                    <span><IconCircleX className="mr-2" size={24} />{getErrorMessage(error)}</span>
+                    <IconCircleX size={24} /><span>{getErrorMessage(error)}</span>
                 </div>
             }
             <div className="mb-4">
@@ -71,7 +71,7 @@ const SignIn = () => {
             {!loading && <div>
                 {ssoOnly &&
                     <div className="my-2 alert alert-info">
-                        <span><IconInfoCircle className="mr-2" size={24} />Password based auth is disabled.</span>
+                        <IconInfoCircle size={24} /><span>Password based auth is disabled.</span>
                     </div>
                 }
                 {!ssoOnly && <form method="POST" onSubmit={setToken} action="/login">

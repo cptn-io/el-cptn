@@ -182,10 +182,10 @@ const OutboundEventList = ({ pipelineId }) => {
                         <td className="text-center"><div className="flex justify-center">{moment(event.createdAt).format('LLL')}</div></td>
                         <td className="text-center"><div className="flex justify-center">{resolveState(event.state)}</div></td>
                         <td className="text-center">
-                            <div className="btn-group">
-                                <button onClick={() => showDetails(event)} className="btn btn-sm btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
-                                <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
-                                <button disabled={executing || event.state === 'QUEUED'} onClick={() => requeueEvent(event.id)} className="btn btn-sm btn-ghost tooltip" data-tip="Requeue event"><IconBolt size={24} /></button>
+                            <div className="join">
+                                <button onClick={() => showDetails(event)} className="btn btn-sm join-item btn-ghost tooltip" data-tip="Show Details"><IconFileDescription size={24} /></button>
+                                <button disabled={executing} onClick={() => refreshEvent(event.id)} className="btn btn-sm join-item btn-ghost tooltip" data-tip="Refresh"><IconRefresh size={24} /></button>
+                                <button disabled={executing || event.state === 'QUEUED'} onClick={() => requeueEvent(event.id)} className="btn btn-sm join-item btn-ghost tooltip" data-tip="Requeue event"><IconBolt size={24} /></button>
                             </div>
                         </td>
                     </tr>)}

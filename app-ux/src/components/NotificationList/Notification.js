@@ -21,13 +21,13 @@ const Notification = (props) => {
 
     const getContent = (item) => {
         return <Fragment>
-            <div className="flex items-center"><span>
-                {item.type === 'success' && <IconCircleCheck size={24} />}
-                {item.type === 'info' && <IconInfoCircle size={24} />}
-                {item.type === 'error' && <IconCircleX size={24} />}
-                {item.type === 'warning' && <IconExclamationCircle size={24} />}</span>
-                <span>{item.message}</span>
-            </div>
+
+            {item.type === 'success' && <IconCircleCheck size={24} />}
+            {item.type === 'info' && <IconInfoCircle size={24} />}
+            {item.type === 'error' && <IconCircleX size={24} />}
+            {item.type === 'warning' && <IconExclamationCircle size={24} />}
+            <span>{item.message}</span>
+
             <button className="clear-btn btn-circle btn btn-ghost btn-sm" onClick={() => onClear(item.id)}><IconX size={16} /></button>
         </Fragment>
     }

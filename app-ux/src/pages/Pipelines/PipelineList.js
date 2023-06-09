@@ -12,7 +12,7 @@ const renderNoPipelines = (isRelatedList) => {
             {isRelatedList ? 'There are no associated Pipelines. Click the button below to start building a new Pipeline' : 'There are no pipelines. Click the button below to start building a new Pipeline'}
         </div>
         <div className="flex justify-center">
-            <Link to="/pipelines/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New Pipeline</Link>
+            <Link to="/pipelines/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} />New Pipeline</Link>
         </div>
     </div>
 }

@@ -6,30 +6,30 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="btn-group"
+        class="join"
       >
         <button
-          class="btn btn-ghost btn-xs "
+          class="btn btn-ghost join-item btn-xs "
         >
           1d
         </button>
         <button
-          class="btn btn-ghost btn-xs "
+          class="btn btn-ghost join-item btn-xs "
         >
           12h
         </button>
         <button
-          class="btn btn-ghost btn-xs "
+          class="btn btn-ghost join-item btn-xs "
         >
           6h
         </button>
         <button
-          class="btn btn-ghost btn-xs "
+          class="btn btn-ghost join-item btn-xs "
         >
           1h
         </button>
         <button
-          class="btn btn-ghost btn-xs text-primary"
+          class="btn btn-ghost join-item btn-xs text-primary"
         >
           5m
         </button>
@@ -38,30 +38,30 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="btn-group"
+      class="join"
     >
       <button
-        class="btn btn-ghost btn-xs "
+        class="btn btn-ghost join-item btn-xs "
       >
         1d
       </button>
       <button
-        class="btn btn-ghost btn-xs "
+        class="btn btn-ghost join-item btn-xs "
       >
         12h
       </button>
       <button
-        class="btn btn-ghost btn-xs "
+        class="btn btn-ghost join-item btn-xs "
       >
         6h
       </button>
       <button
-        class="btn btn-ghost btn-xs "
+        class="btn btn-ghost join-item btn-xs "
       >
         1h
       </button>
       <button
-        class="btn btn-ghost btn-xs text-primary"
+        class="btn btn-ghost join-item btn-xs text-primary"
       >
         5m
       </button>

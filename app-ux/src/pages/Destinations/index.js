@@ -37,7 +37,7 @@ const Destinations = () => {
 
     return <Fragment>
         <PageTitle itemKey="destinations">
-            <Link to="/destinations/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} className="mr-2" />New Destination</Link>
+            <Link to="/destinations/new" className="btn btn-primary btn-sm md:btn-md"><IconCirclePlus size={24} />New Destination</Link>
         </PageTitle>
         {loading ? <Loading /> : <div className="overflow-x-auto">
             <div className="table-container">
@@ -73,7 +73,7 @@ const renderNoDestinations = () => {
             There are no Destinations. Click the button below to start building a new Destination
         </div>
         <div className="flex justify-center">
-            <Link to="/destinations/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} className="mr-2" />New Destination</Link>
+            <Link to="/destinations/new" className="btn btn-md md:btn-lg"><IconCirclePlus size={36} />New Destination</Link>
         </div>
     </div>
 }

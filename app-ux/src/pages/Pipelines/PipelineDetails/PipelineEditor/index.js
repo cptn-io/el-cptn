@@ -111,9 +111,9 @@ const PipelineEditor = (props) => {
         </ReactFlowProvider>
         <div className="xl:col-span-3 lg:col-span-4 md:col-span-1 col-span-1 overflow-x-scroll">
             <div className="my-2 flex justify-center">
-                <div className="btn-group">
-                    <button onClick={discardChanges} className="btn"><IconArrowBackUp size={24} className="mr-2" />Reset</button>
-                    <button onClick={savePipeline} className="btn btn-primary"><IconDeviceFloppy size={24} className="mr-2" />Update</button>
+                <div className="join">
+                    <button onClick={discardChanges} className="btn join-item"><IconArrowBackUp size={24} />Reset</button>
+                    <button onClick={savePipeline} className="btn btn-primary join-item"><IconDeviceFloppy size={24} />Update</button>
                 </div>
             </div>
             <TransformationList selectTransformation={selectTransformation} transformations={draft.transformations} unlinkTransformation={unlinkTransformation} />
