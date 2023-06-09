@@ -7,6 +7,26 @@
     }
 
     .nav-logo {
-        max-height: 46px;
+        max-height: 42px;
+    }
+}
+
+html[data-theme='dark'] {
+    .nav-logo {
+        display: none;
+
+        &.darkbg {
+            display: block;
+        }
+    }
+}
+
+html[data-theme='light'] {
+    .nav-logo {
+        display: block;
+
+        &.darkbg {
+            display: none;
+        }
     }
 }
