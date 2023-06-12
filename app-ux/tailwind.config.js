@@ -16,7 +16,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Lato', 'sans-serif'],
-      },
+      }
     },
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")]
