@@ -1,9 +1,9 @@
 package io.cptn.mgmtsvc.mappers;
 
+import io.cptn.common.entities.Extractor;
 import io.cptn.common.entities.ExtractorSchedule;
-import io.cptn.common.entities.PipelineSchedule;
+import io.cptn.mgmtsvc.dto.ExtractorDto;
 import io.cptn.mgmtsvc.dto.ExtractorScheduleDto;
-import io.cptn.mgmtsvc.dto.PipelineScheduleDto;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
@@ -16,7 +16,7 @@ public interface ExtractorScheduleMapper {
     @Mapping(ignore = true, target = "lastRunAt")
     @Mapping(ignore = true, target = "nextRunAt")
     @Mapping(target = "extractor",
-            expression = "java(extractorScheduleDtoToExtractor(extractorScheduleDto.getExtractor()))")
+            expression = "java(extractorDtoToExtractor(extractorScheduleDto.getExtractor()))")
     ExtractorSchedule toEntity(ExtractorScheduleDto extractorScheduleDto);
 
     ExtractorScheduleDto toDto(ExtractorSchedule extractorSchedule);
@@ -30,12 +30,12 @@ public interface ExtractorScheduleMapper {
     @Mapping(ignore = true, target = "nextRunAt")
     @Mapping(ignore = true, target = "extractor")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    ExtractorSchedule partialUpdate(PipelineScheduleDto pipelineScheduleDto, @MappingTarget PipelineSchedule pipelineSchedule);
+    ExtractorSchedule partialUpdate(ExtractorScheduleDto extractorScheduleDto, @MappingTarget ExtractorSchedule extractorSchedule);
 
     @SuppressWarnings("unused")
-    default ExtractorSchedule extractorScheduleDtoToExtractor(ExtractorScheduleDto extractorScheduleDto) {
-        ExtractorSchedule extractorSchedule = new ExtractorSchedule();
-        extractorSchedule.setId(extractorScheduleDto.getId());
-        return extractorSchedule;
+    default Extractor extractorDtoToExtractor(ExtractorDto extractorDto) {
+        Extractor extractor = new Extractor();
+        extractor.setId(extractorDto.getId());
+        return extractor;
     }
 }
