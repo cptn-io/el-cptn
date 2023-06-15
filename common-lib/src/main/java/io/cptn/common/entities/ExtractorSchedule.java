@@ -9,19 +9,19 @@ import java.io.Serial;
 
 /* @author: kc, created on 4/4/23 */
 @Entity
-@Table(name = "pipeline_schedule")
+@Table(name = "extractor_schedule")
 @ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class PipelineSchedule extends BaseSchedule {
+public class ExtractorSchedule extends BaseSchedule {
 
     @Serial
-    private static final long serialVersionUID = 142919398453772084L;
+    private static final long serialVersionUID = -2844066157978123013L;
 
     @Getter
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pipeline_id")
+    @JoinColumn(name = "extractor_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Pipeline pipeline;
+    private Extractor extractor;
 }
