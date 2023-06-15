@@ -20,7 +20,7 @@ cptn.io (pronounced captain.io) is an open-source self-hostable platform that he
 ### Local machine setup
 
 0. Install docker
-1. Run `git clone https://github.com/cptn-io/el-cptn.git`
+1. Run `git clone -b stable https://github.com/cptn-io/el-cptn.git`
 2. Update the property values in .env file. Ensure that secrets, crypto keys, passwords you use are complex, random and
    secure.
 3. Run `docker compose up` to start the platform.
@@ -32,7 +32,7 @@ cptn.io (pronounced captain.io) is an open-source self-hostable platform that he
 1. Login to your DigitalOcean account.
 2. Create a new droplet and login to the server.
 3. Install docker on the server.
-4. Run `git clone https://github.com/cptn-io/el-cptn.git`
+4. Run `git clone -b stable https://github.com/cptn-io/el-cptn.git`
 5. Update the property values in .env file.
 6. Run `docker compose up -d` to start the platform.
 7. The server should be accessible at `http://<your droplet ip>`
