@@ -24,7 +24,7 @@ public class Extractor extends ScriptedStep {
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "source_id")
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Source source;
 
     public Extractor(UUID id) {
