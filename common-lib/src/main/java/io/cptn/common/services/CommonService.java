@@ -63,6 +63,8 @@ public abstract class CommonService {
         public static final String TRANSFORMATION = "transformation";
         public static final String PIPELINE_SCHEDULE = "pipelineSchedule";
 
+        public static final String EXTRACTOR = "extractor";
+
         private CoreEntities() {
         }
     }
