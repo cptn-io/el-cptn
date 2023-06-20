@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface ExtractorRepository extends JpaRepository<Extractor, UUID> {
 
-    Optional<Extractor> findBySourceId(UUID sourceId);
+    Optional<Extractor> findFirstBySourceId(UUID sourceId);
 
     Long countBySourceId(UUID sourceId);
 }
