@@ -31,6 +31,11 @@ public class ExtractorService extends CommonService {
 
     public Extractor create(Extractor extractor) {
         validateOnCreate(extractor);
+        //check if an extractor already exists for this source
+        Long extractorCount = extractorRepository.countBySourceId(extractor.getSource().getId());
+        if (extractorCount != null && extractorCount > 0) {
+            throw new BadRequestException("An Extractor already exists for the Source");
+        }
         return save(extractor);
     }
 

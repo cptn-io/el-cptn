@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ExtractorRepository extends JpaRepository<Extractor, UUID> {
 
     Optional<Extractor> findBySourceId(UUID sourceId);
+
+    Long countBySourceId(UUID sourceId);
 }
