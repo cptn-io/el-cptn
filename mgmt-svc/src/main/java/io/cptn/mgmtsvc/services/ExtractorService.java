@@ -76,7 +76,7 @@ public class ExtractorService extends CommonService {
     }
 
     public Optional<Extractor> getBySource(UUID sourceId) {
-        return extractorRepository.findBySourceId(sourceId);
+        return extractorRepository.findFirstBySourceId(sourceId);
     }
 
     public Optional<Extractor> getById(UUID id) {

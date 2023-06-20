@@ -1,5 +1,6 @@
 package io.cptn.mgmtsvc.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.cptn.common.entities.Destination;
 import io.cptn.common.validation.OnCreate;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ public class ExtractorDto extends ScriptedStepDto {
     @Serial
     private static final long serialVersionUID = -1843987233036946558L;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Source is required", groups = OnCreate.class)
     private SourceDto source;
 }
