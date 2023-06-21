@@ -15,7 +15,7 @@ import ContextHelp from "../../../components/ContextHelp";
 import Extractor from "./ExtractorConfig/Extractor";
 import ExtractorConfig from "./ExtractorConfig";
 
-const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'extractor', label: 'Extractor' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Inbound Events' }];
+const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'extractor', label: 'Data Extractor' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Inbound Events' }];
 
 const SourceDetails = (props) => {
     const navigate = useNavigate();
