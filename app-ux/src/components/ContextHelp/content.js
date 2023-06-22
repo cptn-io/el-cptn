@@ -57,5 +57,10 @@ export const content = {
         'title': 'Setting up SSO',
         'body': `We support setting up Single Sign On using OAuth 2.0/OpenID Connect(OIDC) protocol. Most modern Identity Providers support this protocol for SSO. We do not support SAML based authentication.\n\nFollow the documentation resources for setting up SSO.
         \nPlease ensure that you do not set 'Allow login only with SSO' option until you have successfully tested the SSO setup. If this option is enabled and your SSO is not properly setup, you will not be able to login to the system.`
+    },
+    'extractor-config': {
+        'title': 'Data Extractor Configuration',
+        'body': `A data extractor helps pull data into the pipeline for processing, instead of using the push mechanism to send data from your source. You can add JavaScript code with the required npm JS modules to connect to your data source and extract the data for processing. For example, you can use a data extractor to retrieve data from a database and send it to a destination.
+        \nAdditionally, you can associate a schedule with your extractor script to run the data extraction process at regular intervals.`
     }
 }

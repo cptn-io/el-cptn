@@ -12,8 +12,9 @@ import Tabs from "../../../components/Tabs";
 import SourcePipelines from "./SourcePipelines";
 import InboundEventList from "./InboundEventList";
 import ContextHelp from "../../../components/ContextHelp";
+import ExtractorConfig from "./ExtractorConfig";
 
-const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Inbound Events' }];
+const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'extractor', label: 'Data Extractor' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Inbound Events' }];
 
 const SourceDetails = (props) => {
     const navigate = useNavigate();
@@ -58,6 +59,7 @@ const SourceDetails = (props) => {
                 </div>
             </div>
         }
+        {tab === 'extractor' && <ExtractorConfig sourceId={id} />}
         {tab === 'pipelines' && <SourcePipelines sourceId={id} />}
         {tab === 'events' && <InboundEventList sourceId={id} />}
     </div>
