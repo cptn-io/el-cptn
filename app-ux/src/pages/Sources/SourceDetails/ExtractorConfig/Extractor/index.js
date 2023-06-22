@@ -11,6 +11,7 @@ import ContextHelp from "../../../../../components/ContextHelp";
 import { IconArrowsMaximize } from "@tabler/icons-react";
 import Loading from "../../../../../components/Loading";
 import useNotifications from "../../../../../hooks/useNotifications";
+import Modal from "../../../../../components/Modal";
 
 const scriptTemplate = `module.exports = function(config) { /* required */
     //add your script here to pull data from your data source.
@@ -41,6 +42,15 @@ const Extractor = ({ sourceId }) => {
     const clearErrors = () => {
         setError({ message: null, details: [] });
     }
+
+    const parseResponsePayload = (response) => {
+        const data = response.data;
+        setId(data.id);
+        setName(data.name);
+        setActive(data.active);
+        setScript(data.script);
+        setConfig(data.config);
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -75,6 +85,11 @@ const Extractor = ({ sourceId }) => {
             };
             //create a new extractor
             axios.post(`/api/extractor`, payload).then(response => {
+                parseResponsePayload(response);
+                addNotification({
+                    message: 'Your changes have been saved',
+                    type: 'success'
+                });
             }).catch(err => {
                 addNotification({
                     message: get(err, 'response.data.message', 'An error occurred while saving the Extractor'),
@@ -112,12 +127,7 @@ const Extractor = ({ sourceId }) => {
     useEffect(() => {
         setExecuting(true);
         axios.get(`/api/extractor/source/${sourceId}`).then(response => {
-            const data = response.data;
-            setId(data.id);
-            setName(data.name);
-            setActive(data.active);
-            setScript(data.script);
-            setConfig(data.config);
+            parseResponsePayload(response);
         }).catch(err => {
             if (err.response.status !== 404) {
                 addNotification({
@@ -141,7 +151,7 @@ const Extractor = ({ sourceId }) => {
             <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Data Extractor Details</div>
             <form onSubmit={submit}>
                 <div>
-                    <div className="space-y-3 px-4 py-5 sm:p-6">
+                    <div className="space-y-3 pb-5">
 
                         <div className="form-control w-full">
                             <label className="label">
@@ -190,11 +200,29 @@ const Extractor = ({ sourceId }) => {
 
                     </div>
                     <div className="bg-base-200 px-4 py-3 text-right sm:px-6">
-                        <Link to="/pipelines" className="btn btn-ghost mr-2">Cancel</Link>
-                        <button disabled={executing} type="submit" className="btn btn-primary">Submit</button>
+                        <button disabled={executing} type="submit" className="btn btn-primary">Save Changes</button>
                     </div>
                 </div>
             </form>
+            {expandEditor && <Modal large={true} title="Script" onCancel={() => setExpandEditor(false)}>
+                <>
+                    <div className="px-6 pb-4">
+                        <Editor
+                            theme="vs-dark"
+                            height="75vh"
+                            options={{ 'fontSize': 15, quickSuggestions: false, scrollBeyondLastLine: false, minimap: { enabled: false } }}
+                            defaultLanguage="javascript"
+                            value={script}
+                            onChange={handleEditorChange}
+                            beforeMount={handleEditorWillMount}
+                            onMount={handleEditorDidMount}
+                        />
+                    </div>
+                    <div className="bg-base-200 px-4 py-3 justify-end sm:px-6 flex">
+                        <button className="btn" onClick={() => setExpandEditor(false)}>Collapse</button>
+                    </div>
+                </>
+            </Modal>}
         </div></div>
 
 }
