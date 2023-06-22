@@ -12,7 +12,6 @@ import Tabs from "../../../components/Tabs";
 import SourcePipelines from "./SourcePipelines";
 import InboundEventList from "./InboundEventList";
 import ContextHelp from "../../../components/ContextHelp";
-import Extractor from "./ExtractorConfig/Extractor";
 import ExtractorConfig from "./ExtractorConfig";
 
 const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'extractor', label: 'Data Extractor' }, { 'key': 'pipelines', label: 'Pipelines' }, { 'key': 'events', label: 'Inbound Events' }];
