@@ -5,9 +5,7 @@ import get from 'lodash/get';
 import filter from 'lodash/filter';
 import Editor from '@monaco-editor/react'
 import ConfigBuilder from "../../../../../components/ConfigBuilder";
-import { Link } from "react-router-dom";
 import { renderErrors } from "../../../../../common/formHelpers";
-import ContextHelp from "../../../../../components/ContextHelp";
 import { IconArrowsMaximize } from "@tabler/icons-react";
 import Loading from "../../../../../components/Loading";
 import useNotifications from "../../../../../hooks/useNotifications";
@@ -30,14 +28,6 @@ const Extractor = ({ sourceId }) => {
     const [error, setError] = useState({ message: null, details: [] });
     const [expandEditor, setExpandEditor] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    const resetAll = () => {
-        setName('');
-        setConfig([{ key: "", value: "", secret: false }]);
-        setScript(scriptTemplate);
-        setActive(true);
-        clearErrors();
-    }
 
     const clearErrors = () => {
         setError({ message: null, details: [] });
@@ -141,7 +131,7 @@ const Extractor = ({ sourceId }) => {
             setLoading(false);
         });
 
-    }, [])
+    }, [addNotification, sourceId])
     if (loading) {
         return <Loading />
     }
