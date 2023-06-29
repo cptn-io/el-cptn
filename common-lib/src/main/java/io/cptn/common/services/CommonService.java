@@ -65,6 +65,8 @@ public abstract class CommonService {
 
         public static final String EXTRACTOR = "extractor";
 
+        public static final String EXTRACTOR_SCHEDULE = "extractorSchedule";
+
         private CoreEntities() {
         }
     }
