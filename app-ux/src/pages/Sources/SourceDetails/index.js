@@ -3,7 +3,7 @@ import PageTitle from "../../../components/Nav/PageTitle";
 import { breadcrumbs } from "..";
 import axios from "axios";
 import Loading from "../../../components/Loading";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useNotifications from "../../../hooks/useNotifications";
 import get from 'lodash/get';
 import SourceDetailsCard from "./SourceDetailsCard";
@@ -18,6 +18,7 @@ const tabs = [{ 'key': 'overview', label: 'Overview' }, { 'key': 'extractor', la
 
 const SourceDetails = (props) => {
     const navigate = useNavigate();
+    const navigateRef = useRef(navigate);
     const { addNotification } = useNotifications();
     const { id, tab } = useParams();
     const [loading, setLoading] = useState(true);
@@ -31,11 +32,11 @@ const SourceDetails = (props) => {
                 message: get(err, 'response.data.message', 'An error occurred while fetching Source'),
                 type: 'error'
             });
-            navigate('/sources');
+            navigateRef.current('/sources');
         }).finally(() => {
             setLoading(false);
         })
-    }, [id, addNotification, navigate]);
+    }, [id, addNotification]);
 
     if (loading) {
         return <Loading />
