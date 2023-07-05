@@ -13,7 +13,7 @@ const TransformationList = (props) => {
                 <tr>
                     <th>Transformations</th>
                     <th className="text-center">
-                        <button className="btn btn-sm btn-ghost btn-square" onClick={selectTransformation}>
+                        <button className="btn btn-sm btn-accent btn-square" onClick={selectTransformation}>
                             <IconPlus width={32} />
                         </button>
                     </th>

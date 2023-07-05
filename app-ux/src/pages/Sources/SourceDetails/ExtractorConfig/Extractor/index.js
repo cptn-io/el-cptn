@@ -12,6 +12,7 @@ import useNotifications from "../../../../../hooks/useNotifications";
 import Modal from "../../../../../components/Modal";
 import cloneDeep from 'lodash/cloneDeep';
 import ConfirmModal from "../../../../../components/ConfirmModal";
+import ExtractorSchedule from "./ExtractorSchedule";
 
 
 const scriptTemplate = `module.exports = function(config) { /* required */
@@ -181,7 +182,7 @@ const Extractor = ({ sourceId }) => {
         return <Loading />
     }
 
-    return <div className="card bg-base-100 mb-4">
+    return <><div className="card bg-base-100 mb-4">
         <div className="card-body p-4">
             <div className="text-lg font-bold bg-base-200 p-2 rounded-md">Data Extractor Details</div>
             <form onSubmit={submit}>
@@ -269,6 +270,8 @@ const Extractor = ({ sourceId }) => {
                 </>
             </Modal>}
         </div></div>
+        {id && <ExtractorSchedule extractorId={id} />}
+    </>
 
 }
 
