@@ -159,10 +159,10 @@ const Scheduler = (props) => {
                 <label className="label">
                     <span className="label-text">Next Execution at</span>
                 </label>
-                <div className="mx-1">{moment(schedule.nextRunAt).format('LLLL')}</div>
+                <div className="mx-1">{schedule?.active ? moment(schedule.nextRunAt).format('LLLL') : 'Schedule is inactive'}</div>
             </div>
             <div className="ng-base-200 px-4 py-3 text-right sm:px-6">
-                <button type="button" disabled={executing} onClick={discardChanges} className="btn mr-2">Discard Changes</button>
+                {schedule?.id && <button type="button" disabled={executing} onClick={discardChanges} className="btn mr-2">Discard Changes</button>}
                 <button type="button" disabled={executing} onClick={saveSchedule} className="btn btn-primary">Save Schedule</button>
             </div>
         </>}
