@@ -50,7 +50,7 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.26",
     "postcss-import": "^15.1.0",
     "raw-loader": "^4.0.2",
     "react-scripts": "5.0.1",
