@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "jest": "^29.5.0",
-    "jest-when": "^3.5.2",
+    "jest-when": "^3.6.0",
     "jshint": "^2.13.6"
   }
 }
