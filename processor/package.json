@@ -22,7 +22,7 @@
     "workerpool": "^6.4.0"
   },
   "devDependencies": {
-    "jest": "^29.5.0",
+    "jest": "^29.6.4",
     "jest-when": "^3.5.2",
     "jshint": "^2.13.6"
   }
