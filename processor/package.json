@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.21",
-    "memfs": "^3.5.3",
+    "memfs": "^4.3.0",
     "pg": "^8.11.0",
     "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.19",
