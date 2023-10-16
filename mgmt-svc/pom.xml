@@ -15,7 +15,7 @@
         <commonstext.version>1.10.0</commonstext.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <lombok.version>1.18.28</lombok.version>
-        <liquibase.version>4.22.0</liquibase.version>
+        <liquibase.version>4.24.0</liquibase.version>
     </properties>
     <dependencies>
         <dependency>
