@@ -104,9 +104,9 @@ const CreateUser = (props) => {
                     <label className="label">
                         <span className="label-text">Password</span>
                     </label>
-                    <div className="input-group">
-                        <input autoComplete="new-password" type={showPassword ? "text" : "password"} name="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Account password" className="input input-bordered w-full" />
-                        <button type="button" className="btn btn-square" onClick={(e) => setShowPassword(current => !current)}>
+                    <div className="join">
+                        <input autoComplete="new-password" type={showPassword ? "text" : "password"} name="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Account password" className="input input-bordered w-full join-item" />
+                        <button type="button" className="btn btn-square join-item" onClick={(e) => setShowPassword(current => !current)}>
                             {!showPassword && <IconEye size="24" />}
                             {showPassword && <IconEyeOff size="24" />}
                         </button>

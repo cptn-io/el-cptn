@@ -110,12 +110,12 @@ const NewPipeline = (props) => {
                                 <label className="label">
                                     <span className="label-text">Select a Source</span>
                                 </label>
-                                <div className="input-group">
-                                    <input type="text" readOnly disabled placeholder="Select" value={source?.name || ''} className="input input-bordered" />
-                                    <button className="btn btn-square tooltip p-3" data-tip="Select a Source" onClick={e => { e.preventDefault(); setShowSourceSelector(true) }}>
+                                <div className="join">
+                                    <input type="text" readOnly disabled placeholder="Select" value={source?.name || ''} className="input input-bordered join-item" />
+                                    <button className="btn btn-square tooltip p-3 join-item" data-tip="Select a Source" onClick={e => { e.preventDefault(); setShowSourceSelector(true) }}>
                                         <IconSearch width={24} />
                                     </button>
-                                    <button className="btn btn-square tooltip p-2" data-tip="Create Source" onClick={e => { e.preventDefault(); setShowSourceDialog(true) }}>
+                                    <button className="btn btn-square tooltip p-2 join-item" data-tip="Create Source" onClick={e => { e.preventDefault(); setShowSourceDialog(true) }}>
                                         <IconPlus width={24} />
                                     </button>
                                 </div>
@@ -126,13 +126,13 @@ const NewPipeline = (props) => {
                                 <label className="label">
                                     <span className="label-text">Select a Destination</span>
                                 </label>
-                                <div className="input-group">
-                                    <input type="text" readOnly disabled placeholder="Select" value={destination?.name || ''} className="input input-bordered" />
-                                    <button className="btn btn-square tooltip p-3" data-tip="Select a Destination" onClick={e => { e.preventDefault(); setShowDestinationSelector(true) }}>
+                                <div className="join">
+                                    <input type="text" readOnly disabled placeholder="Select" value={destination?.name || ''} className="input input-bordered join-item" />
+                                    <button className="btn btn-square tooltip p-3 join-item" data-tip="Select a Destination" onClick={e => { e.preventDefault(); setShowDestinationSelector(true) }}>
                                         <IconSearch width={24} />
                                     </button>
 
-                                    <button className="btn btn-square tooltip p-2" data-tip="Create Destination" onClick={e => { e.preventDefault(); setShowDestinationDialog(true) }}>
+                                    <button className="btn btn-square tooltip p-2 join-item" data-tip="Create Destination" onClick={e => { e.preventDefault(); setShowDestinationDialog(true) }}>
                                         <IconPlus width={24} />
                                     </button>
 

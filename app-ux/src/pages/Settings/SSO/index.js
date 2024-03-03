@@ -129,9 +129,9 @@ const SSO = () => {
                         <span className="label-text">Client Secret</span>
                     </label>
 
-                    <div className="input-group">
-                        <input type={showClientSecret ? "text" : "password"} name="value" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} placeholder="Provide the Client Secret" className="input input-bordered w-full" />
-                        <button className="btn btn-square" onClick={toggleClientSecretVisibility}>
+                    <div className="join">
+                        <input type={showClientSecret ? "text" : "password"} name="value" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} placeholder="Provide the Client Secret" className="input input-bordered w-full join-item" />
+                        <button className="btn btn-square join-item" onClick={toggleClientSecretVisibility}>
                             {!showClientSecret && <IconEye size="24" />}
                             {showClientSecret && <IconEyeOff size="24" />}
                         </button>
