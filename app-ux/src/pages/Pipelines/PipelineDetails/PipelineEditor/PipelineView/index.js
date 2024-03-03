@@ -8,7 +8,7 @@ import { processConnectionMap, getTransformationNodes } from './helpers.js';
 const edgeOptions = {
     animated: true,
     style: {
-        stroke: 'hsl(var(--bc))',
+        stroke: 'oklch(var(--bc))',
     },
 };
 

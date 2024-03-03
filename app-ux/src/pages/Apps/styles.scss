@@ -4,7 +4,7 @@
     .corner {
         width: 0;
         height: 0;
-        border-top: 50px solid hsl(var(--er));
+        border-top: 50px solid oklch(var(--er));
 
         border-right: 50px solid transparent;
         position: absolute;
@@ -21,7 +21,7 @@
         }
 
         &.info {
-            border-top: 50px solid hsl(var(--in));
+            border-top: 50px solid oklch(var(--in));
 
             .text {
                 top: -40px;

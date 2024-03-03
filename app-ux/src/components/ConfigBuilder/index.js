@@ -52,9 +52,9 @@ const ConfigBuilder = (props) => {
                     <input readOnly={readOnly} value={item.key} name="key" onChange={(e) => changeConfig(e, i)} className="input input-bordered w-full" type="text" placeholder="Key" />
                 </div>
                 <div className="w-1/2 md:w-2/5 px-3">
-                    <div className="input-group">
-                        <input readOnly={readOnly} type={!item.secret || visibleFields[item.key] ? "text" : "password"} name="value" value={item.value} onChange={(e) => changeConfig(e, i)} placeholder="Value" className="input input-bordered w-full" />
-                        <button className="btn btn-square" disabled={!item.secret} onClick={(e) => toggleSecretVisibility(e, item.key)}>
+                    <div className="join">
+                        <input readOnly={readOnly} type={!item.secret || visibleFields[item.key] ? "text" : "password"} name="value" value={item.value} onChange={(e) => changeConfig(e, i)} placeholder="Value" className="input input-bordered w-full join-item" />
+                        <button className="btn btn-square  join-item" disabled={!item.secret} onClick={(e) => toggleSecretVisibility(e, item.key)}>
                             {!visibleFields[item.key] && <IconEye size="24" />}
                             {visibleFields[item.key] && <IconEyeOff size="24" />}
                         </button>
