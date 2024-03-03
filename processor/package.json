@@ -12,18 +12,19 @@
   "author": "KC",
   "license": "MIT",
   "dependencies": {
+    "geoip-lite": "^1.4.10",
     "lodash": "^4.17.21",
     "memfs": "^3.5.3",
     "pg": "^8.11.0",
     "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.19",
-    "winston": "^3.10.0",
-    "winston-daily-rotate-file": "^4.7.1",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^5.0.0",
     "workerpool": "^6.4.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "jest-when": "^3.5.2",
+    "jest-when": "^3.6.0",
     "jshint": "^2.13.6"
   }
 }

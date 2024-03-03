@@ -13,6 +13,10 @@ let transport = new transports.DailyRotateFile({
     maxFiles: '14d'
 });
 
+transport.on('error', error => {
+    console.log('Error in log rotation transport', error);
+});
+
 const myFormat = printf(({ level, message, label, timestamp }) => {
     return `${timestamp} [${label}] ${level}: ${message}`;
 });
