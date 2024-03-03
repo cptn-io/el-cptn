@@ -6,9 +6,9 @@ const Tabs = (props) => {
             onTabChange(tabKey);
         }
     }
-    return <div className="tabs bg-base-200 rounded">
+    return <div role="tablist" className="tabs bg-base-200 rounded tabs-md md:tabs-lg tabs-lifted">
         {tabs.map(tab => {
-            return <button key={tab.key} className={`tab tab-md md:tab-lg tab-lifted ${tab.key === (activeTab || tabs?.[0]?.key) && 'tab-active'}`} onClick={() => changeTab(tab.key)}>{tab.label}</button>
+            return <button type="button" role="tab" key={tab.key} className={`tab  ${tab.key === (activeTab || tabs?.[0]?.key) ? 'tab-active' : ''}`} onClick={() => changeTab(tab.key)} aria-label={tab.label}>{tab.label}</button>
         })}
     </div>
 }

@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /* @author: kc, created on 5/1/23 */
 @Component
 @RequiredArgsConstructor
-public class CorsFilter implements Filter {
+public class CustomCorsFilter implements Filter {
 
     private final SourceService sourceService;
 
