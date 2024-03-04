@@ -11,7 +11,7 @@
     <properties>
         <java.version>17</java.version>
         <lombok.version>1.18.30</lombok.version>
-        <querydsl.version>5.0.0</querydsl.version>
+        <querydsl.version>5.1.0</querydsl.version>
     </properties>
     <dependencies>
         <dependency>
