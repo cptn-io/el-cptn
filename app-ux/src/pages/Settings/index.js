@@ -18,7 +18,7 @@ const Settings = () => {
     return (
         <>
             <PageTitle itemKey="settings" />
-            <Tabs tabs={tabs} activeTab={tab} onTabChange={onTabChange} />
+            <Tabs tabs={tabs} activeTab={tab} onTabChange={onTabChange} style={{ "display": "inline-grid" }} />
             {(!tab || tab === 'sso') &&
                 <div className="grid grid-flow-row-dense grid-cols-1 xl:grid-cols-8 gap-4 ">
                     <div className="xl:col-span-6 mt-4">
