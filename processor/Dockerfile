@@ -1,4 +1,4 @@
-FROM node:18-alpine3.17
+FROM node:18-alpine3.18
 
 LABEL org.opencontainers.image.description="Event Processor"
 
