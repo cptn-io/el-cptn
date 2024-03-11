@@ -7,7 +7,7 @@
     "@sbzen/re-cron": "^2.0.6",
     "@tabler/icons-react": "^2.47.0",
     "axios": "^1.6.7",
-    "daisyui": "^4.7.2",
+    "daisyui": "^4.7.3",
     "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.21",
     "moment-timezone": "^0.5.45",
