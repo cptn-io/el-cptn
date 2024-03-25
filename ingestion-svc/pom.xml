@@ -12,7 +12,7 @@
         <java.version>17</java.version>
         <commonstext.version>1.10.0</commonstext.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-        <lombok.version>1.18.30</lombok.version>
+        <lombok.version>1.18.32</lombok.version>
     </properties>
     <dependencies>
         <dependency>
