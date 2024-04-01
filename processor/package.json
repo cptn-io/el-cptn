@@ -14,7 +14,7 @@
   "dependencies": {
     "geoip-lite": "^1.4.10",
     "lodash": "^4.17.21",
-    "memfs": "^4.6.0",
+    "memfs": "^4.8.1",
     "pg": "^8.11.3",
     "redis-connection-pool": "^4.0.1",
     "vm2": "^3.9.19",
