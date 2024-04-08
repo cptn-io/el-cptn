@@ -20,7 +20,7 @@
     "vm2": "^3.9.19",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^5.0.0",
-    "workerpool": "^6.5.1"
+    "workerpool": "^9.1.1"
   },
   "devDependencies": {
     "jest": "^29.7.0",
