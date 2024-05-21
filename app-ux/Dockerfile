@@ -1,4 +1,4 @@
-FROM caddy:2.6.4-alpine
+FROM caddy:alpine
 
 LABEL org.opencontainers.image.description="Caddy server with UX"
 
