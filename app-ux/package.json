@@ -5,7 +5,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "@sbzen/re-cron": "^2.0.6",
-    "@tabler/icons-react": "^2.47.0",
+    "@tabler/icons-react": "^3.5.0",
     "axios": "^1.6.7",
     "daisyui": "^4.7.2",
     "http-proxy-middleware": "^2.0.6",
