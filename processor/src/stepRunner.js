@@ -1,7 +1,7 @@
-
+const { findMissingRequiredModules, installModule } = require('./nodeModuleHelper');
+const vm = require('vm');
 const Destination = require('./entities/Destination');
 const logger = require('./logger');
-const { findMissingRequiredModules, installModule } = require('./nodeModuleHelper');
 
 async function installRequiredModules(stepScript) {
     try {
@@ -13,7 +13,7 @@ async function installRequiredModules(stepScript) {
     }
 }
 
-async function getDestinationWrappedObject(vm, step) {
+async function getDestinationWrappedObject(step, logs) {
     if (!(step instanceof Destination)) {
         return;
     }
@@ -23,20 +23,23 @@ async function getDestinationWrappedObject(vm, step) {
     await installRequiredModules(stepScript);
 
     try {
-        const wrappedObject = vm.run(stepScript, './script.js');
-        return wrappedObject;
+        const script = new vm.Script(stepScript);
+        const context = vm.createContext(getContext(logs));
+        return script.runInContext(context);
     } catch (err) {
         logger.error("Error running destination setup script in Sandbox", err.message, err);
         throw err;
     }
 }
 
-async function runStep(vm, step, evt, ctx) {
+async function runStep(step, evt, ctx, logs) {
     const stepScript = step.script;
     await installRequiredModules(stepScript);
 
     try {
-        const vmRun = vm.run(stepScript, './script.js');
+        const script = new vm.Script(stepScript);
+        const context = vm.createContext(getContext(logs));
+        const vmRun = script.runInContext(context);
 
         if (!(step instanceof Destination)) {
             return await vmRun(evt, ctx, step.config);
@@ -47,7 +50,29 @@ async function runStep(vm, step, evt, ctx) {
     }
 }
 
+function getContext(logs) {
+    const logHandler = (level, ...args) => {
+        try {
+            const logAsString = args.map(arg => JSON.stringify(arg)).join(' ');
+            logs.push(`${level.toUpperCase()}: ${logAsString}`);
+        } catch (error) {
+            logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
+        }
+    }
+    return {
+        module: { exports: {} },
+        require: require,
+        console: {
+            log: (args) => logHandler('log', args),
+            error: (args) => logHandler('error', args),
+            warn: (args) => logHandler('warn', args),
+            info: (args) => logHandler('info', args)
+        },
+    };
+}
+
 module.exports = {
     getDestinationWrappedObject,
-    runStep
+    runStep,
+    getContext
 };
