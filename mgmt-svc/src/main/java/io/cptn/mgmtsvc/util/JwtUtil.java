@@ -4,13 +4,14 @@ import io.cptn.mgmtsvc.security.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.lang.Assert;
+import io.jsonwebtoken.security.Keys;
 import lombok.NonNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,13 +33,13 @@ public class JwtUtil implements InitializingBean {
         Calendar iat = Calendar.getInstance();
         Calendar exp = Calendar.getInstance();
         exp.add(Calendar.HOUR, JWT_TOKEN_VALIDITY_HOURS);
-
+        SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder().setClaims(claims)
-                .setSubject(userPrincipal.getId())
-                .setIssuedAt(iat.getTime())
-                .setExpiration(exp.getTime())
-                .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8)).compact();
+        return Jwts.builder().claims(claims)
+                .subject(userPrincipal.getId())
+                .issuedAt(iat.getTime())
+                .expiration(exp.getTime())
+                .signWith(secretKey).compact();
     }
 
     public boolean validateToken(String token, UserPrincipal userPrincipal) {
@@ -61,20 +62,21 @@ public class JwtUtil implements InitializingBean {
 
     private Claims parseToken(String token) {
 
-        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
+        SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        Jws<Claims> claimsJws = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
 
-        return claimsJws.getBody();
+        return claimsJws.getPayload();
     }
 
     public String createJWT(@NonNull Map<String, Object> claims, Integer expiresInMinutes) {
 
         Calendar exp = Calendar.getInstance();
         exp.add(Calendar.MINUTE, expiresInMinutes);
-
-        return Jwts.builder().setClaims(claims)
-                .setIssuedAt(Calendar.getInstance().getTime())
-                .setExpiration(exp.getTime())
-                .signWith(SignatureAlgorithm.HS256, secret.getBytes(StandardCharsets.UTF_8)).compact();
+        SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        return Jwts.builder().claims(claims)
+                .issuedAt(Calendar.getInstance().getTime())
+                .expiration(exp.getTime())
+                .signWith(secretKey).compact();
 
     }
 
