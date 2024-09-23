@@ -58,7 +58,7 @@ function getContext(logs) {
         } catch (error) {
             logs.push(`LOG: ${error.message} (error while parsing log)`); //ignore
         }
-    }
+    };
     return {
         module: { exports: {} },
         require: require,
