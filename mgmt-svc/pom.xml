@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-authorization-server</artifactId>
-            <version>1.2.2</version>
+            <version>1.4.5</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -140,12 +140,12 @@
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-spring</artifactId>
-            <version>5.10.2</version>
+            <version>5.13.0</version>
         </dependency>
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-provider-jdbc-template</artifactId>
-            <version>5.12.0</version>
+            <version>5.13.0</version>
         </dependency>
     </dependencies>
 
